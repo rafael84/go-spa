@@ -5,7 +5,7 @@ create table account.user
     created_at   timestamptz not null default now(),
     updated_at   timestamptz not null default now(),
     email        varchar(140) not null,
-    password     varchar(30) not null,
+    password     varchar(240) not null,
     json_data    jsonb
 )
 with ( oids = false );

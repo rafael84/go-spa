@@ -19,7 +19,7 @@ type User struct {
 	CreatedAt time.Time      `db:"created_at,autofilled"   json:"createdAt"`
 	UpdatedAt time.Time      `db:"updated_at,autofilled"   json:"updatedAt"`
 	Email     string         `db:"email"                   json:"email"`
-	Password  string         `db:"password"                json:"-"`
+	Password  SaltedPassword `db:"password"                json:"-"`
 	JsonData  database.JSONB `db:"json_data"               json:"jsonData,omitempty"`
 }
 

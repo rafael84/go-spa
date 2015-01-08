@@ -70,7 +70,7 @@ func SignUpHandler(c *context.Context, rw http.ResponseWriter, req *http.Request
 	}
 
 	// password validation
-	if form.Password != form.Password {
+	if form.Password != form.PasswordAgain {
 		return api.BadRequest(rw, c.T("account.user.passwords_mismatch"))
 	}
 
@@ -121,7 +121,7 @@ func SignInHandler(c *context.Context, rw http.ResponseWriter, req *http.Request
 	}
 
 	// check user password
-	if user.Password != form.Password {
+	if !user.Password.Valid(form.Password) {
 		return api.BadRequest(rw, "Invalid email and/or password")
 	}
 

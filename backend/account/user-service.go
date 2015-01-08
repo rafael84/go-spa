@@ -1,6 +1,7 @@
 package account
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/guregu/null"
@@ -16,16 +17,23 @@ func NewUserService(session *database.Session) *userService {
 }
 
 func (us *userService) Create(email, password string, userJsonData *UserJsonData) (*User, error) {
+	// encode password
+	var saltedPassword SaltedPassword
+	err := saltedPassword.Encode(password)
+	if err != nil {
+		return nil, errors.New("Could not encode password")
+	}
+
 	// create new user structure
 	user := &User{
 		Id:       null.NewInt(0, false),
 		State:    UserStateActive,
 		Email:    email,
-		Password: password,
+		Password: saltedPassword,
 	}
 
 	// fill user structure with additional data
-	err := user.JsonData.Set(userJsonData)
+	err = user.JsonData.Set(userJsonData)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to marshal json data: %s", err)
 	}
