@@ -31,6 +31,14 @@ func mustLoadTranslations() {
 	i18n.MustLoadTranslationFile("translations/pt-br.all.json")
 }
 
+// mustLoadEnv loads a .env file with the environment settings
+//
+// The .env file must have the following structure:
+//
+// 		# Email settings
+// 		EMAIL_USERNAME=user@gmail.com
+// 		EMAIL_PASSWORD=*****
+//
 func mustLoadEnv() {
 	err := godotenv.Load()
 	if err != nil {
