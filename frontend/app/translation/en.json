@@ -75,14 +75,34 @@
         }
     },
     "resetPassword": {
-        "title": "Reset Password",
-        "form": {
-            "email": {
-                "label": "Email",
-                "placeholder": "Email address"
-            },
-            "submit": {
-                "label": "Continue"
+        "step1": {
+            "title": "Reset Password",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Email address"
+                },
+                "submit": {
+                    "label": "Continue"
+                }
+            }
+        },
+        "step2": {
+            "title": "Reset Password - Step 2",
+            "form": {
+                "password": {
+                    "label": "Password",
+                    "placeholder": "At least 6 characters",
+                    "error": "Please provide a password with at least 6 characters."
+                },
+                "passwordAgain": {
+                    "label": "Password, again",
+                    "placeholder": "Enter your password again, please",
+                    "error": "You must enter your password twice."
+                },
+                "submit": {
+                    "label": "Change Password"
+                }
             }
         }
     }

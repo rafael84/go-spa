@@ -3,7 +3,6 @@ package account
 import (
 	"encoding/json"
 	"net/http"
-	"os"
 	"regexp"
 	"time"
 
@@ -13,7 +12,6 @@ import (
 	"github.com/rafael84/go-spa/backend/api"
 	"github.com/rafael84/go-spa/backend/context"
 	"github.com/rafael84/go-spa/backend/database"
-	"github.com/rafael84/go-spa/backend/mail"
 )
 
 const (
@@ -22,7 +20,6 @@ const (
 )
 
 func init() {
-	api.AddSimpleRoute("/account/user/resetPassword", ResetPasswordHandler)
 	api.AddSimpleRoute("/account/user/signup", SignUpHandler)
 	api.AddSimpleRoute("/account/user/signin", SignInHandler)
 	api.AddSecureRoute("/account/user/me", MeHandler)
@@ -175,32 +172,4 @@ func MeHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Requ
 
 func UserHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {
 	return api.OK(rw, "To be implemented")
-}
-
-func ResetPasswordHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
-	// decode request data
-	var form ResetPasswordForm
-	err := json.NewDecoder(req.Body).Decode(&form)
-	if err != nil {
-		return api.BadRequest(rw, "Could not query user: %s", err)
-	}
-
-	// validate email address
-	if ok := regexp.MustCompile(emailRegex).MatchString(form.Email); !ok {
-		return api.BadRequest(rw, "Invalid email address")
-	}
-
-	go func() {
-		mail.NewGmailAccount(
-			os.Getenv("EMAIL_USERNAME"),
-			os.Getenv("EMAIL_PASSWORD"),
-		).Send(&mail.Message{
-			From:    "Go-SPA",
-			To:      []string{form.Email},
-			Subject: "Reset Password",
-			Body:    []byte("Access this link."),
-		})
-	}()
-
-	return api.OK(rw, "Email sent")
 }

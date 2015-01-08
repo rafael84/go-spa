@@ -75,14 +75,34 @@
         }
     },
     "resetPassword": {
-        "title": "Esqueci minha senha",
-        "form": {
-            "email": {
-                "label": "Email",
-                "placeholder": "Endereço de email"
-            },
-            "submit": {
-                "label": "Continuar"
+        "step1": {
+            "title": "Esqueci minha senha",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Endereço de email"
+                },
+                "submit": {
+                    "label": "Continuar"
+                }
+            }
+        },
+        "step2": {
+            "title": "Esqueci minha senha - Passo 2",
+            "form": {
+                "password": {
+                    "label": "Senha",
+                    "placeholder": "Pelo menos 6 caracteres",
+                    "error": "Por favor entre com uma senha com pelo menos 6 caracteres"
+                },
+                "passwordAgain": {
+                    "label": "Senha, novamente",
+                    "placeholder": "Entre com a sua senha mais uma vez, por favor",
+                    "error": "Você deve entrar com a senha duas vezes"
+                },
+                "submit": {
+                    "label": "Alterar Senha"
+                }
             }
         }
     }

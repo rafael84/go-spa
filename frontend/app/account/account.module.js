@@ -9,9 +9,20 @@ angular.module('app.account', [
 .config(function Config($stateProvider) {
     $stateProvider
         .state('resetPassword', {
-            url: '/resetPassword',
+            url: '/reset-password',
             controller: 'ResetPasswordCtrl as vm',
-            templateUrl: 'app/account/reset-password.tmpl.html'
+            templateUrl: 'app/account/reset-password.tmpl.html',
+            data: {
+                step: 1
+            }
+        })
+        .state('resetPasswordStep2', {
+            url: '/reset-password/step2/:key',
+            controller: 'ResetPasswordCtrl as vm',
+            templateUrl: 'app/account/reset-password-step2.tmpl.html',
+            data: {
+                step: 2
+            }
         });
 })
 
@@ -93,7 +104,27 @@ angular.module('app.account', [
     };
 
     account.resetPassword = function(user) {
-        return $http.post('/api/v1/account/user/resetPassword', user);
+        return $http.post('/api/v1/account/reset-password', user);
+    };
+
+    account.resetPasswordValidateKey = function(key) {
+        return $http.post('/api/v1/account/reset-password/validate-key', {
+            key: key
+        });
+    };
+
+    account.changePassword = function(user) {
+        var deferred = $q.defer();
+        if (user.password !== user.passwordAgain) {
+            deferred.reject({
+                data: {
+                    error: 'Passwords does not match'
+                }
+            });
+        } else {
+            return $http.post('/api/v1/account/reset-password/complete', user);
+        }
+        return deferred.promise;
     };
 
     return {
@@ -104,22 +135,51 @@ angular.module('app.account', [
         signOut: account.signOut,
         signUp: account.signUp,
         getUser: account.getUser,
-        resetPassword: account.resetPassword
+        resetPassword: account.resetPassword,
+        resetPasswordValidateKey: account.resetPasswordValidateKey,
+        changePassword: account.changePassword
     };
 })
 
-.controller('ResetPasswordCtrl', function ResetPasswordCtrl($state, Account) {
+.controller('ResetPasswordCtrl', function ResetPasswordCtrl($state, $stateParams, Account) {
     var vm = this;
 
     vm.error = null;
+    vm.validKey = null;
 
-    vm.send = function send(user) {
-        Account.resetPassword(user)
+    if ($state.current.data.step == 1) {
+        vm.send = function send(user) {
+            Account.resetPassword(user)
+                .then(function success(response) {
+                    $state.go('home');
+                })
+                .catch(function error(response) {
+                    vm.error = response.data.error;
+                });
+        }
+    }
+
+    if ($state.current.data.step == 2) {
+        Account.resetPasswordValidateKey($stateParams.key)
             .then(function success(response) {
-                $state.go('home');
+                vm.validKey = response.data;
+                vm.user = {
+                    validKey: vm.validKey
+                }
             })
             .catch(function error(response) {
                 vm.error = response.data.error;
             });
+
+        vm.send = function send(user) {
+            Account.changePassword(user)
+                .then(function success(response) {
+                    // $state.go('home');
+                    console.log("OK");
+                })
+                .catch(function error(response) {
+                    vm.error = response.data.error;
+                });
+        }
     }
 })
