@@ -1,4 +1,4 @@
-package accounts
+package account
 
 import (
 	"time"
@@ -29,7 +29,7 @@ type UserJsonData struct {
 }
 
 func (_ *User) Table() string {
-	return "accounts.user"
+	return "account.user"
 }
 
 func (u *User) DecodeJsonData() (*UserJsonData, error) {

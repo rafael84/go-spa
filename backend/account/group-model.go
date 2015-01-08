@@ -1,4 +1,4 @@
-package accounts
+package account
 
 import (
 	"time"
@@ -16,4 +16,4 @@ type Group struct {
 	JsonData  database.JSONB `db:"json_data"   json:"jsonData,omitempty"`
 }
 
-func (_ *Group) Table() string { return "accounts.group" }
+func (_ *Group) Table() string { return "account.group" }

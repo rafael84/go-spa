@@ -1,4 +1,4 @@
-package accounts
+package account
 
 import (
 	"net/http"
@@ -12,8 +12,8 @@ import (
 )
 
 func init() {
-	api.AddSecureRoute("/accounts/group", GroupHandler)
-	api.AddSecureRoute("/accounts/group/{id:[0-9]+}", GroupHandler)
+	api.AddSecureRoute("/account/group", GroupHandler)
+	api.AddSecureRoute("/account/group/{id:[0-9]+}", GroupHandler)
 }
 
 func GroupHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {

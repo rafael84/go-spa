@@ -1,1 +1,1 @@
-drop schema accounts;
+drop schema account;

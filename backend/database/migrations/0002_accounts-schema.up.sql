@@ -1,1 +1,1 @@
-create schema accounts;
+create schema account;

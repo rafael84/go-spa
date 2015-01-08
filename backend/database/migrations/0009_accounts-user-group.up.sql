@@ -1,5 +1,5 @@
 
-create table accounts.user_group
+create table account.user_group
 (
     id            bigserial not null primary key,
     state         integer not null default 0,
@@ -11,11 +11,11 @@ create table accounts.user_group
 )
 with ( oids = false );
 
-create index user_group_json_data_idx on accounts.user_group using gin (json_data);
+create index user_group_json_data_idx on account.user_group using gin (json_data);
 
 create trigger sync_user_group_updated_at before update 
-on accounts.user_group for each row 
+on account.user_group for each row 
 execute procedure public.sync_updated_at();
 
-alter table accounts.user_group add foreign key (user_id) references accounts.user(id);
-alter table accounts.user_group add foreign key (group_id) references accounts.group(id);
+alter table account.user_group add foreign key (user_id) references account.user(id);
+alter table account.user_group add foreign key (group_id) references account.group(id);

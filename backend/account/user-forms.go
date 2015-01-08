@@ -1,4 +1,4 @@
-package accounts
+package account
 
 type SignUpForm struct {
 	FirstName     string `json:"firstName"`

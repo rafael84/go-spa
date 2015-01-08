@@ -1,4 +1,4 @@
-create table accounts.group
+create table account.group
 (
     id           bigserial not null primary key,
     state        integer not null default 0,
@@ -9,8 +9,8 @@ create table accounts.group
 )
 with ( oids = false );
 
-create index group_json_data_idx on accounts.group using gin (json_data);
+create index group_json_data_idx on account.group using gin (json_data);
 
 create trigger sync_group_updated_at before update 
-on accounts.group for each row 
+on account.group for each row 
 execute procedure public.sync_updated_at();

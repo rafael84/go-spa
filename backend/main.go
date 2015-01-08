@@ -10,7 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/nicksnyder/go-i18n/i18n"
 
-	_ "github.com/rafael84/go-spa/backend/accounts"
+	_ "github.com/rafael84/go-spa/backend/account"
 	"github.com/rafael84/go-spa/backend/api"
 	"github.com/rafael84/go-spa/backend/database"
 	"github.com/rafael84/go-spa/backend/middleware"

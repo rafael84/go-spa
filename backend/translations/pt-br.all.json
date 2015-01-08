@@ -1,18 +1,18 @@
 [
   {
-    "id": "accounts.user.could_not_parse_request_data",
+    "id": "account.user.could_not_parse_request_data",
     "translation": "Não foi possível recuperar os dados da requisição"
   },
   {
-    "id": "accounts.user.could_not_query_user ",
+    "id": "account.user.could_not_query_user ",
     "translation": "Não foi possível consultar dados os usuário"
   },
   {
-    "id": "accounts.user.email_taken",
+    "id": "account.user.email_taken",
     "translation": "Este endereço de email já foi utilizado"
   },
   {
-    "id": "accounts.user.passwords_mismatch",
+    "id": "account.user.passwords_mismatch",
     "translation": "As senhas não coincidem"
   }
 ]

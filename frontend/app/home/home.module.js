@@ -61,7 +61,7 @@
     function Me($http, $q) {
         function get() {
             var deferred = $q.defer();
-            $http.get("/api/v1/accounts/user/me")
+            $http.get("/api/v1/account/user/me")
                 .then(function success(response) { deferred.resolve(response.data); })
                 .catch(function error(response) { deferred.reject(response.data.error); });
             return deferred.promise;
@@ -74,14 +74,14 @@
     function Group($http, $q) {
         function getAll() {
             var deferred = $q.defer();
-            $http.get("/api/v1/accounts/group")
+            $http.get("/api/v1/account/group")
                 .then(function success(response) { deferred.resolve(response.data); })
                 .catch(function error(response) { deferred.reject(response.data.error); });
             return deferred.promise;
         }
         function getById(id) {
             var deferred = $q.defer();
-            $http.get("/api/v1/accounts/group/" + id)
+            $http.get("/api/v1/account/group/" + id)
                 .then(function success(response) { deferred.resolve(response.data); })
                 .catch(function error(response) { deferred.reject(response.data.error); });
             return deferred.promise;

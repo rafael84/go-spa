@@ -1,4 +1,4 @@
-package accounts
+package account
 
 import (
 	"encoding/json"
@@ -22,12 +22,12 @@ const (
 )
 
 func init() {
-	api.AddSimpleRoute("/accounts/user/resetPassword", ResetPasswordHandler)
-	api.AddSimpleRoute("/accounts/user/signup", SignUpHandler)
-	api.AddSimpleRoute("/accounts/user/signin", SignInHandler)
-	api.AddSecureRoute("/accounts/user/me", MeHandler)
-	api.AddSecureRoute("/accounts/user", UserHandler)
-	api.AddSecureRoute("/accounts/token/renew", TokenRenewHandler)
+	api.AddSimpleRoute("/account/user/resetPassword", ResetPasswordHandler)
+	api.AddSimpleRoute("/account/user/signup", SignUpHandler)
+	api.AddSimpleRoute("/account/user/signin", SignInHandler)
+	api.AddSecureRoute("/account/user/me", MeHandler)
+	api.AddSecureRoute("/account/user", UserHandler)
+	api.AddSecureRoute("/account/token/renew", TokenRenewHandler)
 }
 
 // newToken generate a new JWT token.
@@ -55,7 +55,7 @@ func SignUpHandler(c *context.Context, rw http.ResponseWriter, req *http.Request
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return api.BadRequest(rw, c.T("accounts.user.could_not_parse_request_data"))
+		return api.BadRequest(rw, c.T("account.user.could_not_parse_request_data"))
 	}
 
 	// create new user service
@@ -63,15 +63,15 @@ func SignUpHandler(c *context.Context, rw http.ResponseWriter, req *http.Request
 	// check whether the email address is already taken
 	_, err = service.GetByEmail(form.Email)
 	if err == nil {
-		return api.BadRequest(rw, c.T("accounts.user.email_taken"))
+		return api.BadRequest(rw, c.T("account.user.email_taken"))
 	} else if err != database.ERecordNotFound {
 		log.Errorf("Could not query user: %s", err)
-		return api.InternalServerError(rw, "accounts.user.could_not_query_user")
+		return api.InternalServerError(rw, "account.user.could_not_query_user")
 	}
 
 	// password validation
 	if form.Password != form.Password {
-		return api.BadRequest(rw, c.T("accounts.user.passwords_mismatch"))
+		return api.BadRequest(rw, c.T("account.user.passwords_mismatch"))
 	}
 
 	// create new user

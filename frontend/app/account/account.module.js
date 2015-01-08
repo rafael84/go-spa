@@ -34,7 +34,7 @@ angular.module('app.account', [
 
     account.renewToken = function() {
         return $http.post(
-            "/api/v1/accounts/token/renew"
+            "/api/v1/account/token/renew"
         ).then(function success(response) {
             store.set('token', response.data.token);
             $rootScope.$broadcast('tokenRenewed', response); // TODO: is it really necessary?
@@ -51,7 +51,7 @@ angular.module('app.account', [
 
     account.signIn = function(user) {
         return $http.post(
-            "/api/v1/accounts/user/signin", user
+            "/api/v1/account/user/signin", user
         ).then(function success(response) {
             store.set('token', response.data.token);
             account.startTokenRenewal();
@@ -74,7 +74,7 @@ angular.module('app.account', [
                 }
             });
         } else {
-            return $http.post('/api/v1/accounts/user/signup', user);
+            return $http.post('/api/v1/account/user/signup', user);
         }
         return deferred.promise;
     };
@@ -93,7 +93,7 @@ angular.module('app.account', [
     };
 
     account.resetPassword = function(user) {
-        return $http.post('/api/v1/accounts/user/resetPassword', user);
+        return $http.post('/api/v1/account/user/resetPassword', user);
     };
 
     return {

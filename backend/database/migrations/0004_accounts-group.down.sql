@@ -1,3 +1,3 @@
-drop trigger if exists sync_group_updated_at on accounts.group;
+drop trigger if exists sync_group_updated_at on account.group;
 
-drop table if exists accounts.group;
+drop table if exists account.group;

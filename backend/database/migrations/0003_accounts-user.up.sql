@@ -1,4 +1,4 @@
-create table accounts.user
+create table account.user
 (
     id           bigserial not null primary key,
     state        integer not null default 0,
@@ -10,8 +10,8 @@ create table accounts.user
 )
 with ( oids = false );
 
-create index user_json_data_idx on accounts.user using gin (json_data);
+create index user_json_data_idx on account.user using gin (json_data);
 
 create trigger sync_user_updated_at before update 
-on accounts.user for each row 
+on account.user for each row 
 execute procedure public.sync_updated_at();
