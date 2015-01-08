@@ -1,0 +1,89 @@
+{
+    "root": {
+        "title": "GO SPA"
+    },
+    "main": {
+        "header": {
+            "title": "Go SPA - Sample App",
+            "signup": "Sign Up",
+            "signin": "Sign In",
+            "signout": "Sign Out",
+            "hello": "Hello"
+        },
+        "footer": {
+            "translate": {
+                "en": "English",
+                "pt": "Portuguese"
+            }
+        }
+    },
+    "home": {
+        "title": "Home",
+        "menu": {
+            "me": "Me",
+            "groups": "Groups"
+        }
+    },
+    "signin": {
+        "title": "Sign In",
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "At least 6 characters"
+            },
+            "resetPassword": "Reset my password",
+            "submit": {
+                "label": "Continue"
+            }
+        }
+    },
+    "signup": {
+        "title": "Sign Up",
+        "form": {
+            "firstName": {
+                "label": "First Name",
+                "placeholder": "Please enter your first name only, please",
+                "error": "Please enter your first name."
+            },
+            "lastName": {
+                "label": "Last Name",
+                "placeholder": "Please enter your last name",
+                "error": "Please enter your last name."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address",
+                "error": "Please enter a valid email address."
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "At least 6 characters",
+                "error": "Please provide a password with at least 6 characters."
+            },
+            "passwordAgain": {
+                "label": "Password, again",
+                "placeholder": "Enter your password again, please",
+                "error": "You must enter your password twice."
+            },
+            "submit": {
+                "label": "Continue"
+            }
+        }
+    },
+    "resetPassword": {
+        "title": "Reset Password",
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address"
+            },
+            "submit": {
+                "label": "Continue"
+            }
+        }
+    }
+}

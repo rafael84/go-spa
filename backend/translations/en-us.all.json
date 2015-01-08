@@ -1,0 +1,18 @@
+[
+  {
+    "id": "accounts.user.could_not_parse_request_data",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "accounts.user.could_not_query_user ",
+    "translation": "Could not query user"
+  },
+  {
+    "id": "accounts.user.email_taken",
+    "translation": "This email address is already taken"
+  },
+  {
+    "id": "accounts.user.passwords_mismatch",
+    "translation": "Passwords does not match"
+  }
+]

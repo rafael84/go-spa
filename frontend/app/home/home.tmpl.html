@@ -1,0 +1,17 @@
+<h2 translate="home.title">Home</h2>
+
+<div class="alert alert-danger lead" ng-show="vm.error">
+    <i class="fa fa-exclamation-circle"></i>
+    {{ vm.error }}
+</div>
+
+<div class="nav nav-pills">
+    <li ng-class="{ active: $state.is('home.me') }">
+        <a ui-sref="home.me" translate="home.menu.me">Me</a>
+    </li>
+    <li ng-class="{ active: $state.is('home.group') || $state.is('home.group.detail') }">
+        <a ui-sref="home.group" translate="home.menu.groups">Groups</a>
+    </li>
+</div>
+
+<div ui-view></div>

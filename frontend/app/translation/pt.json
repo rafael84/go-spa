@@ -1,0 +1,89 @@
+{
+    "root": {
+        "title": "GO SPA"
+    },
+    "main": {
+        "header": {
+            "title": "Go SPA - Aplicação de Exemplo",
+            "signup": "Cadastrar",
+            "signin": "Acessar minha conta",
+            "signout": "Sair",
+            "hello": "Olá"
+        },
+        "footer": {
+            "translate": {
+                "en": "Inglês",
+                "pt": "Português"
+            }
+        }
+    },
+    "home": {
+        "title": "Home",
+        "menu": {
+            "me": "Meu Perfil",
+            "groups": "Grupos"
+        }
+    },
+    "signin": {
+        "title": "Acessar minha conta",
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email"
+            },
+            "password": {
+                "label": "Senha",
+                "placeholder": "Pelo menos 6 caracteres"
+            },
+            "resetPassword": "Esqueci minha senha",
+            "submit": {
+                "label": "Continuar"
+            }
+        }
+    },
+    "signup": {
+        "title": "Cadastrar",
+        "form": {
+            "firstName": {
+                "label": "Primeiro Nome",
+                "placeholder": "Entre apenas com o seu primeiro nome, por favor",
+                "error": "Por favor, entre com o seu primeiro nome."
+            },
+            "lastName": {
+                "label": "Último Nome",
+                "placeholder": "Enter com seu sobrenome",
+                "error": "Por favor, entre com o seu sobrenome."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email",
+                "error": "Por favor, entre com um email válido"
+            },
+            "password": {
+                "label": "Senha",
+                "placeholder": "Pelo menos 6 caracteres",
+                "error": "Por favor entre com uma senha com pelo menos 6 caracteres"
+            },
+            "passwordAgain": {
+                "label": "Senha, novamente",
+                "placeholder": "Entre com a sua senha mais uma vez, por favor",
+                "error": "Você deve entrar com a senha duas vezes"
+            },
+            "submit": {
+                "label": "Continuar"
+            }
+        }
+    },
+    "resetPassword": {
+        "title": "Esqueci minha senha",
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email"
+            },
+            "submit": {
+                "label": "Continuar"
+            }
+        }
+    }
+}

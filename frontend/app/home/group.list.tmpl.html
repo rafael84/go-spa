@@ -1,0 +1,22 @@
+<h3>
+    Groups
+</h3>
+
+<table class="table">
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="group in vm.groups">
+            <td>
+                <a ui-sref="home.group.detail({groupId: group.id})">
+                    {{ group.id }}
+                </a>
+            </td>
+            <td>{{ group.name }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div ui-view></div>

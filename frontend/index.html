@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="MainCtrl as main">
+
+<head>
+    <meta charset="utf-8">
+    <title translate="root.title">APP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- VENDOR -->
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css" type="text/css"
+    />
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css" type="text/css"
+    />
+    <!-- APP -->
+    <link rel="stylesheet" href="app/app.css" type="text/css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <section>
+            <h1 class="page-header"> 
+                <a ui-sref="home" translate="main.header.title">Go SPA</a> 
+
+                <small class="pull-right">
+                        <span ng-hide="main.isUserSignedIn()">
+                            <a ui-sref="signup" translate="main.header.signup">Sign Up</a>
+                            |
+                            <a ui-sref="signin" translate="main.header.signin">Sign In</a>
+                        </span>
+                        <span ng-show="main.isUserSignedIn()">
+                            {{ 'main.header.hello' | translate }} 
+                            <a ui-sref="home.me">{{ main.getUser().jsonData.firstName }}</a>
+                            |
+                            <a ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
+                        </span>
+                </small>
+            </h1>
+
+        </section>
+
+        <section ui-view></section>
+
+        <section>
+            <div class="clearfix">
+                <span class="pull-right">
+                    <button class="btn btn-link" ng-click="main.switchLang('en')" translate="main.footer.translate.en">English</button>
+                    |
+                    <button class="btn btn-link" ng-click="main.switchLang('pt')" translate="main.footer.translate.pt">Portuguese</button>
+                </span>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- VENDOR -->
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/angularjs/angular.min.js"></script>
+    <script src="vendor/a0-angular-storage/dist/angular-storage.min.js"></script>
+    <script src="vendor/angular-jwt/dist/angular-jwt.min.js"></script>
+    <script src="vendor/ui-router/release/angular-ui-router.min.js"></script>
+    <script src="./vendor/angular-translate/angular-translate.min.js"></script>
+    <!-- APP -->
+    <script src="app/app.js"></script>
+    <script src="app/translation/translation.module.js"></script>
+    <script src="app/account/account.module.js"></script>
+    <script src="app/home/home.module.js"></script>
+    <script src="app/signup/signup.module.js"></script>
+    <script src="app/signin/signin.module.js"></script>
+</body>
+
+</html>

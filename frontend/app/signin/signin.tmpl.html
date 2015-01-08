@@ -1,0 +1,28 @@
+<h2 translate="signin.title">Sign In</h2>
+
+<form class="form" ng-submit="signin.authenticate()">
+
+    <div class="alert alert-danger lead" ng-show="signin.error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ signin.error }}
+    </div>
+
+    <div class="form-group">
+        <label for="email" translate="signin.form.email.label">Email</label>
+        <input class="form-control" type="text" name="email" id="email" ng-model="signin.user.email"
+        placeholder="{{ 'signin.form.email.placeholder' | translate }}" />
+    </div>
+
+    <div class="form-group">
+        <label for="password" translate="signin.form.password.label">Password</label>
+        <input class="form-control" type="password" name="password" id="password" ng-model="signin.user.password"
+        placeholder="{{ 'signin.form.password.placeholder' | translate }}" />
+    </div>
+
+    <p class="clearfix">
+        <button class="btn btn-link" translate="signin.form.resetPassword" ui-sref="resetPassword"></button>
+        <span class="pull-right">
+            <button class="btn btn-default" type="submit">{{ 'signin.form.submit.label' | translate }} →</button>
+        </span>
+    </p>
+</form>
