@@ -88,7 +88,11 @@ func (s *Session) Filter(entity Entity, where string, whereParams ...interface{}
 		sql.WriteString(where)
 	}
 
-	log.Debugf("SQL: %s", sql.String())
+	log.WithField(
+		"params", fmt.Sprintf("%s", whereParams),
+	).Debugf(
+		"SQL: %s", sql.String(),
+	)
 
 	rows, err := s.DB.Query(sql.String(), whereParams...)
 	if err != nil {

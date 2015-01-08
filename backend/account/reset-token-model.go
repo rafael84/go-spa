@@ -21,5 +21,5 @@ func (_ *ResetToken) Table() string {
 }
 
 func (r *ResetToken) Valid() bool {
-	return r.Expiration.Before(time.Now())
+	return r.Expiration.After(time.Now())
 }

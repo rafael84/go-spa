@@ -86,10 +86,14 @@ func ValidateKeyHandler(c *context.Context, rw http.ResponseWriter, req *http.Re
 		Key    string `json:"key"`
 	}
 
-	// TODO: validate the key here
+	service := NewResetTokenService(c.DB)
 
-	return api.OK(rw, ValidKey{1, form.Key})
-	// return api.BadRequest(rw, "Invalid Key")
+	resetToken, err := service.GetByKey(form.Key)
+	if err != nil || !resetToken.Valid() {
+		return api.BadRequest(rw, "Invalid Key")
+	}
+
+	return api.OK(rw, ValidKey{resetToken.UserId, form.Key})
 }
 
 func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
