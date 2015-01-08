@@ -56,6 +56,30 @@ func (ef EntityFields) autofilledValues(autofilled bool) []interface{} {
 	return values
 }
 
+func (ef EntityFields) pk(pk bool) []string {
+	fields := make([]string, 0)
+	for _, field := range ef.extract() {
+		tag := extractTag(field)
+		if tag.pk == pk {
+			fields = append(fields, tag.fieldname)
+		}
+	}
+	return fields
+}
+
+func (ef EntityFields) pkValues(pk bool) []interface{} {
+	entityValue := reflect.ValueOf(ef.Entity).Elem()
+	values := make([]interface{}, 0)
+	for _, field := range ef.extract() {
+		tag := extractTag(field)
+		if tag.pk == pk {
+			value := entityValue.FieldByName(field.Name).Addr().Interface()
+			values = append(values, value)
+		}
+	}
+	return values
+}
+
 func (ef EntityFields) Updatable() []string {
 	return ef.autofilled(false)
 }
@@ -80,6 +104,14 @@ func (ef EntityFields) UpdatableValues() []interface{} {
 
 func (ef EntityFields) NotUpdatableValues() []interface{} {
 	return ef.autofilledValues(true)
+}
+
+func (ef EntityFields) PK() []string {
+	return ef.pk(true)
+}
+
+func (ef EntityFields) PKValues() []interface{} {
+	return ef.pkValues(true)
 }
 
 func (ef EntityFields) Scan(rows *sql.Rows) error {

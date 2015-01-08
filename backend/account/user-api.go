@@ -138,7 +138,7 @@ func TokenRenewHandler(sc *context.SecureContext, rw http.ResponseWriter, req *h
 	service := NewUserService(sc.DB)
 
 	// check if user is still valid
-	user, err := service.GetById(int(userId.(float64)))
+	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
 		return api.InternalServerError(rw, "Could not query user.")
@@ -160,7 +160,7 @@ func MeHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Requ
 	service := NewUserService(sc.DB)
 
 	// query user data
-	user, err := service.GetById(int(userId.(float64)))
+	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
 		return api.InternalServerError(rw, "Could not query user.")

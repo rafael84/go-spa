@@ -47,7 +47,15 @@ func (us *userService) Create(email, password string, userJsonData *UserJsonData
 	return user, nil
 }
 
-func (us *userService) GetById(id int) (*User, error) {
+func (us *userService) Update(user *User) error {
+	err := us.session.Update(user)
+	if err != nil {
+		return fmt.Errorf("Could not persist user: %s", err)
+	}
+	return nil
+}
+
+func (us *userService) GetById(id int64) (*User, error) {
 	user, err := us.session.One(&User{}, "id = $1", id)
 	if err != nil {
 		return nil, err

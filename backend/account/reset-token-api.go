@@ -12,6 +12,11 @@ import (
 	"github.com/rafael84/go-spa/backend/mail"
 )
 
+type ValidKey struct {
+	UserId int64  `json:"userId"`
+	Key    string `json:"key"`
+}
+
 func init() {
 	api.AddSimpleRoute("/account/reset-password", ResetPasswordHandler)
 	api.AddSimpleRoute("/account/reset-password/validate-key", ValidateKeyHandler)
@@ -81,11 +86,6 @@ func ValidateKeyHandler(c *context.Context, rw http.ResponseWriter, req *http.Re
 		return api.BadRequest(rw, "Unable to validate key")
 	}
 
-	type ValidKey struct {
-		UserId int64  `json:"userId"`
-		Key    string `json:"key"`
-	}
-
 	service := NewResetTokenService(c.DB)
 
 	resetToken, err := service.GetByKey(form.Key)
@@ -97,7 +97,49 @@ func ValidateKeyHandler(c *context.Context, rw http.ResponseWriter, req *http.Re
 }
 
 func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
-	// TODO: change user password here
+	type ChangePasswordForm struct {
+		Password      string   `json:"password"`
+		PasswordAgain string   `json:"passwordAgain"`
+		ValidKey      ValidKey `json:"validKey"`
+	}
+
+	// decode request data
+	var form ChangePasswordForm
+	err := json.NewDecoder(req.Body).Decode(&form)
+	if err != nil {
+		return api.BadRequest(rw, "Unable to change the password")
+	}
+
+	// validate the passwords
+	if form.Password != form.PasswordAgain {
+		return api.BadRequest(rw, "Passwords mismatch")
+	}
+
+	// validate the key again
+	service := NewResetTokenService(c.DB)
+	resetToken, err := service.GetByKey(form.ValidKey.Key)
+	if err != nil || !resetToken.Valid() {
+		return api.BadRequest(rw, "Invalid Key")
+	}
+
+	// get user from db
+	userService := NewUserService(c.DB)
+	user, err := userService.GetById(resetToken.UserId)
+	if err != nil {
+		return api.InternalServerError(rw, "User not found")
+	}
+
+	// encode user password
+	err = user.Password.Encode(form.Password)
+	if err != nil {
+		return api.InternalServerError(rw, "Could not change user password")
+	}
+
+	// change user data in database
+	err = userService.Update(user)
+	if err != nil {
+		return api.InternalServerError(rw, "Could not change user password")
+	}
+
 	return api.OK(rw, "Password changed")
-	// return api.BadRequest(rw, "Invalid Key")
 }

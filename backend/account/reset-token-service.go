@@ -33,7 +33,7 @@ func (r *resetTokenService) Create(userId int64) (*ResetToken, error) {
 		Id:         null.NewInt(0, false),
 		State:      0,
 		Key:        hex.EncodeToString(buf),
-		Expiration: time.Now().Add(time.Minute * 1),
+		Expiration: time.Now().Add(time.Minute * 10),
 		UserId:     userId,
 	}
 

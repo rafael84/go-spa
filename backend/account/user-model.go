@@ -14,7 +14,7 @@ const (
 )
 
 type User struct {
-	Id        null.Int       `db:"id,autofilled"           json:"id"`
+	Id        null.Int       `db:"id,autofilled,pk"        json:"id"`
 	State     int            `db:"state"                   json:"state"`
 	CreatedAt time.Time      `db:"created_at,autofilled"   json:"createdAt"`
 	UpdatedAt time.Time      `db:"updated_at,autofilled"   json:"updatedAt"`
