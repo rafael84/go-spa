@@ -19,8 +19,8 @@ type Session struct {
 	DB *sql.DB
 }
 
-func NewSession() (*Session, error) {
-	db, err := Connect()
+func NewSession(connectionString string) (*Session, error) {
+	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		return nil, err
 	}

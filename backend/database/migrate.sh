@@ -3,10 +3,20 @@ set -e
 
 which migrate > /dev/null || go get -v github.com/mattes/migrate
 
+# HOW TO CREATE USER AND DATABASE (assuming you're using psql):
+#
+#   $ psql template1
+#   
+#   template1=# create user gospa with password 'gospa';
+#   template1=# create database gospa;
+#   template1=# grant all privileges on database gospa to gospa;
+#  
+#   template1=# \c gospa;
+#
+#   gospa=# alter schema public owner to gospa;
+
 dir=$(dirname $0)
 
-ip=$(boot2docker ip 2> /dev/null || echo '127.0.0.1')  
-port=15432
-password=1234
+. $dir/../.env
 
-migrate -path $dir/migrations -url "postgres://postgres:${password}@${ip}:${port}/postgres?sslmode=disable" $@
+migrate -path $dir/migrations -url $DB_CONN_URL $@

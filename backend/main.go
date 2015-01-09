@@ -36,8 +36,17 @@ func mustLoadTranslations() {
 // The .env file must have the following structure:
 //
 // 		# Email settings
-// 		EMAIL_USERNAME=user@gmail.com
-// 		EMAIL_PASSWORD=*****
+// 		export EMAIL_USERNAME=gospa@gmail.com
+// 		export EMAIL_PASSWORD=******
+//
+// 		# Database
+// 		DB_USER=gospa
+// 		DB_NAME=gospa
+// 		DB_PASSWORD=
+// 		DB_HOST=127.0.0.1
+// 		DB_PORT=5432
+// 		DB_SSLMODE=disable
+// 		export DB_CONN_URL="postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=${DB_SSLMODE}"
 //
 func mustLoadEnv() {
 	err := godotenv.Load()
@@ -58,7 +67,7 @@ func main() {
 
 	router := mux.NewRouter()
 
-	db, err := database.NewSession()
+	db, err := database.NewSession(os.Getenv("DB_CONN_URL"))
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %s", err)
 	}

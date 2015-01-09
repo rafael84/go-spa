@@ -7,6 +7,8 @@ import (
 	"os"
 	"regexp"
 
+	log "github.com/Sirupsen/logrus"
+
 	"github.com/rafael84/go-spa/backend/api"
 	"github.com/rafael84/go-spa/backend/context"
 	"github.com/rafael84/go-spa/backend/mail"
@@ -21,6 +23,38 @@ func init() {
 	api.AddSimpleRoute("/account/reset-password", ResetPasswordHandler)
 	api.AddSimpleRoute("/account/reset-password/validate-key", ValidateKeyHandler)
 	api.AddSimpleRoute("/account/reset-password/complete", CompleteHandler)
+}
+
+func sendResetPasswordEmail(c *context.Context, user *User) {
+	var body bytes.Buffer
+
+	resetTokenService := NewResetTokenService(c.DB)
+
+	resetToken, err := resetTokenService.Create(user.Id.NullInt64.Int64)
+	if err != nil {
+		log.Errorf("Unable to create a new reset token: %s", err)
+		return
+	}
+
+	body.WriteString("Access this link: ")
+	body.WriteString("http://localhost:3000/#/reset-password/step2/")
+	body.WriteString(resetToken.Key)
+
+	err = mail.NewGmailAccount(
+		os.Getenv("EMAIL_USERNAME"),
+		os.Getenv("EMAIL_PASSWORD"),
+	).Send(&mail.Message{
+		From:    "Go-SPA",
+		To:      []string{user.Email},
+		Subject: "Reset Password",
+		Body:    body.Bytes(),
+	})
+
+	if err != nil {
+		log.Errorf("Unable to send email: %s", err)
+		return
+	}
+
 }
 
 func ResetPasswordHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
@@ -46,30 +80,7 @@ func ResetPasswordHandler(c *context.Context, rw http.ResponseWriter, req *http.
 		return api.BadRequest(rw, "User not found")
 	}
 
-	go func(user *User) {
-		var body bytes.Buffer
-
-		resetTokenService := NewResetTokenService(c.DB)
-		resetToken, err := resetTokenService.Create(user.Id.NullInt64.Int64)
-
-		if err != nil {
-			return
-		}
-
-		body.WriteString("Access this link: ")
-		body.WriteString("http://localhost:3000/#/reset-password/step2/")
-		body.WriteString(resetToken.Key)
-
-		mail.NewGmailAccount(
-			os.Getenv("EMAIL_USERNAME"),
-			os.Getenv("EMAIL_PASSWORD"),
-		).Send(&mail.Message{
-			From:    "Go-SPA",
-			To:      []string{form.Email},
-			Subject: "Reset Password",
-			Body:    body.Bytes(),
-		})
-	}(user)
+	go sendResetPasswordEmail(c, user)
 
 	return api.OK(rw, "Email sent")
 }

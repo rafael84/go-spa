@@ -8,5 +8,3 @@ begin
 end;
 $body$
 language plpgsql volatile cost 100;
-
-alter function public.sync_updated_at() owner to postgres;
