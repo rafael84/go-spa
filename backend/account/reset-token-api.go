@@ -152,5 +152,5 @@ func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Reque
 		return api.InternalServerError(rw, "Could not change user password")
 	}
 
-	return api.OK(rw, "Password changed")
+	return api.OK(rw, user)
 }

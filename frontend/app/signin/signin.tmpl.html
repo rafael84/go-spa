@@ -1,3 +1,8 @@
+<div class="alert alert-info lead" ng-show="signin.message">
+    <i class="fa fa-exclamation-circle"></i>
+    {{ signin.message }}
+</div>
+
 <h2 translate="signin.title">Sign In</h2>
 
 <form class="form" ng-submit="signin.authenticate()">

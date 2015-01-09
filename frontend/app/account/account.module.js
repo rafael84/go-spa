@@ -3,7 +3,9 @@
 angular.module('app.account', [
     'ui.router',
     'angular-jwt',
-    'angular-storage'
+    'angular-storage',
+
+    'app.main'
 ])
 
 .config(function Config($stateProvider) {
@@ -49,6 +51,7 @@ angular.module('app.account', [
         ).then(function success(response) {
             store.set('token', response.data.token);
             $rootScope.$broadcast('tokenRenewed', response); // TODO: is it really necessary?
+            return response;
         }).catch(function error(response) {
             account.stopTokenRenewal();
             $rootScope.$broadcast('tokenNotRenewed', response) // TODO: is it really necessary?
@@ -67,6 +70,7 @@ angular.module('app.account', [
             store.set('token', response.data.token);
             account.startTokenRenewal();
             $rootScope.$broadcast('user:signedIn', response);
+            return response;
         });
     };
 
@@ -141,7 +145,7 @@ angular.module('app.account', [
     };
 })
 
-.controller('ResetPasswordCtrl', function ResetPasswordCtrl($state, $stateParams, Account) {
+.controller('ResetPasswordCtrl', function ResetPasswordCtrl($state, $stateParams, Account, Flash) {
     var vm = this;
 
     vm.error = null;
@@ -151,6 +155,7 @@ angular.module('app.account', [
         vm.send = function send(user) {
             Account.resetPassword(user)
                 .then(function success(response) {
+                    Flash.show('Check your email address.');
                     $state.go('home');
                 })
                 .catch(function error(response) {
@@ -174,8 +179,8 @@ angular.module('app.account', [
         vm.send = function send(user) {
             Account.changePassword(user)
                 .then(function success(response) {
-                    // $state.go('home');
-                    console.log("OK");
+                    Flash.show('Your account has been updated, you can login now.');
+                    $state.go('signin');
                 })
                 .catch(function error(response) {
                     vm.error = response.data.error;

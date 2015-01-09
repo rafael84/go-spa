@@ -4,7 +4,7 @@ create table account.reset_token
     state        integer not null default 0,
     created_at   timestamptz not null default now(),
     updated_at   timestamptz not null default now(),
-    key          varchar(32) not null,
+    key          varchar(64) not null,
     expiration   timestamptz not null,
     user_id      bigint not null
 )

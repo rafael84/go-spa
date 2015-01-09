@@ -3,6 +3,7 @@
 angular.module('app.signup', [
     'ui.router',
 
+    'app.main',
     'app.account'
 ])
 
@@ -14,7 +15,7 @@ angular.module('app.signup', [
     });
 })
 
-.controller('SignUpCtrl', function SignUpCtrl($state, Account) {
+.controller('SignUpCtrl', function SignUpCtrl($state, Account, Flash) {
     var signup = this;
 
     signup.user = {};
@@ -27,6 +28,7 @@ angular.module('app.signup', [
 
         Account.signUp(signup.user)
             .then(function success(response) {
+                Flash.show('Thanks for registering!');
                 $state.go('home');
             })
             .catch(function error(response) {

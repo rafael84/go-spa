@@ -10,13 +10,22 @@
     />
     <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css" type="text/css"
     />
+    <link rel="stylesheet" href="vendor/animate.css/animate.min.css" type="text/css"
+    />
     <!-- APP -->
     <link rel="stylesheet" href="app/app.css" type="text/css" />
 </head>
 
-<body>
+<body ng-cloak>
 
     <div class="container">
+
+        <div class="flash-message text-center" 
+            ng-class="{'animated bounceInDown': main.hasFlashMessage()}"
+            ng-show="main.hasFlashMessage()">
+            {{ main.getFlashMessage() }}
+        </div>
+
         <section>
             <h1 class="page-header"> 
                 <a ui-sref="home" translate="main.header.title">Go SPA</a> 
@@ -35,7 +44,6 @@
                         </span>
                 </small>
             </h1>
-
         </section>
 
         <section ui-view></section>
@@ -59,9 +67,11 @@
     <script src="vendor/a0-angular-storage/dist/angular-storage.min.js"></script>
     <script src="vendor/angular-jwt/dist/angular-jwt.min.js"></script>
     <script src="vendor/ui-router/release/angular-ui-router.min.js"></script>
-    <script src="./vendor/angular-translate/angular-translate.min.js"></script>
+    <script src="vendor/angular-translate/angular-translate.min.js"></script>
+
     <!-- APP -->
     <script src="app/app.js"></script>
+    <script src="app/main/main.module.js"></script>
     <script src="app/translation/translation.module.js"></script>
     <script src="app/account/account.module.js"></script>
     <script src="app/home/home.module.js"></script>

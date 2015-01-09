@@ -3,6 +3,7 @@
 angular.module('app.signin', [
     'ui.router',
 
+    'app.main',
     'app.account'
 ])
 
@@ -16,7 +17,7 @@ angular.module('app.signin', [
 })
 
 
-.controller('SignInCtrl', function SignInCtrl($state, Account) {
+.controller('SignInCtrl', function SignInCtrl($state, Account, Flash) {
     var signin = this;
 
     signin.user = {};
@@ -25,6 +26,7 @@ angular.module('app.signin', [
     signin.authenticate = function authenticate() {
         Account.signIn(signin.user)
             .then(function success(response) {
+                Flash.show('Welcome back!');
                 $state.go('home');
             })
             .catch(function error(response) {
