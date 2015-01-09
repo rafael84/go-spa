@@ -2,19 +2,22 @@
     Groups
 </h3>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <th>Id</th>
         <th>Name</th>
+        <th>Actions</th>
     </thead>
     <tbody>
         <tr ng-repeat="group in vm.groups">
             <td>
-                <a ui-sref="home.group.detail({groupId: group.id})">
+                <a class="btn btn-link" ui-sref="home.group.detail({groupId: group.id})">
                     {{ group.id }}
                 </a>
             </td>
             <td>{{ group.name }}</td>
+            <td><a class="btn btn-link" ng-click="vm.delete(group)">Delete</td>
+            
         </tr>
     </tbody>
 </table>

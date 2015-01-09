@@ -29,6 +29,14 @@ func GroupHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.R
 			log.Errorf("Could not query group id %s: %v", id, err)
 			return api.BadRequest(rw, "Could not query group")
 		}
+		if req.Method == "DELETE" {
+			err := sc.DB.Delete(group)
+			if err != nil {
+				log.Errorf("Could not delete group %s: %v", id, err)
+				return api.InternalServerError(rw, "Could not delete user")
+			}
+			return api.NoContent(rw)
+		}
 		return api.OK(rw, group)
 	}
 

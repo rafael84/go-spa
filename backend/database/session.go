@@ -62,6 +62,37 @@ func (s *Session) Create(entity Entity) error {
 	}
 }
 
+func (s *Session) Delete(entity Entity) error {
+	ef := EntityFields{entity}
+
+	pkFields := ef.PK()
+	pkValues := ef.PKValues()
+
+	pkList := make([]string, 0)
+	for index, field := range pkFields {
+		pkList = append(
+			pkList,
+			fmt.Sprintf("%s = $%d", field, index+1),
+		)
+	}
+	pkListStr := strings.Join(pkList, " AND ")
+
+	var query bytes.Buffer
+	query.WriteString("delete from ")
+	query.WriteString(entity.Table())
+	query.WriteString(" where ")
+	query.WriteString(pkListStr)
+
+	log.Debugf("SQL: %s", query.String())
+
+	_, err := s.DB.Exec(query.String(), pkValues...)
+	if err != nil {
+		return fmt.Errorf("Failed to execute statement: %s", err)
+	}
+
+	return nil
+}
+
 func (s *Session) Update(entity Entity) error {
 	ef := EntityFields{entity}
 

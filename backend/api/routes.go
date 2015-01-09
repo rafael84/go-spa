@@ -81,6 +81,10 @@ func Created(rw http.ResponseWriter, response interface{}) error {
 	return Success(rw, http.StatusCreated, response)
 }
 
+func NoContent(rw http.ResponseWriter) error {
+	return Success(rw, http.StatusNoContent, "")
+}
+
 func BadRequest(rw http.ResponseWriter, message string, args ...interface{}) error {
 	return Errorf(rw, http.StatusBadRequest, message, args...)
 }

@@ -5,7 +5,9 @@
     angular.module('app.home', [
             'ui.router',
             'angular-storage',
-            'angular-jwt'
+            'angular-jwt',
+
+            'app.main'
         ])
         .config(Config)
         .factory('Me', Me)
@@ -97,9 +99,23 @@
                 });
             return deferred.promise;
         }
+
+        function remove(group) {
+            var deferred = $q.defer();
+            $http.delete("/api/v1/account/group/" + group.id)
+                .then(function success(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function error(response) {
+                    deferred.reject(response.data.error);
+                });
+            return deferred.promise;
+        }
+
         return {
             getAll: getAll,
-            getById: getById
+            getById: getById,
+            remove: remove
         }
     }
 
@@ -113,9 +129,22 @@
         vm.user = user;
     }
 
-    function GroupListCtrl(groups) {
+    function GroupListCtrl(groups, Group, Flash) {
         var vm = this;
         vm.groups = groups;
+        vm.delete = function(group) {
+            Group.remove(group)
+                .then(function success(response) {
+                    Group.getAll()
+                        .then(function success(response) {
+                            vm.groups = response;
+                        });
+                    Flash.show("Deleted");
+                })
+                .catch(function error(response) {
+                    Flash.show("Error!");
+                });
+        }
     }
 
     function GroupDetailCtrl(group) {

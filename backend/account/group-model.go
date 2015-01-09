@@ -8,7 +8,7 @@ import (
 )
 
 type Group struct {
-	Id        null.Int       `db:"id"          json:"id"`
+	Id        null.Int       `db:"id,pk"       json:"id"`
 	State     int            `db:"state"       json:"state"`
 	CreatedAt time.Time      `db:"created_at"  json:"createdAt"`
 	UpdatedAt time.Time      `db:"updated_at"  json:"updatedAt"`
