@@ -31,7 +31,7 @@ func (r *resetTokenService) Create(userId int64) (*ResetToken, error) {
 	// create new reset token structure
 	resetToken := &ResetToken{
 		Id:         null.NewInt(0, false),
-		State:      0,
+		State:      ResetTokenActive,
 		Key:        hex.EncodeToString(buf),
 		Expiration: time.Now().Add(time.Minute * 10),
 		UserId:     userId,
@@ -44,6 +44,14 @@ func (r *resetTokenService) Create(userId int64) (*ResetToken, error) {
 	}
 
 	return resetToken, nil
+}
+
+func (r *resetTokenService) Update(token *ResetToken) error {
+	err := r.session.Update(token)
+	if err != nil {
+		return fmt.Errorf("Could not persist token: %s", err)
+	}
+	return nil
 }
 
 func (r *resetTokenService) GetByKey(key string) (*ResetToken, error) {

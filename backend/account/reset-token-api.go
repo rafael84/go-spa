@@ -127,8 +127,8 @@ func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Reque
 	}
 
 	// validate the key again
-	service := NewResetTokenService(c.DB)
-	resetToken, err := service.GetByKey(form.ValidKey.Key)
+	resetTokenService := NewResetTokenService(c.DB)
+	resetToken, err := resetTokenService.GetByKey(form.ValidKey.Key)
 	if err != nil || !resetToken.Valid() {
 		return api.BadRequest(rw, "Invalid Key")
 	}
@@ -150,6 +150,13 @@ func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Reque
 	err = userService.Update(user)
 	if err != nil {
 		return api.InternalServerError(rw, "Could not change user password")
+	}
+
+	// invalidate token
+	resetToken.State = ResetTokenInactive
+	err = resetTokenService.Update(resetToken)
+	if err != nil {
+		log.Errorf("Unable to invalidate token: %s", err)
 	}
 
 	return api.OK(rw, user)

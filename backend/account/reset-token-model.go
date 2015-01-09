@@ -6,8 +6,13 @@ import (
 	"github.com/guregu/null"
 )
 
+const (
+	ResetTokenActive   = 0
+	ResetTokenInactive = 1
+)
+
 type ResetToken struct {
-	Id         null.Int  `db:"id,autofilled"           json:"id"`
+	Id         null.Int  `db:"id,autofilled,pk"        json:"id"`
 	State      int       `db:"state"                   json:"state"`
 	CreatedAt  time.Time `db:"created_at,autofilled"   json:"createdAt"`
 	UpdatedAt  time.Time `db:"updated_at,autofilled"   json:"updatedAt"`
@@ -21,5 +26,5 @@ func (_ *ResetToken) Table() string {
 }
 
 func (r *ResetToken) Valid() bool {
-	return r.Expiration.After(time.Now())
+	return r.State == ResetTokenActive && r.Expiration.After(time.Now())
 }
