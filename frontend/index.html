@@ -31,15 +31,15 @@
 
           <small class="pull-right">
             <span ng-hide="main.isUserSignedIn()">
-              <a ui-sref="signup" translate="main.header.signup">Sign Up</a>
+              <a class="btn btn-link" ui-sref="signup" translate="main.header.signup">Sign Up</a>
               |
-              <a ui-sref="signin" translate="main.header.signin">Sign In</a>
+              <a class="btn btn-link" ui-sref="signin" translate="main.header.signin">Sign In</a>
             </span>
             <span ng-show="main.isUserSignedIn()">
               {{ 'main.header.hello' | translate }} 
               <a ui-sref="home.me">{{ main.getUser().jsonData.firstName }}</a>
               |
-              <a ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
+              <a class="btn btn-link" ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
             </span>
           </small>
         </h1>
