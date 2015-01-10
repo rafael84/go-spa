@@ -2,6 +2,10 @@
 
 root = true
 
+[*]
+preserve_newlines = true
+max_preserve_newlines = 1
+
 [**.js]
 indent_style = space
 indent_size = 4
@@ -11,6 +15,6 @@ indent_style = space
 indent_size = 4
 
 [**.html]
-;vim:max_char=99
+max_char = 99
 indent_style = space
 indent_size = 2
