@@ -8,10 +8,11 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"github.com/nicksnyder/go-i18n/i18n"
 
 	_ "github.com/rafael84/go-spa/backend/account"
-	"github.com/rafael84/go-spa/backend/api"
+	"github.com/rafael84/go-spa/backend/context"
 	"github.com/rafael84/go-spa/backend/database"
 	"github.com/rafael84/go-spa/backend/middleware"
 	_ "github.com/rafael84/go-spa/backend/storage"
@@ -20,6 +21,8 @@ import (
 const (
 	pathPrefix   = "/api/v1"
 	frontendPath = "../frontend"
+	privKey      = "keys/app.rsa"     // openssl genrsa -out app.rsa 2048
+	pubKey       = "keys/app.rsa.pub" // openssl rsa -in app.rsa -pubout > app.rsa.pub
 )
 
 func init() {
@@ -72,7 +75,9 @@ func main() {
 		log.Fatalf("Unable to connect to database: %s", err)
 	}
 
-	err = api.Configure(router, pathPrefix, db)
+	vars := map[string]interface{}{"db": db}
+
+	err = context.Configure(router, privKey, pubKey, pathPrefix, vars)
 	if err != nil {
 		log.Fatalf("Unable to configure API: %s", err)
 	}

@@ -9,8 +9,9 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/rafael84/go-spa/backend/api"
+	"github.com/rafael84/go-spa/backend/base"
 	"github.com/rafael84/go-spa/backend/context"
+	"github.com/rafael84/go-spa/backend/database"
 	"github.com/rafael84/go-spa/backend/mail"
 )
 
@@ -20,39 +21,15 @@ type ValidKey struct {
 }
 
 func init() {
-	api.AddEndpoint(
-		&context.Endpoint{
-			Public: true,
-			Path:   "/account/reset-password",
-			Handlers: context.MethodHandlers{
-				"POST": ResetPasswordHandler,
-			},
-		},
-	)
-	api.AddEndpoint(
-		&context.Endpoint{
-			Public: true,
-			Path:   "/account/reset-password/validate-key",
-			Handlers: context.MethodHandlers{
-				"POST": ValidateKeyHandler,
-			},
-		},
-	)
-	api.AddEndpoint(
-		&context.Endpoint{
-			Public: true,
-			Path:   "/account/reset-password/complete",
-			Handlers: context.MethodHandlers{
-				"POST": CompleteHandler,
-			},
-		},
-	)
+	context.Resource("/account/reset-password", &ResetPasswordResource{}, true)
+	context.Resource("/account/reset-password/validate-key", &ValidateKeyResource{}, true)
+	context.Resource("/account/reset-password/complete", &CompleteResource{}, true)
 }
 
 func sendResetPasswordEmail(c *context.Context, user *User) {
 	var body bytes.Buffer
 
-	resetTokenService := NewResetTokenService(c.DB)
+	resetTokenService := NewResetTokenService(c.Vars["db"].(*database.Session))
 
 	resetToken, err := resetTokenService.Create(user.Id.NullInt64.Int64)
 	if err != nil {
@@ -81,35 +58,43 @@ func sendResetPasswordEmail(c *context.Context, user *User) {
 
 }
 
-func ResetPasswordHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type ResetPasswordResource struct {
+	*base.Resource
+}
+
+func (r *ResetPasswordResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	// decode request data
 	var form ResetPasswordForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return api.BadRequest(rw, "Could not query user: %s", err)
+		return context.BadRequest(rw, "Could not query user: %s", err)
 	}
 
 	// validate email address
 	if ok := regexp.MustCompile(emailRegex).MatchString(form.Email); !ok {
-		return api.BadRequest(rw, "Invalid email address")
+		return context.BadRequest(rw, "Invalid email address")
 	}
 
 	// create new user service
-	userService := NewUserService(c.DB)
+	userService := NewUserService(r.DB(c))
 
 	// get user from database
 	var user *User
 	user, err = userService.GetByEmail(form.Email)
 	if err != nil {
-		return api.BadRequest(rw, "User not found")
+		return context.BadRequest(rw, "User not found")
 	}
 
 	go sendResetPasswordEmail(c, user)
 
-	return api.OK(rw, "Email sent")
+	return context.OK(rw, "Email sent")
 }
 
-func ValidateKeyHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type ValidateKeyResource struct {
+	*base.Resource
+}
+
+func (r *ValidateKeyResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	type ValidateKeyForm struct {
 		Key string `json:"key"`
 	}
@@ -118,20 +103,24 @@ func ValidateKeyHandler(c *context.Context, rw http.ResponseWriter, req *http.Re
 	var form ValidateKeyForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return api.BadRequest(rw, "Unable to validate key")
+		return context.BadRequest(rw, "Unable to validate key")
 	}
 
-	service := NewResetTokenService(c.DB)
+	service := NewResetTokenService(r.DB(c))
 
 	resetToken, err := service.GetByKey(form.Key)
 	if err != nil || !resetToken.Valid() {
-		return api.BadRequest(rw, "Invalid Key")
+		return context.BadRequest(rw, "Invalid Key")
 	}
 
-	return api.OK(rw, ValidKey{resetToken.UserId, form.Key})
+	return context.OK(rw, ValidKey{resetToken.UserId, form.Key})
 }
 
-func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type CompleteResource struct {
+	*base.Resource
+}
+
+func (r *CompleteResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	type ChangePasswordForm struct {
 		Password      string   `json:"password"`
 		PasswordAgain string   `json:"passwordAgain"`
@@ -142,38 +131,38 @@ func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Reque
 	var form ChangePasswordForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return api.BadRequest(rw, "Unable to change the password")
+		return context.BadRequest(rw, "Unable to change the password")
 	}
 
 	// validate the passwords
 	if form.Password != form.PasswordAgain {
-		return api.BadRequest(rw, "Passwords mismatch")
+		return context.BadRequest(rw, "Passwords mismatch")
 	}
 
 	// validate the key again
-	resetTokenService := NewResetTokenService(c.DB)
+	resetTokenService := NewResetTokenService(r.DB(c))
 	resetToken, err := resetTokenService.GetByKey(form.ValidKey.Key)
 	if err != nil || !resetToken.Valid() {
-		return api.BadRequest(rw, "Invalid Key")
+		return context.BadRequest(rw, "Invalid Key")
 	}
 
 	// get user from db
-	userService := NewUserService(c.DB)
+	userService := NewUserService(r.DB(c))
 	user, err := userService.GetById(resetToken.UserId)
 	if err != nil {
-		return api.InternalServerError(rw, "User not found")
+		return context.InternalServerError(rw, "User not found")
 	}
 
 	// encode user password
 	err = user.Password.Encode(form.Password)
 	if err != nil {
-		return api.InternalServerError(rw, "Could not change user password")
+		return context.InternalServerError(rw, "Could not change user password")
 	}
 
 	// change user data in database
 	err = userService.Update(user)
 	if err != nil {
-		return api.InternalServerError(rw, "Could not change user password")
+		return context.InternalServerError(rw, "Could not change user password")
 	}
 
 	// invalidate token
@@ -183,5 +172,5 @@ func CompleteHandler(c *context.Context, rw http.ResponseWriter, req *http.Reque
 		log.Errorf("Unable to invalidate token: %s", err)
 	}
 
-	return api.OK(rw, user)
+	return context.OK(rw, user)
 }

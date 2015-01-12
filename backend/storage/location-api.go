@@ -6,47 +6,40 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 
-	"github.com/rafael84/go-spa/backend/api"
+	"github.com/rafael84/go-spa/backend/base"
 	"github.com/rafael84/go-spa/backend/context"
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 func init() {
-	api.AddEndpoint(
-		&context.Endpoint{
-			Path: "/storage/location",
-			Handlers: context.MethodHandlers{
-				"GET": LocationHandler,
-			},
-		},
-	)
-	api.AddEndpoint(
-		&context.Endpoint{
-			Path: "/storage/location/{id:[0-9]+}",
-			Handlers: context.MethodHandlers{
-				"GET": LocationHandler,
-			},
-		},
-	)
+	context.Resource("/storage/location", &LocationResource{}, false)
+	context.Resource("/storage/location/{id:[0-9]+}", &LocationItemResource{}, false)
 }
 
-func LocationHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type LocationResource struct {
+	*base.Resource
+}
 
-	var locations []database.Entity
-	var err error
-
-	vars := mux.Vars(req)
-	id, found := vars["id"]
-
-	if found {
-		locations, err = sc.DB.Filter(&Location{}, "id = $1", id)
-	} else {
-		locations, err = sc.DB.Filter(&Location{}, "")
-	}
+func (r *LocationResource) GET(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	locations, err := r.DB(c).Filter(&Location{}, "")
 	if err != nil {
 		log.Errorf("Query error: %v", err)
-		return api.InternalServerError(rw, "Query error")
+		return context.InternalServerError(rw, "Query error")
 	}
+	return context.OK(rw, locations)
+}
 
-	return api.OK(rw, locations)
+type LocationItemResource struct {
+	*base.Resource
+}
+
+func (r *LocationItemResource) GET(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	vars := mux.Vars(req)
+	id := vars["id"]
+
+	locations, err := r.DB(c).Filter(&Location{}, "id = $1", id)
+	if err != nil {
+		log.Errorf("Query error: %v", err)
+		return context.InternalServerError(rw, "Query error")
+	}
+	return context.OK(rw, locations)
 }

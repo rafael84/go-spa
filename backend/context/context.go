@@ -10,33 +10,17 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/nicksnyder/go-i18n/i18n"
-
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 var (
 	verifyKey []byte
 	signKey   []byte
+	endpoints = []*Endpoint{}
 )
 
-type Context struct {
-	Router *mux.Router
-	DB     *database.Session
-	T      i18n.TranslateFunc
-	Token  *jwt.Token
-
-	middleware *jwtmiddleware.JWTMiddleware
-}
-
-type ContextHandler func(sc *Context, rw http.ResponseWriter, req *http.Request) error
+type ContextHandler func(c *Context, rw http.ResponseWriter, req *http.Request) error
 
 type MethodHandlers map[string]ContextHandler
-
-type Endpoint struct {
-	Public   bool
-	Path     string
-	Handlers MethodHandlers
-}
 
 func (handlers *MethodHandlers) IsAllowed(req *http.Request) bool {
 	for method, _ := range *handlers {
@@ -47,10 +31,43 @@ func (handlers *MethodHandlers) IsAllowed(req *http.Request) bool {
 	return false
 }
 
-func New(router *mux.Router, db *database.Session) (c *Context, err error) {
+type Endpoint struct {
+	Public   bool
+	Path     string
+	Handlers MethodHandlers
+}
+
+func AddEndpoint(endpoint *Endpoint) {
+	endpoints = append(endpoints, endpoint)
+}
+
+func Configure(router *mux.Router, privKey, pubKey, pathPrefix string, vars map[string]interface{}) error {
+	apiRouter := router.PathPrefix(pathPrefix).Subrouter()
+
+	LoadSecureKeys(privKey, pubKey)
+	ctx, err := New(apiRouter, vars)
+	if err != nil {
+		return err
+	}
+	ctx.AddEndpoints(endpoints...)
+
+	return nil
+}
+
+type Context struct {
+	Router *mux.Router
+	Vars   map[string]interface{}
+
+	T     i18n.TranslateFunc
+	Token *jwt.Token
+
+	middleware *jwtmiddleware.JWTMiddleware
+}
+
+func New(router *mux.Router, vars map[string]interface{}) (c *Context, err error) {
 	c = &Context{
 		Router: router,
-		DB:     db,
+		Vars:   vars,
 	}
 	options := jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
@@ -96,6 +113,7 @@ func LoadSecureKeys(privateKeyPath, publicKeyPath string) (err error) {
 	}
 	return nil
 }
+
 func newContextHandler(context *Context, endpoint *Endpoint) http.HandlerFunc {
 	return func(rw http.ResponseWriter, req *http.Request) {
 		if !endpoint.Handlers.IsAllowed(req) {

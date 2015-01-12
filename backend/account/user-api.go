@@ -9,7 +9,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/rafael84/go-spa/backend/api"
+	"github.com/rafael84/go-spa/backend/base"
 	"github.com/rafael84/go-spa/backend/context"
 	"github.com/rafael84/go-spa/backend/database"
 )
@@ -20,27 +20,10 @@ const (
 )
 
 func init() {
-	api.AddEndpoint(
-		&context.Endpoint{
-			Public:   true,
-			Path:     "/account/user/signup",
-			Handlers: context.MethodHandlers{"POST": SignUpHandler},
-		},
-	)
-	api.AddEndpoint(
-		&context.Endpoint{
-			Public:   true,
-			Path:     "/account/user/signin",
-			Handlers: context.MethodHandlers{"POST": SignInHandler},
-		},
-	)
-
-	// api.AddResource(api.NewResource("/account/user/me").GET(MeHandler).PUT(MeHandler))
-
-	api.Resource("/account/user/me", &MeResource{})
-
-	api.AddResource(api.NewResource("/account/user").GET(UserHandler))
-	api.AddResource(api.NewResource("/account/token/renew").GET(TokenRenewHandler))
+	context.Resource("/account/user/signup", &SignUpResource{}, true)
+	context.Resource("/account/user/signin", &SignInResource{}, true)
+	context.Resource("/account/user/me", &MeResource{}, false)
+	context.Resource("/account/token/renew", &TokenRenewResource{}, false)
 }
 
 // newToken generate a new JWT token.
@@ -56,35 +39,38 @@ func newToken(user *User) *jwt.Token {
 func tokenResponse(rw http.ResponseWriter, token *jwt.Token) error {
 	tokenString, err := context.SignToken(token)
 	if err != nil {
-		return api.InternalServerError(rw, "Problem signin token")
+		return context.InternalServerError(rw, "Problem signin token")
 	}
-	return api.OK(rw, map[string]string{"token": tokenString})
+	return context.OK(rw, map[string]string{"token": tokenString})
 }
 
-// SignUpHandler handles the user registration logic
-func SignUpHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type SignUpResource struct {
+	*base.Resource
+}
+
+func (r *SignUpResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	// decode request data
 	var form SignUpForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return api.BadRequest(rw, c.T("account.user.could_not_parse_request_data"))
+		return context.BadRequest(rw, c.T("account.user.could_not_parse_request_data"))
 	}
 
 	// create new user service
-	service := NewUserService(c.DB)
+	service := NewUserService(r.DB(c))
 	// check whether the email address is already taken
 	_, err = service.GetByEmail(form.Email)
 	if err == nil {
-		return api.BadRequest(rw, c.T("account.user.email_taken"))
+		return context.BadRequest(rw, c.T("account.user.email_taken"))
 	} else if err != database.ERecordNotFound {
 		log.Errorf("Could not query user: %s", err)
-		return api.InternalServerError(rw, "account.user.could_not_query_user")
+		return context.InternalServerError(rw, "account.user.could_not_query_user")
 	}
 
 	// password validation
 	if form.Password != form.PasswordAgain {
-		return api.BadRequest(rw, c.T("account.user.passwords_mismatch"))
+		return context.BadRequest(rw, c.T("account.user.passwords_mismatch"))
 	}
 
 	// create new user
@@ -97,122 +83,138 @@ func SignUpHandler(c *context.Context, rw http.ResponseWriter, req *http.Request
 		},
 	)
 	if err != nil {
-		return api.InternalServerError(rw, "Could not create user: %s", err)
+		return context.InternalServerError(rw, "Could not create user: %s", err)
 	}
 
 	// return created user data
-	return api.Created(rw, user)
+	return context.Created(rw, user)
 }
 
-func SignInHandler(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type SignInResource struct {
+	*base.Resource
+}
 
+func (r *SignInResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	// decode request data
 	var form SignInForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return api.BadRequest(rw, "Could not query user: %s", err)
+		return context.BadRequest(rw, "Could not query user: %s", err)
 	}
 
 	// validate email address
 	if ok := regexp.MustCompile(emailRegex).MatchString(form.Email); !ok {
-		return api.BadRequest(rw, "Invalid email address")
+		return context.BadRequest(rw, "Invalid email address")
 	}
 
 	// validate password length
 	if len(form.Password) == 0 {
-		return api.BadRequest(rw, "Password cannot be empty")
+		return context.BadRequest(rw, "Password cannot be empty")
 	}
 
 	// create new user service
-	service := NewUserService(c.DB)
+	service := NewUserService(r.DB(c))
 
 	// check user in database
 	var user *User
 	user, err = service.GetByEmail(form.Email)
 	if err != nil {
-		return api.BadRequest(rw, "Invalid email and/or password")
+		return context.BadRequest(rw, "Invalid email and/or password")
 	}
 
 	// check user password
 	if !user.Password.Valid(form.Password) {
-		return api.BadRequest(rw, "Invalid email and/or password")
+		return context.BadRequest(rw, "Invalid email and/or password")
 	}
 
 	// generate new token
 	return tokenResponse(rw, newToken(user))
 }
 
-func TokenRenewHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
+type TokenRenewResource struct {
+	*base.Resource
+}
+
+func (r *TokenRenewResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 
 	// get user id from the current token
-	userId, found := sc.Token.Claims["uid"]
+	userId, found := c.Token.Claims["uid"]
 	if !found {
-		return api.BadRequest(rw, "Could not extract user from context")
+		return context.BadRequest(rw, "Could not extract user from context")
 	}
 
 	// create new user service
-	service := NewUserService(sc.DB)
+	service := NewUserService(r.DB(c))
 
 	// check if user is still valid
 	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return api.InternalServerError(rw, "Could not query user.")
+		return context.InternalServerError(rw, "Could not query user.")
 	}
 
 	// generate new token
 	return tokenResponse(rw, newToken(user))
+
 }
 
-type MeResource struct{}
+type MeResource struct {
+	*base.Resource
+}
 
 func (r *MeResource) GET(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	// get user id from current token
 	userId, found := c.Token.Claims["uid"]
 	if !found {
-		return api.BadRequest(rw, "Could not extract user from context")
+		return context.BadRequest(rw, "Could not extract user from context")
 	}
 
 	// create new user service
-	service := NewUserService(c.DB)
+	service := NewUserService(r.DB(c))
 
 	// query user data
 	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return api.InternalServerError(rw, "Could not query user.")
+		return context.InternalServerError(rw, "Could not query user.")
 	}
 
 	// return user data
-	return api.OK(rw, user)
+	return context.OK(rw, user)
 }
 
 func (r *MeResource) PUT(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
-	return nil
-}
 
-func MeHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
-
-	// get user id from current token
-	userId, found := sc.Token.Claims["uid"]
-	if !found {
-		return api.BadRequest(rw, "Could not extract user from context")
+	// decode request data
+	var form MeForm
+	err := json.NewDecoder(req.Body).Decode(&form)
+	if err != nil {
+		return context.BadRequest(rw, "Could decode user profile data: %s", err)
 	}
 
 	// create new user service
-	service := NewUserService(sc.DB)
+	service := NewUserService(r.DB(c))
 
 	// query user data
-	user, err := service.GetById(int64(userId.(float64)))
+	user, err := service.GetById(form.Id.Int64)
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return api.InternalServerError(rw, "Could not query user.")
+		return context.InternalServerError(rw, "Could not query user.")
 	}
 
-	// return user data
-	return api.OK(rw, user)
-}
+	// get the json data from user
+	jsonData, err := user.DecodeJsonData()
+	if err != nil {
+		return context.BadRequest(rw, "Could not decode json data")
+	}
 
-func UserHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
-	return api.OK(rw, "To be implemented")
+	// update the user
+	user.Email = form.Email
+	jsonData.FirstName = form.JsonData.FirstName
+	jsonData.LastName = form.JsonData.LastName
+	user.JsonData.Set(jsonData)
+	service.Update(user)
+
+	// return user data
+	return context.OK(rw, user)
 }

@@ -6,59 +6,57 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 
-	"github.com/rafael84/go-spa/backend/api"
+	"github.com/rafael84/go-spa/backend/base"
 	"github.com/rafael84/go-spa/backend/context"
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 func init() {
-	api.AddEndpoint(
-		&context.Endpoint{
-			Path: "/account/group",
-			Handlers: context.MethodHandlers{
-				"GET": GroupHandler,
-			},
-		},
-	)
-	api.AddEndpoint(
-		&context.Endpoint{
-			Path: "/account/group/{id:[0-9]+}",
-			Handlers: context.MethodHandlers{
-				"GET": GroupHandler,
-			},
-		},
-	)
+	context.Resource("/account/group", &GroupResource{}, false)
+	context.Resource("/account/group/{id:[0-9]+}", &GroupItemResource{}, false)
 }
 
-func GroupHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
-	var err error
+type GroupResource struct {
+	*base.Resource
+}
 
-	vars := mux.Vars(req)
-	id, found := vars["id"]
-
-	if found {
-		var group database.Entity
-		group, err = sc.DB.One(&Group{}, "id = $1", id)
-		if err != nil {
-			log.Errorf("Could not query group id %s: %v", id, err)
-			return api.BadRequest(rw, "Could not query group")
-		}
-		if req.Method == "DELETE" {
-			err := sc.DB.Delete(group)
-			if err != nil {
-				log.Errorf("Could not delete group %s: %v", id, err)
-				return api.InternalServerError(rw, "Could not delete user")
-			}
-			return api.NoContent(rw)
-		}
-		return api.OK(rw, group)
-	}
-
-	var groups []database.Entity
-	groups, err = sc.DB.Filter(&Group{}, "")
+func (r *GroupResource) GET(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	groups, err := r.DB(c).Filter(&Group{}, "")
 	if err != nil {
 		log.Errorf("Could not query groups: %v", err)
-		return api.BadRequest(rw, "Could not query groups")
+		return context.BadRequest(rw, "Could not query groups")
 	}
-	return api.OK(rw, groups)
+	return context.OK(rw, groups)
+}
+
+type GroupItemResource struct {
+	*base.Resource
+}
+
+func (r *GroupItemResource) GET(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	vars := mux.Vars(req)
+	id := vars["id"]
+
+	group, err := r.DB(c).One(&Group{}, "id = $1", id)
+	if err != nil {
+		log.Errorf("Could not query group id %s: %v", id, err)
+		return context.BadRequest(rw, "Could not query group")
+	}
+	return context.OK(rw, group)
+}
+
+func (r *GroupItemResource) DELETE(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	vars := mux.Vars(req)
+	id := vars["id"]
+
+	group, err := r.DB(c).One(&Group{}, "id = $1", id)
+	if err != nil {
+		log.Errorf("Could not query group id %s: %v", id, err)
+		return context.BadRequest(rw, "Could not query group")
+	}
+	err = r.DB(c).Delete(group)
+	if err != nil {
+		log.Errorf("Could not delete group %s: %v", id, err)
+		return context.InternalServerError(rw, "Could not delete user")
+	}
+	return context.NoContent(rw)
 }

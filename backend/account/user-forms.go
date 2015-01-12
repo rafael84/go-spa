@@ -1,5 +1,7 @@
 package account
 
+import "github.com/guregu/null"
+
 type SignUpForm struct {
 	FirstName     string `json:"firstName"`
 	LastName      string `json:"lastName"`
@@ -15,4 +17,10 @@ type SignInForm struct {
 
 type ResetPasswordForm struct {
 	Email string `json:"email"`
+}
+
+type MeForm struct {
+	Id       null.Int     `json:"id"`
+	Email    string       `json:"email"`
+	JsonData UserJsonData `json:"jsonData,omitempty"`
 }
