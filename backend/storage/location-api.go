@@ -12,11 +12,25 @@ import (
 )
 
 func init() {
-	api.AddSecureRoute("/storage/location", LocationHandler)
-	api.AddSecureRoute("/storage/location/{id:[0-9]+}", LocationHandler)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Path: "/storage/location",
+			Handlers: context.MethodHandlers{
+				"GET": LocationHandler,
+			},
+		},
+	)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Path: "/storage/location/{id:[0-9]+}",
+			Handlers: context.MethodHandlers{
+				"GET": LocationHandler,
+			},
+		},
+	)
 }
 
-func LocationHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {
+func LocationHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
 
 	var locations []database.Entity
 	var err error

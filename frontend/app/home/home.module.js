@@ -1,21 +1,18 @@
 (function() {
-
     'use strict';
-
     angular.module('app.home', [
             'ui.router',
             'angular-storage',
             'angular-jwt',
-
             'app.main'
         ])
         .config(Config)
-        .factory('Me', Me)
-        .factory('Group', Group)
-        .controller('HomeCtrl', HomeCtrl)
-        .controller('MeCtrl', MeCtrl)
-        .controller('GroupListCtrl', GroupListCtrl)
-        .controller('GroupDetailCtrl', GroupDetailCtrl);
+        .factory('Me', ['$http', '$q', Me])
+        .factory('Group', ['$http', '$q', Group])
+        .controller('HomeCtrl', ['$state', HomeCtrl])
+        .controller('MeCtrl', ['user', 'Me', 'Flash', MeCtrl])
+        .controller('GroupListCtrl', ['groups', 'Group', 'Flash', GroupListCtrl])
+        .controller('GroupDetailCtrl', ['group', GroupDetailCtrl]);
 
     function Config($stateProvider) {
         $stateProvider
@@ -61,7 +58,19 @@
     function Me($http, $q) {
         function get() {
             var deferred = $q.defer();
-            $http.get("/api/v1/account/user/me")
+            $http.get('/api/v1/account/user/me')
+                .then(function success(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function error(response) {
+                    deferred.reject(response.data.error);
+                });
+            return deferred.promise;
+        }
+
+        function update(user) {
+            var deferred = $q.defer();
+            $http.put('/api/v1/account/user/me', user)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -71,7 +80,8 @@
             return deferred.promise;
         }
         return {
-            get: get
+            get: get,
+            update: update
         }
     }
 
@@ -111,7 +121,6 @@
                 });
             return deferred.promise;
         }
-
         return {
             getAll: getAll,
             getById: getById,
@@ -124,9 +133,18 @@
         vm.error = null;
     }
 
-    function MeCtrl(user) {
+    function MeCtrl(user, Me, Flash) {
         var vm = this;
         vm.user = user;
+        vm.update = function(valid) {
+            Me.update(vm.user)
+                .then(function success(response) {
+                    Flash.show('Your profile has been updated.');
+                })
+                .catch(function error(response) {
+                    vm.error = response;
+                });
+        }
     }
 
     function GroupListCtrl(groups, Group, Flash) {
@@ -151,5 +169,4 @@
         var vm = this;
         vm.group = group;
     }
-
 })();

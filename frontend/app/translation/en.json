@@ -105,5 +105,28 @@
                 }
             }
         }
+    },
+    "me": {
+        "title": "Me",
+        "form": {
+            "firstName": {
+                "label": "First Name",
+                "placeholder": "Please enter your first name only, please",
+                "error": "Please enter your first name."
+            },
+            "lastName": {
+                "label": "Last Name",
+                "placeholder": "Please enter your last name",
+                "error": "Please enter your last name."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address",
+                "error": "Please enter a valid email address."
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
     }
 }

@@ -12,11 +12,25 @@ import (
 )
 
 func init() {
-	api.AddSecureRoute("/account/group", GroupHandler)
-	api.AddSecureRoute("/account/group/{id:[0-9]+}", GroupHandler)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Path: "/account/group",
+			Handlers: context.MethodHandlers{
+				"GET": GroupHandler,
+			},
+		},
+	)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Path: "/account/group/{id:[0-9]+}",
+			Handlers: context.MethodHandlers{
+				"GET": GroupHandler,
+			},
+		},
+	)
 }
 
-func GroupHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {
+func GroupHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	var err error
 
 	vars := mux.Vars(req)

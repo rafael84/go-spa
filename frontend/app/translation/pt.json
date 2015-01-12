@@ -45,12 +45,12 @@
         "title": "Cadastrar",
         "form": {
             "firstName": {
-                "label": "Primeiro Nome",
+                "label": "Nome",
                 "placeholder": "Entre apenas com o seu primeiro nome, por favor",
                 "error": "Por favor, entre com o seu primeiro nome."
             },
             "lastName": {
-                "label": "Último Nome",
+                "label": "Sobrenome",
                 "placeholder": "Enter com seu sobrenome",
                 "error": "Por favor, entre com o seu sobrenome."
             },
@@ -103,6 +103,29 @@
                 "submit": {
                     "label": "Alterar Senha"
                 }
+            }
+        }
+    },
+    "me": {
+        "title": "Meu Perfil",
+        "form": {
+            "firstName": {
+                "label": "Nome",
+                "placeholder": "Entre apenas com o seu primeiro nome, por favor",
+                "error": "Por favor, entre com o seu primeiro nome."
+            },
+            "lastName": {
+                "label": "Sobrenome",
+                "placeholder": "Enter com seu sobrenome",
+                "error": "Por favor, entre com o seu sobrenome."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email",
+                "error": "Por favor, entre com um email válido"
+            },
+            "submit": {
+                "label": "Salvar"
             }
         }
     }

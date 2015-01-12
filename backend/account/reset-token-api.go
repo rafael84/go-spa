@@ -20,9 +20,33 @@ type ValidKey struct {
 }
 
 func init() {
-	api.AddSimpleRoute("/account/reset-password", ResetPasswordHandler)
-	api.AddSimpleRoute("/account/reset-password/validate-key", ValidateKeyHandler)
-	api.AddSimpleRoute("/account/reset-password/complete", CompleteHandler)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Public: true,
+			Path:   "/account/reset-password",
+			Handlers: context.MethodHandlers{
+				"POST": ResetPasswordHandler,
+			},
+		},
+	)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Public: true,
+			Path:   "/account/reset-password/validate-key",
+			Handlers: context.MethodHandlers{
+				"POST": ValidateKeyHandler,
+			},
+		},
+	)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Public: true,
+			Path:   "/account/reset-password/complete",
+			Handlers: context.MethodHandlers{
+				"POST": CompleteHandler,
+			},
+		},
+	)
 }
 
 func sendResetPasswordEmail(c *context.Context, user *User) {

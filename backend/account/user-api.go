@@ -20,11 +20,23 @@ const (
 )
 
 func init() {
-	api.AddSimpleRoute("/account/user/signup", SignUpHandler)
-	api.AddSimpleRoute("/account/user/signin", SignInHandler)
-	api.AddSecureRoute("/account/user/me", MeHandler)
-	api.AddSecureRoute("/account/user", UserHandler)
-	api.AddSecureRoute("/account/token/renew", TokenRenewHandler)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Public:   true,
+			Path:     "/account/user/signup",
+			Handlers: context.MethodHandlers{"POST": SignUpHandler},
+		},
+	)
+	api.AddPrivateEndpoint(
+		&context.Endpoint{
+			Public:   true,
+			Path:     "/account/user/signin",
+			Handlers: context.MethodHandlers{"POST": SignInHandler},
+		},
+	)
+	api.AddResource(api.NewResource("/account/user/me").GET(MeHandler).PUT(MeHandler))
+	api.AddResource(api.NewResource("/account/user").GET(UserHandler))
+	api.AddResource(api.NewResource("/account/token/renew").GET(TokenRenewHandler))
 }
 
 // newToken generate a new JWT token.
@@ -126,12 +138,12 @@ func SignInHandler(c *context.Context, rw http.ResponseWriter, req *http.Request
 	return tokenResponse(rw, newToken(user))
 }
 
-func TokenRenewHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {
+func TokenRenewHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
 
 	// get user id from the current token
 	userId, found := sc.Token.Claims["uid"]
 	if !found {
-		return api.BadRequest(rw, "Could not extract user from secure context")
+		return api.BadRequest(rw, "Could not extract user from context")
 	}
 
 	// create new user service
@@ -148,12 +160,12 @@ func TokenRenewHandler(sc *context.SecureContext, rw http.ResponseWriter, req *h
 	return tokenResponse(rw, newToken(user))
 }
 
-func MeHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {
+func MeHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
 
 	// get user id from current token
 	userId, found := sc.Token.Claims["uid"]
 	if !found {
-		return api.BadRequest(rw, "Could not extract user from secure context")
+		return api.BadRequest(rw, "Could not extract user from context")
 	}
 
 	// create new user service
@@ -170,6 +182,6 @@ func MeHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Requ
 	return api.OK(rw, user)
 }
 
-func UserHandler(sc *context.SecureContext, rw http.ResponseWriter, req *http.Request) error {
+func UserHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
 	return api.OK(rw, "To be implemented")
 }
