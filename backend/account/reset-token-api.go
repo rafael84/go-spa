@@ -20,7 +20,7 @@ type ValidKey struct {
 }
 
 func init() {
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Public: true,
 			Path:   "/account/reset-password",
@@ -29,7 +29,7 @@ func init() {
 			},
 		},
 	)
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Public: true,
 			Path:   "/account/reset-password/validate-key",
@@ -38,7 +38,7 @@ func init() {
 			},
 		},
 	)
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Public: true,
 			Path:   "/account/reset-password/complete",

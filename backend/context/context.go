@@ -10,6 +10,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/nicksnyder/go-i18n/i18n"
+
 	"github.com/rafael84/go-spa/backend/database"
 )
 

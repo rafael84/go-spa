@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Path: "/account/group",
 			Handlers: context.MethodHandlers{
@@ -20,7 +20,7 @@ func init() {
 			},
 		},
 	)
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Path: "/account/group/{id:[0-9]+}",
 			Handlers: context.MethodHandlers{

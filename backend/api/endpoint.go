@@ -14,27 +14,22 @@ const (
 )
 
 var (
-	privateEndpoints = []*context.Endpoint{}
+	endpoints = []*context.Endpoint{}
 )
 
-func AddPrivateEndpoint(endpoint *context.Endpoint) {
-	privateEndpoints = append(privateEndpoints, endpoint)
-}
-
-func AddResource(resource *resource) {
-	privateEndpoints = append(privateEndpoints, &resource.Endpoint)
+func AddEndpoint(endpoint *context.Endpoint) {
+	endpoints = append(endpoints, endpoint)
 }
 
 func Configure(router *mux.Router, pathPrefix string, db *database.Session) error {
 	apiRouter := router.PathPrefix(pathPrefix).Subrouter()
 
-	// add private endpoints
 	context.LoadSecureKeys(privKey, pubKey)
-	privateContext, err := context.New(apiRouter, db)
+	ctx, err := context.New(apiRouter, db)
 	if err != nil {
 		return err
 	}
-	privateContext.AddEndpoints(privateEndpoints...)
+	ctx.AddEndpoints(endpoints...)
 
 	return nil
 }

@@ -20,21 +20,25 @@ const (
 )
 
 func init() {
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Public:   true,
 			Path:     "/account/user/signup",
 			Handlers: context.MethodHandlers{"POST": SignUpHandler},
 		},
 	)
-	api.AddPrivateEndpoint(
+	api.AddEndpoint(
 		&context.Endpoint{
 			Public:   true,
 			Path:     "/account/user/signin",
 			Handlers: context.MethodHandlers{"POST": SignInHandler},
 		},
 	)
-	api.AddResource(api.NewResource("/account/user/me").GET(MeHandler).PUT(MeHandler))
+
+	// api.AddResource(api.NewResource("/account/user/me").GET(MeHandler).PUT(MeHandler))
+
+	api.Resource("/account/user/me", &MeResource{})
+
 	api.AddResource(api.NewResource("/account/user").GET(UserHandler))
 	api.AddResource(api.NewResource("/account/token/renew").GET(TokenRenewHandler))
 }
@@ -158,6 +162,33 @@ func TokenRenewHandler(sc *context.Context, rw http.ResponseWriter, req *http.Re
 
 	// generate new token
 	return tokenResponse(rw, newToken(user))
+}
+
+type MeResource struct{}
+
+func (r *MeResource) GET(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	// get user id from current token
+	userId, found := c.Token.Claims["uid"]
+	if !found {
+		return api.BadRequest(rw, "Could not extract user from context")
+	}
+
+	// create new user service
+	service := NewUserService(c.DB)
+
+	// query user data
+	user, err := service.GetById(int64(userId.(float64)))
+	if err != nil {
+		log.Errorf("Could not query user: %v", err)
+		return api.InternalServerError(rw, "Could not query user.")
+	}
+
+	// return user data
+	return api.OK(rw, user)
+}
+
+func (r *MeResource) PUT(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+	return nil
 }
 
 func MeHandler(sc *context.Context, rw http.ResponseWriter, req *http.Request) error {
