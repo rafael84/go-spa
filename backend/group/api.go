@@ -1,6 +1,7 @@
 package group
 
 import (
+	"encoding/json"
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
@@ -11,8 +12,8 @@ import (
 )
 
 func init() {
-	ctx.Resource("/account/group", &GroupResource{}, false)
-	ctx.Resource("/account/group/{id:[0-9]+}", &GroupItemResource{}, false)
+	ctx.Resource("/group", &GroupResource{}, false)
+	ctx.Resource("/group/{id:[0-9]+}", &GroupItemResource{}, false)
 }
 
 type GroupResource struct {
@@ -26,6 +27,29 @@ func (r *GroupResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Re
 		return ctx.BadRequest(rw, "Could not query groups")
 	}
 	return ctx.OK(rw, groups)
+}
+
+func (r *GroupResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
+
+	// decode request data
+	var form = &struct {
+		Name string `json:"name"`
+	}{}
+	err := json.NewDecoder(req.Body).Decode(form)
+	if err != nil {
+		log.Errorf("Could not parse request data: %s", err)
+		return ctx.BadRequest(rw, "Could not parse request data")
+	}
+
+	// create new group
+	grp := &Group{Name: form.Name}
+	err = r.DB(c).Create(grp)
+	if err != nil {
+		log.Errorf("Could not create group %s: %v", form.Name, err)
+		return ctx.BadRequest(rw, "Could not create group")
+	}
+
+	return ctx.Created(rw, grp)
 }
 
 type GroupItemResource struct {

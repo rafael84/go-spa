@@ -129,5 +129,18 @@
                 "label": "Save"
             }
         }
+    },
+    "group": {
+        "title": "Group",
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Group Name",
+                "error": "Please enter the group name."
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
     }
 }

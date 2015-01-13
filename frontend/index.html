@@ -49,10 +49,10 @@
         <li ng-class="{ active: $state.is('me') }">
           <a ui-sref="me" translate="home.menu.me">Me</a>
         </li>
-        <li ng-class="{ active: $state.is('group') || $state.is('group.detail') }">
-          <a ui-sref="group" translate="home.menu.groups">Groups</a>
+        <li ng-class="{ active: $state.includes('group') }">
+          <a ui-sref="group.list" translate="home.menu.groups">Groups</a>
         </li>
-        <li ng-class="{ active: $state.is('location') || $state.is('location.detail') }">
+        <li ng-class="{ active: $state.includes('location') }">
           <a ui-sref="location" translate="home.menu.locations">Locations</a>
         </li>
       </div>

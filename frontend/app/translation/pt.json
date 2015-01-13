@@ -129,5 +129,18 @@
                 "label": "Salvar"
             }
         }
+    },
+    "group": {
+        "title": "Novo Grupo",
+        "form": {
+            "name": {
+                "label": "Nome",
+                "placeholder": "Nome do Grupo",
+                "error": "Por favor, digite o nome do grupo"
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
     }
 }

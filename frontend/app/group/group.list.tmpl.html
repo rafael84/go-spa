@@ -1,4 +1,8 @@
-<h3>Groups</h3>
+<h3>Group List
+  <span class="pull-right">
+    <button type="button" class="btn btn-primary" ui-sref="group.new">New Group</button>
+  </span>
+</h3>
 
 <table class="table table-striped">
   <thead>
@@ -9,7 +13,7 @@
   <tbody>
     <tr ng-repeat="group in vm.groups">
       <td>
-        <a class="btn btn-link" ui-sref="group.detail({groupId: group.id})">
+        <a class="btn btn-link" ui-sref="group.edit({groupId: group.id})">
           {{ group.id }}
         </a>
       </td>

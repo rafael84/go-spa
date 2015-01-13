@@ -1,0 +1,27 @@
+<h3>
+  New Group
+  <small class="pull-right"><a ui-sref="group.list">Back</a></small>
+</h3>
+
+<form name="groupForm" class="form" ng-submit="vm.save(groupForm.$valid)" novalidate>
+
+  <div class="alert alert-danger lead" ng-show="vm.error">
+    <i class="fa fa-exclamation-circle"></i>
+    {{ vm.error }}
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': groupForm.name.$invalid && !groupForm.name.$pristine}">
+    <label for="name" translate="group.form.name.label">Name</label>
+    <input class="form-control" type="text" name="name" id="name" ng-model="vm.group.name" required placeholder="{{ 'group.form.name.placeholder' | translate}}"
+    />
+    <p ng-show="groupForm.name.$invalid && !groupForm.name.$pristine" class="help-block">
+      {{ 'group.form.name.error' | translate }}
+    </p>
+  </div>
+
+  <p class="clearfix">
+    <button class="btn btn-primary pull-right" type="submit" ng-disabled="groupForm.$invalid">
+      {{'group.form.submit.label' | translate}} →
+    </button>
+  </p>
+</form>
