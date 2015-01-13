@@ -26,6 +26,7 @@ const (
 
 func init() {
 	log.SetLevel(log.DebugLevel)
+	log.SetFormatter(&log.TextFormatter{ForceColors: true})
 }
 
 func mustLoadTranslations() {
