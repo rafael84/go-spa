@@ -10,10 +10,6 @@ import (
 	"github.com/rafael84/go-spa/backend/base"
 )
 
-const (
-	emailRegex = `\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b`
-)
-
 func init() {
 	ctx.Resource("/account/user/signin", &SignInResource{}, true)
 }
@@ -36,7 +32,7 @@ func (r *SignInResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 	}
 
 	// validate email address
-	if ok := regexp.MustCompile(emailRegex).MatchString(form.Email); !ok {
+	if ok := regexp.MustCompile(base.EmailRegex).MatchString(form.Email); !ok {
 		return ctx.BadRequest(rw, "Invalid email address")
 	}
 
