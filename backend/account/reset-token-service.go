@@ -7,15 +7,15 @@ import (
 	"io"
 	"time"
 
+	"github.com/gotk/pg"
 	"github.com/guregu/null"
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 type resetTokenService struct {
-	session *database.Session
+	session *pg.Session
 }
 
-func NewResetTokenService(session *database.Session) *resetTokenService {
+func NewResetTokenService(session *pg.Session) *resetTokenService {
 	return &resetTokenService{session}
 }
 
@@ -55,7 +55,7 @@ func (r *resetTokenService) Update(token *ResetToken) error {
 }
 
 func (r *resetTokenService) GetByKey(key string) (*ResetToken, error) {
-	resetToken, err := r.session.One(&ResetToken{}, "key = $1", key)
+	resetToken, err := r.session.FindOne(&ResetToken{}, "key = $1", key)
 	if err != nil {
 		return nil, err
 	}

@@ -4,15 +4,15 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/gotk/pg"
 	"github.com/guregu/null"
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 type userService struct {
-	session *database.Session
+	session *pg.Session
 }
 
-func NewUserService(session *database.Session) *userService {
+func NewUserService(session *pg.Session) *userService {
 	return &userService{session}
 }
 
@@ -33,7 +33,7 @@ func (us *userService) Create(email, password string, userJsonData *UserJsonData
 	}
 
 	// fill user structure with additional data
-	err = user.JsonData.Set(userJsonData)
+	err = user.JsonData.Encode(userJsonData)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to marshal json data: %s", err)
 	}
@@ -56,7 +56,7 @@ func (us *userService) Update(user *User) error {
 }
 
 func (us *userService) GetById(id int64) (*User, error) {
-	user, err := us.session.One(&User{}, "id = $1", id)
+	user, err := us.session.FindOne(&User{}, "id = $1", id)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (us *userService) GetById(id int64) (*User, error) {
 }
 
 func (us *userService) GetByEmail(email string) (*User, error) {
-	user, err := us.session.One(&User{}, "email = $1", email)
+	user, err := us.session.FindOne(&User{}, "email = $1", email)
 	if err != nil {
 		return nil, err
 	}

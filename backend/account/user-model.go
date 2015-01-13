@@ -3,9 +3,8 @@ package account
 import (
 	"time"
 
+	"github.com/gotk/pg"
 	"github.com/guregu/null"
-
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 const (
@@ -20,7 +19,7 @@ type User struct {
 	UpdatedAt time.Time      `db:"updated_at,autofilled"   json:"updatedAt"`
 	Email     string         `db:"email"                   json:"email"`
 	Password  SaltedPassword `db:"password"                json:"-"`
-	JsonData  database.JSONB `db:"json_data"               json:"jsonData,omitempty"`
+	JsonData  pg.JSONB       `db:"json_data"               json:"jsonData,omitempty"`
 }
 
 type UserJsonData struct {
@@ -34,7 +33,7 @@ func (_ *User) Table() string {
 
 func (u *User) DecodeJsonData() (*UserJsonData, error) {
 	userJsonData := &UserJsonData{}
-	err := u.JsonData.Get(userJsonData)
+	err := u.JsonData.Decode(userJsonData)
 	if err != nil {
 		return nil, err
 	}

@@ -7,13 +7,12 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/gotk/pg"
 	"github.com/gotk/webctx"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 	"github.com/nicksnyder/go-i18n/i18n"
 
 	_ "github.com/rafael84/go-spa/backend/account"
-	"github.com/rafael84/go-spa/backend/database"
 	"github.com/rafael84/go-spa/backend/middleware"
 	_ "github.com/rafael84/go-spa/backend/storage"
 )
@@ -70,7 +69,7 @@ func main() {
 
 	router := mux.NewRouter().PathPrefix(pathPrefix).Subrouter()
 
-	db, err := database.NewSession(os.Getenv("DB_CONN_URL"))
+	db, err := pg.NewSession(os.Getenv("DB_CONN_URL"))
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %s", err)
 	}

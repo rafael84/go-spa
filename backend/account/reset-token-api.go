@@ -8,10 +8,10 @@ import (
 	"regexp"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/gotk/pg"
 	"github.com/gotk/webctx"
 
 	"github.com/rafael84/go-spa/backend/base"
-	"github.com/rafael84/go-spa/backend/database"
 	"github.com/rafael84/go-spa/backend/mail"
 )
 
@@ -29,7 +29,7 @@ func init() {
 func sendResetPasswordEmail(c *webctx.Context, user *User) {
 	var body bytes.Buffer
 
-	resetTokenService := NewResetTokenService(c.Vars["db"].(*database.Session))
+	resetTokenService := NewResetTokenService(c.Vars["db"].(*pg.Session))
 
 	resetToken, err := resetTokenService.Create(user.Id.NullInt64.Int64)
 	if err != nil {

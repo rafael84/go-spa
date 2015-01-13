@@ -20,7 +20,7 @@ type GroupResource struct {
 }
 
 func (r *GroupResource) GET(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
-	groups, err := r.DB(c).Filter(&Group{}, "")
+	groups, err := r.DB(c).FindAll(&Group{}, "")
 	if err != nil {
 		log.Errorf("Could not query groups: %v", err)
 		return webctx.BadRequest(rw, "Could not query groups")
@@ -36,7 +36,7 @@ func (r *GroupItemResource) GET(c *webctx.Context, rw http.ResponseWriter, req *
 	vars := mux.Vars(req)
 	id := vars["id"]
 
-	group, err := r.DB(c).One(&Group{}, "id = $1", id)
+	group, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
 		return webctx.BadRequest(rw, "Could not query group")
@@ -48,7 +48,7 @@ func (r *GroupItemResource) DELETE(c *webctx.Context, rw http.ResponseWriter, re
 	vars := mux.Vars(req)
 	id := vars["id"]
 
-	group, err := r.DB(c).One(&Group{}, "id = $1", id)
+	group, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
 		return webctx.BadRequest(rw, "Could not query group")

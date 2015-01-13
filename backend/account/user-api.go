@@ -8,10 +8,10 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gotk/pg"
 	"github.com/gotk/webctx"
 
 	"github.com/rafael84/go-spa/backend/base"
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 const (
@@ -63,7 +63,7 @@ func (r *SignUpResource) POST(c *webctx.Context, rw http.ResponseWriter, req *ht
 	_, err = service.GetByEmail(form.Email)
 	if err == nil {
 		return webctx.BadRequest(rw, c.T("account.user.email_taken"))
-	} else if err != database.ERecordNotFound {
+	} else if err != pg.ERecordNotFound {
 		log.Errorf("Could not query user: %s", err)
 		return webctx.InternalServerError(rw, "account.user.could_not_query_user")
 	}
@@ -212,7 +212,7 @@ func (r *MeResource) PUT(c *webctx.Context, rw http.ResponseWriter, req *http.Re
 	user.Email = form.Email
 	jsonData.FirstName = form.JsonData.FirstName
 	jsonData.LastName = form.JsonData.LastName
-	user.JsonData.Set(jsonData)
+	user.JsonData.Encode(jsonData)
 	service.Update(user)
 
 	// return user data

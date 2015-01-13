@@ -20,7 +20,7 @@ type LocationResource struct {
 }
 
 func (r *LocationResource) GET(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
-	locations, err := r.DB(c).Filter(&Location{}, "")
+	locations, err := r.DB(c).FindAll(&Location{}, "")
 	if err != nil {
 		log.Errorf("Query error: %v", err)
 		return webctx.InternalServerError(rw, "Query error")
@@ -36,7 +36,7 @@ func (r *LocationItemResource) GET(c *webctx.Context, rw http.ResponseWriter, re
 	vars := mux.Vars(req)
 	id := vars["id"]
 
-	locations, err := r.DB(c).Filter(&Location{}, "id = $1", id)
+	locations, err := r.DB(c).FindAll(&Location{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Query error: %v", err)
 		return webctx.InternalServerError(rw, "Query error")

@@ -1,13 +1,12 @@
 package base
 
 import (
+	"github.com/gotk/pg"
 	"github.com/gotk/webctx"
-
-	"github.com/rafael84/go-spa/backend/database"
 )
 
 type Resource struct{}
 
-func (r *Resource) DB(c *webctx.Context) *database.Session {
-	return c.Vars["db"].(*database.Session)
+func (r *Resource) DB(c *webctx.Context) *pg.Session {
+	return c.Vars["db"].(*pg.Session)
 }
