@@ -17,6 +17,6 @@ which migrate > /dev/null || go get -v github.com/mattes/migrate
 
 dir=$(dirname $0)
 
-. $dir/../.env
+. $dir/.env
 
 migrate -path $dir/migrations -url $DB_CONN_URL $@
