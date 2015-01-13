@@ -7,7 +7,8 @@ angular.module("app", [
     'app.home',
     'app.account',
     'app.signup',
-    'app.signin'
+    'app.signin',
+    'app.group'
 ])
 
 .config(function Config($httpProvider, $compileProvider, jwtInterceptorProvider) {

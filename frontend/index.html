@@ -42,6 +42,18 @@
             </span>
           </small>
         </h1>
+      <div class="nav nav-pills">
+        <li ng-class="{ active: $state.is('home') }">
+          <a ui-sref="home">Home</a>
+        </li>
+        <li ng-class="{ active: $state.is('me') }">
+          <a ui-sref="me" translate="home.menu.me">Me</a>
+        </li>
+        <li ng-class="{ active: $state.is('group') || $state.is('group.detail') }">
+          <a ui-sref="group" translate="home.menu.groups">Groups</a>
+        </li>
+      </div>
+
     </section>
 
     <section ui-view></section>
@@ -76,6 +88,7 @@
   <script src="app/home/home.module.js"></script>
   <script src="app/signup/signup.module.js"></script>
   <script src="app/signin/signin.module.js"></script>
+  <script src="app/group/group.module.js"></script>
 </body>
 
 </html>
