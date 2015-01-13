@@ -21,7 +21,8 @@
         "title": "Home",
         "menu": {
             "me": "Meu Perfil",
-            "groups": "Grupos"
+            "groups": "Grupos",
+            "locations": "Locais"
         }
     },
     "signin": {

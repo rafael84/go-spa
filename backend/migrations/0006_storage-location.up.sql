@@ -4,6 +4,7 @@ create table storage.location
     state        integer not null default 0,
     created_at   timestamptz not null default now(),
     updated_at   timestamptz not null default now(),
+    name         varchar(100) not null,
     static_url   varchar(240) not null,
     static_path  varchar(240) not null,
     json_data    jsonb

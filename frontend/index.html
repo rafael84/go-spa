@@ -52,6 +52,9 @@
         <li ng-class="{ active: $state.is('group') || $state.is('group.detail') }">
           <a ui-sref="group" translate="home.menu.groups">Groups</a>
         </li>
+        <li ng-class="{ active: $state.is('location') || $state.is('location.detail') }">
+          <a ui-sref="location" translate="home.menu.locations">Locations</a>
+        </li>
       </div>
 
     </section>
@@ -89,6 +92,7 @@
   <script src="app/signup/signup.module.js"></script>
   <script src="app/signin/signin.module.js"></script>
   <script src="app/group/group.module.js"></script>
+  <script src="app/location/location.module.js"></script>
 </body>
 
 </html>
