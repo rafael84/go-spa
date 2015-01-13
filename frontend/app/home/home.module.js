@@ -2,6 +2,7 @@
     'use strict';
     angular.module('app.home', [
             'ui.router',
+            'ngDialog',
             'angular-storage',
             'angular-jwt',
             'app.main'
@@ -11,7 +12,7 @@
         .factory('Group', ['$http', '$q', Group])
         .controller('HomeCtrl', ['$state', HomeCtrl])
         .controller('MeCtrl', ['user', 'Me', 'Flash', MeCtrl])
-        .controller('GroupListCtrl', ['groups', 'Group', 'Flash', GroupListCtrl])
+        .controller('GroupListCtrl', ['ngDialog', 'groups', 'Group', 'Flash', GroupListCtrl])
         .controller('GroupDetailCtrl', ['group', GroupDetailCtrl]);
 
     function Config($stateProvider) {
@@ -147,17 +148,25 @@
         }
     }
 
-    function GroupListCtrl(groups, Group, Flash) {
+    function GroupListCtrl(ngDialog, groups, Group, Flash) {
         var vm = this;
         vm.groups = groups;
-        vm.delete = function(group) {
-            Group.remove(group)
+        vm.deleteDlg = function(group) {
+            vm.group = group;
+            ngDialog.open({
+                template: 'deleteDlgTmpl',
+                data: vm
+            });
+        }
+        vm.delete = function() {
+            Group.remove(vm.group)
                 .then(function success(response) {
                     Group.getAll()
                         .then(function success(response) {
                             vm.groups = response;
                         });
                     Flash.show("Deleted");
+                    vm.group = null;
                 })
                 .catch(function error(response) {
                     Flash.show("Error!");

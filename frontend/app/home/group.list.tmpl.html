@@ -1,25 +1,30 @@
-<h3>
-    Groups
-</h3>
+<h3>Groups</h3>
 
 <table class="table table-striped">
-    <thead>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Actions</th>
-    </thead>
-    <tbody>
-        <tr ng-repeat="group in vm.groups">
-            <td>
-                <a class="btn btn-link" ui-sref="home.group.detail({groupId: group.id})">
-                    {{ group.id }}
-                </a>
-            </td>
-            <td>{{ group.name }}</td>
-            <td><a class="btn btn-link" ng-click="vm.delete(group)">Delete</td>
-            
-        </tr>
-    </tbody>
+  <thead>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Actions</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="group in vm.groups">
+      <td>
+        <a class="btn btn-link" ui-sref="home.group.detail({groupId: group.id})">
+          {{ group.id }}
+        </a>
+      </td>
+      <td>{{ group.name }}</td>
+      <td><a class="btn btn-link" ng-click="vm.deleteDlg(group)">Delete</td>
+    </tr>
+  </tbody>
 </table>
 
 <div ui-view></div>
+
+
+<script type="text/ng-template" id="deleteDlgTmpl">
+    <h1>Are you sure?</h1>
+    <p class="lead">You're about to delete the <b>{{ ngDialogData.group.name }}</b> group.</p>
+    <button type="button" class="btn btn-default" ng-click="closeThisDialog()">No, I made a terrible mistake!</button>
+    <button type="button" class="btn btn-danger" ng-click="ngDialogData.delete(); closeThisDialog()">Yes, I'm sure!!!</button>
+</script>
