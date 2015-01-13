@@ -12,9 +12,11 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/nicksnyder/go-i18n/i18n"
 
-	_ "github.com/rafael84/go-spa/backend/account"
+	_ "github.com/rafael84/go-spa/backend/group"
 	"github.com/rafael84/go-spa/backend/middleware"
+	_ "github.com/rafael84/go-spa/backend/reset"
 	_ "github.com/rafael84/go-spa/backend/storage"
+	_ "github.com/rafael84/go-spa/backend/user"
 )
 
 const (

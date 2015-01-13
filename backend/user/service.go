@@ -1,4 +1,4 @@
-package account
+package user
 
 import (
 	"errors"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/gotk/pg"
 	"github.com/guregu/null"
+	"github.com/rafael84/go-spa/backend/base"
 )
 
 type userService struct {
@@ -18,7 +19,7 @@ func NewUserService(session *pg.Session) *userService {
 
 func (us *userService) Create(email, password string, userJsonData *UserJsonData) (*User, error) {
 	// encode password
-	var saltedPassword SaltedPassword
+	var saltedPassword base.SaltedPassword
 	err := saltedPassword.Encode(password)
 	if err != nil {
 		return nil, errors.New("Could not encode password")

@@ -1,4 +1,4 @@
-package account
+package group
 
 import (
 	"net/http"
@@ -36,24 +36,24 @@ func (r *GroupItemResource) GET(c *ctx.Context, rw http.ResponseWriter, req *htt
 	vars := mux.Vars(req)
 	id := vars["id"]
 
-	group, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
+	grp, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
 		return ctx.BadRequest(rw, "Could not query group")
 	}
-	return ctx.OK(rw, group)
+	return ctx.OK(rw, grp)
 }
 
 func (r *GroupItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	vars := mux.Vars(req)
 	id := vars["id"]
 
-	group, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
+	grp, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
 		return ctx.BadRequest(rw, "Could not query group")
 	}
-	err = r.DB(c).Delete(group)
+	err = r.DB(c).Delete(grp)
 	if err != nil {
 		log.Errorf("Could not delete group %s: %v", id, err)
 		return ctx.InternalServerError(rw, "Could not delete user")
