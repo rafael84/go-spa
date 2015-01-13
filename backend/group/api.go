@@ -7,6 +7,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 	"github.com/gotk/ctx"
+	"github.com/gotk/pg"
 
 	"github.com/rafael84/go-spa/backend/base"
 )
@@ -65,6 +66,40 @@ func (r *GroupItemResource) GET(c *ctx.Context, rw http.ResponseWriter, req *htt
 		log.Errorf("Could not query group id %s: %v", id, err)
 		return ctx.BadRequest(rw, "Could not query group")
 	}
+	return ctx.OK(rw, grp)
+}
+
+func (r *GroupItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
+
+	vars := mux.Vars(req)
+	id := vars["id"]
+
+	// decode request data
+	var form = &struct {
+		Name string `json:"name"`
+	}{}
+	err := json.NewDecoder(req.Body).Decode(form)
+	if err != nil {
+		log.Errorf("Could not parse request data: %s", err)
+		return ctx.BadRequest(rw, "Could not parse request data")
+	}
+
+	// get user from database
+	var grp pg.Entity
+	grp, err = r.DB(c).FindOne(&Group{}, "id = $1", id)
+	if err != nil {
+		log.Errorf("Could not query group id %s: %v", id, err)
+		return ctx.BadRequest(rw, "Could not query group")
+	}
+
+	// update the group
+	grp.(*Group).Name = form.Name
+	err = r.DB(c).Update(grp)
+	if err != nil {
+		log.Errorf("Could not edit group %s: %v", form.Name, err)
+		return ctx.BadRequest(rw, "Could not edit group")
+	}
+
 	return ctx.OK(rw, grp)
 }
 

@@ -10,8 +10,8 @@
         .config(Config)
         .factory('Group', ['$http', '$q', Group])
         .controller('GroupListCtrl', ['ngDialog', 'groups', 'Group', 'Flash', GroupListCtrl])
-        .controller('GroupEditCtrl', ['group', GroupEditCtrl])
-        .controller('GroupNewCtrl', ['$state', 'Flash', 'Group', GroupNewCtrl]);
+        .controller('GroupNewCtrl', ['$state', 'Flash', 'Group', GroupNewCtrl])
+        .controller('GroupEditCtrl', ['$state', 'Flash', 'Group', 'group', GroupEditCtrl]);
 
     function Config($stateProvider) {
         $stateProvider
@@ -33,6 +33,11 @@
                     }
                 }
             })
+            .state('group.new', {
+                url: '/new',
+                templateUrl: 'app/group/group.new.tmpl.html',
+                controller: 'GroupNewCtrl as vm'
+            })
             .state('group.edit', {
                 url: '/edit/:groupId',
                 templateUrl: 'app/group/group.edit.tmpl.html',
@@ -42,11 +47,6 @@
                         return Group.getById($stateParams.groupId);
                     }
                 }
-            })
-            .state('group.new', {
-                url: '/new',
-                templateUrl: 'app/group/group.new.tmpl.html',
-                controller: 'GroupNewCtrl as vm'
             });
     }
 
@@ -98,11 +98,24 @@
                 });
             return deferred.promise;
         }
+
+        function edit(group) {
+            var deferred = $q.defer();
+            $http.put("/api/v1/group/" + group.id, group)
+                .then(function success(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function error(response) {
+                    deferred.reject(response.data.error);
+                });
+            return deferred.promise;
+        }
         return {
             getAll: getAll,
             getById: getById,
             remove: remove,
-            add: add
+            add: add,
+            edit: edit
         }
     }
 
@@ -132,11 +145,6 @@
         }
     }
 
-    function GroupEditCtrl(group) {
-        var vm = this;
-        vm.group = group;
-    }
-
     function GroupNewCtrl($state, Flash, Group) {
         var vm = this;
         vm.error = null;
@@ -145,6 +153,22 @@
             Group.add(vm.group)
                 .then(function success(response) {
                     Flash.show('Group ' + vm.group.name + ' created!');
+                    $state.go('group.list');
+                })
+                .catch(function error(response) {
+                    vm.error = response;
+                });
+        }
+    }
+
+    function GroupEditCtrl($state, Flash, Group, group) {
+        var vm = this;
+        vm.error = null;
+        vm.group = group;
+        vm.save = function(valid) {
+            Group.edit(vm.group)
+                .then(function success(response) {
+                    Flash.show('Group ' + vm.group.name + ' updated!');
                     $state.go('group.list');
                 })
                 .catch(function error(response) {
