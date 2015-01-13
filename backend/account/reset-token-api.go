@@ -8,9 +8,9 @@ import (
 	"regexp"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/gotk/webctx"
 
 	"github.com/rafael84/go-spa/backend/base"
-	"github.com/rafael84/go-spa/backend/context"
 	"github.com/rafael84/go-spa/backend/database"
 	"github.com/rafael84/go-spa/backend/mail"
 )
@@ -21,12 +21,12 @@ type ValidKey struct {
 }
 
 func init() {
-	context.Resource("/account/reset-password", &ResetPasswordResource{}, true)
-	context.Resource("/account/reset-password/validate-key", &ValidateKeyResource{}, true)
-	context.Resource("/account/reset-password/complete", &CompleteResource{}, true)
+	webctx.Resource("/account/reset-password", &ResetPasswordResource{}, true)
+	webctx.Resource("/account/reset-password/validate-key", &ValidateKeyResource{}, true)
+	webctx.Resource("/account/reset-password/complete", &CompleteResource{}, true)
 }
 
-func sendResetPasswordEmail(c *context.Context, user *User) {
+func sendResetPasswordEmail(c *webctx.Context, user *User) {
 	var body bytes.Buffer
 
 	resetTokenService := NewResetTokenService(c.Vars["db"].(*database.Session))
@@ -62,17 +62,17 @@ type ResetPasswordResource struct {
 	*base.Resource
 }
 
-func (r *ResetPasswordResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *ResetPasswordResource) POST(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	// decode request data
 	var form ResetPasswordForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return context.BadRequest(rw, "Could not query user: %s", err)
+		return webctx.BadRequest(rw, "Could not query user: %s", err)
 	}
 
 	// validate email address
 	if ok := regexp.MustCompile(emailRegex).MatchString(form.Email); !ok {
-		return context.BadRequest(rw, "Invalid email address")
+		return webctx.BadRequest(rw, "Invalid email address")
 	}
 
 	// create new user service
@@ -82,19 +82,19 @@ func (r *ResetPasswordResource) POST(c *context.Context, rw http.ResponseWriter,
 	var user *User
 	user, err = userService.GetByEmail(form.Email)
 	if err != nil {
-		return context.BadRequest(rw, "User not found")
+		return webctx.BadRequest(rw, "User not found")
 	}
 
 	go sendResetPasswordEmail(c, user)
 
-	return context.OK(rw, "Email sent")
+	return webctx.OK(rw, "Email sent")
 }
 
 type ValidateKeyResource struct {
 	*base.Resource
 }
 
-func (r *ValidateKeyResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *ValidateKeyResource) POST(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	type ValidateKeyForm struct {
 		Key string `json:"key"`
 	}
@@ -103,24 +103,24 @@ func (r *ValidateKeyResource) POST(c *context.Context, rw http.ResponseWriter, r
 	var form ValidateKeyForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return context.BadRequest(rw, "Unable to validate key")
+		return webctx.BadRequest(rw, "Unable to validate key")
 	}
 
 	service := NewResetTokenService(r.DB(c))
 
 	resetToken, err := service.GetByKey(form.Key)
 	if err != nil || !resetToken.Valid() {
-		return context.BadRequest(rw, "Invalid Key")
+		return webctx.BadRequest(rw, "Invalid Key")
 	}
 
-	return context.OK(rw, ValidKey{resetToken.UserId, form.Key})
+	return webctx.OK(rw, ValidKey{resetToken.UserId, form.Key})
 }
 
 type CompleteResource struct {
 	*base.Resource
 }
 
-func (r *CompleteResource) POST(c *context.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *CompleteResource) POST(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	type ChangePasswordForm struct {
 		Password      string   `json:"password"`
 		PasswordAgain string   `json:"passwordAgain"`
@@ -131,38 +131,38 @@ func (r *CompleteResource) POST(c *context.Context, rw http.ResponseWriter, req 
 	var form ChangePasswordForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return context.BadRequest(rw, "Unable to change the password")
+		return webctx.BadRequest(rw, "Unable to change the password")
 	}
 
 	// validate the passwords
 	if form.Password != form.PasswordAgain {
-		return context.BadRequest(rw, "Passwords mismatch")
+		return webctx.BadRequest(rw, "Passwords mismatch")
 	}
 
 	// validate the key again
 	resetTokenService := NewResetTokenService(r.DB(c))
 	resetToken, err := resetTokenService.GetByKey(form.ValidKey.Key)
 	if err != nil || !resetToken.Valid() {
-		return context.BadRequest(rw, "Invalid Key")
+		return webctx.BadRequest(rw, "Invalid Key")
 	}
 
 	// get user from db
 	userService := NewUserService(r.DB(c))
 	user, err := userService.GetById(resetToken.UserId)
 	if err != nil {
-		return context.InternalServerError(rw, "User not found")
+		return webctx.InternalServerError(rw, "User not found")
 	}
 
 	// encode user password
 	err = user.Password.Encode(form.Password)
 	if err != nil {
-		return context.InternalServerError(rw, "Could not change user password")
+		return webctx.InternalServerError(rw, "Could not change user password")
 	}
 
 	// change user data in database
 	err = userService.Update(user)
 	if err != nil {
-		return context.InternalServerError(rw, "Could not change user password")
+		return webctx.InternalServerError(rw, "Could not change user password")
 	}
 
 	// invalidate token
@@ -172,5 +172,5 @@ func (r *CompleteResource) POST(c *context.Context, rw http.ResponseWriter, req 
 		log.Errorf("Unable to invalidate token: %s", err)
 	}
 
-	return context.OK(rw, user)
+	return webctx.OK(rw, user)
 }
