@@ -1,8 +1,3 @@
-<div class="alert alert-info lead" ng-show="signin.message">
-    <i class="fa fa-exclamation-circle"></i>
-    {{ signin.message }}
-</div>
-
 <h2 translate="signin.title">Sign In</h2>
 
 <form class="form" ng-submit="signin.authenticate()">
@@ -25,7 +20,7 @@
     </div>
 
     <p class="clearfix">
-        <button class="btn btn-link" translate="signin.form.resetPassword" ui-sref="resetPassword"></button>
+        <button type="button" class="btn btn-link" translate="signin.form.resetPassword" ui-sref="resetPassword"></button>
         <span class="pull-right">
             <button class="btn btn-default" type="submit">{{ 'signin.form.submit.label' | translate }} →</button>
         </span>
