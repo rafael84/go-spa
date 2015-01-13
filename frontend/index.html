@@ -12,65 +12,74 @@
   <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog.min.css" />
   <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog-theme-default.min.css" />
   <!-- APP -->
-  <link rel="stylesheet" href="app/app.css" type="text/css" />
+  <link rel="stylesheet" href="app/assets/app.css" type="text/css" />
 </head>
 
 <body ng-cloak>
 
-  <div class="container">
+  <div class="flash-message text-center" ng-class="{'animated bounceInDown': main.hasFlashMessage()}"
+  ng-show="main.hasFlashMessage()">
+    {{ main.getFlashMessage() }}
+  </div>
 
-    <div class="flash-message text-center" ng-class="{'animated bounceInDown': main.hasFlashMessage()}"
-    ng-show="main.hasFlashMessage()">
-      {{ main.getFlashMessage() }}
-    </div>
+  <div id="wrapper">
 
-    <section>
-      <h1 class="page-header"> 
-          <a ui-sref="home" translate="main.header.title">Go SPA</a> 
-
+    <section id="header" class="container-fluid">
+      <h1> 
+        <a ui-sref="home" translate="main.header.title">Go SPA</a> 
           <small class="pull-right">
             <span ng-hide="main.isUserSignedIn()">
               <a class="btn btn-link" ui-sref="signup" translate="main.header.signup">Sign Up</a>
-              |
+              &#124;
               <a class="btn btn-link" ui-sref="signin" translate="main.header.signin">Sign In</a>
             </span>
             <span ng-show="main.isUserSignedIn()">
               {{ 'main.header.hello' | translate }} 
               <a ui-sref="me">{{ main.getUser().jsonData.firstName }}</a>
-              |
+              &#124;
               <a class="btn btn-link" ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
             </span>
           </small>
-        </h1>
+      </h1>
       <div class="nav nav-pills">
         <li ng-class="{ active: $state.is('home') }">
-          <a ui-sref="home">Home</a>
+          <a ui-sref="home">
+            <i class="fa fa-home"></i> Home
+          </a>
         </li>
         <li ng-class="{ active: $state.is('me') }">
-          <a ui-sref="me" translate="home.menu.me">Me</a>
+          <a ui-sref="me">
+            <i class="fa fa-user"></i> {{ 'home.menu.me' | translate}}
+          </a>
         </li>
         <li ng-class="{ active: $state.includes('group') }">
-          <a ui-sref="group.list" translate="home.menu.groups">Groups</a>
+          <a ui-sref="group.list">
+            <i class="fa fa-users"></i> {{ 'home.menu.groups' | translate }}
+          </a>
         </li>
         <li ng-class="{ active: $state.includes('location') }">
-          <a ui-sref="location" translate="home.menu.locations">Locations</a>
+          <a ui-sref="location">
+            <i class="fa fa-folder"></i> {{ 'home.menu.locations' | translate }}
+          </a>
         </li>
       </div>
-
     </section>
 
-    <section ui-view></section>
+    <section id="content" class="container-fluid" ui-view></section>
 
-    <section>
-      <div class="clearfix">
-        <span class="pull-right">
-            <button class="btn btn-link" ng-click="main.switchLang('en')" translate="main.footer.translate.en">English</button>
-            |
-            <button class="btn btn-link" ng-click="main.switchLang('pt')" translate="main.footer.translate.pt">Portuguese</button>
-          </span>
-      </div>
+    <section id="footer" class="container-fluid">
+      <span class="pull-right">
+        <button class="btn btn-link" ng-click="main.switchLang('en')">
+          <img src="app/assets/img/en.png" alt="english"/> 
+          {{ 'main.footer.translate.en' | translate }}
+        </button>
+        &#124;
+        <button class="btn btn-link" ng-click="main.switchLang('pt')">
+          <img src="app/assets/img/pt.png" alt="portuguese"/>
+          {{ 'main.footer.translate.pt' | translate }}
+        </button>
+      </span>
     </section>
-
   </div>
 
   <!-- VENDOR -->
