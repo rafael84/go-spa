@@ -13,9 +13,9 @@ import (
 	"github.com/nicksnyder/go-i18n/i18n"
 
 	_ "github.com/rafael84/go-spa/backend/group"
+	_ "github.com/rafael84/go-spa/backend/location"
 	"github.com/rafael84/go-spa/backend/middleware"
 	_ "github.com/rafael84/go-spa/backend/reset"
-	_ "github.com/rafael84/go-spa/backend/storage"
 	_ "github.com/rafael84/go-spa/backend/user"
 )
 
