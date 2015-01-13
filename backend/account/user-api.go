@@ -8,8 +8,8 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gotk/ctx"
 	"github.com/gotk/pg"
-	"github.com/gotk/webctx"
 
 	"github.com/rafael84/go-spa/backend/base"
 )
@@ -20,10 +20,10 @@ const (
 )
 
 func init() {
-	webctx.Resource("/account/user/signup", &SignUpResource{}, true)
-	webctx.Resource("/account/user/signin", &SignInResource{}, true)
-	webctx.Resource("/account/user/me", &MeResource{}, false)
-	webctx.Resource("/account/token/renew", &TokenRenewResource{}, false)
+	ctx.Resource("/account/user/signup", &SignUpResource{}, true)
+	ctx.Resource("/account/user/signin", &SignInResource{}, true)
+	ctx.Resource("/account/user/me", &MeResource{}, false)
+	ctx.Resource("/account/token/renew", &TokenRenewResource{}, false)
 }
 
 // newToken generate a new JWT token.
@@ -37,24 +37,24 @@ func newToken(user *User) *jwt.Token {
 }
 
 func tokenResponse(rw http.ResponseWriter, token *jwt.Token) error {
-	tokenString, err := webctx.SignToken(token)
+	tokenString, err := ctx.SignToken(token)
 	if err != nil {
-		return webctx.InternalServerError(rw, "Problem signing token")
+		return ctx.InternalServerError(rw, "Problem signing token")
 	}
-	return webctx.OK(rw, map[string]string{"token": tokenString})
+	return ctx.OK(rw, map[string]string{"token": tokenString})
 }
 
 type SignUpResource struct {
 	*base.Resource
 }
 
-func (r *SignUpResource) POST(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *SignUpResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	// decode request data
 	var form SignUpForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return webctx.BadRequest(rw, c.T("account.user.could_not_parse_request_data"))
+		return ctx.BadRequest(rw, c.T("account.user.could_not_parse_request_data"))
 	}
 
 	// create new user service
@@ -62,15 +62,15 @@ func (r *SignUpResource) POST(c *webctx.Context, rw http.ResponseWriter, req *ht
 	// check whether the email address is already taken
 	_, err = service.GetByEmail(form.Email)
 	if err == nil {
-		return webctx.BadRequest(rw, c.T("account.user.email_taken"))
+		return ctx.BadRequest(rw, c.T("account.user.email_taken"))
 	} else if err != pg.ERecordNotFound {
 		log.Errorf("Could not query user: %s", err)
-		return webctx.InternalServerError(rw, "account.user.could_not_query_user")
+		return ctx.InternalServerError(rw, "account.user.could_not_query_user")
 	}
 
 	// password validation
 	if form.Password != form.PasswordAgain {
-		return webctx.BadRequest(rw, c.T("account.user.passwords_mismatch"))
+		return ctx.BadRequest(rw, c.T("account.user.passwords_mismatch"))
 	}
 
 	// create new user
@@ -83,33 +83,33 @@ func (r *SignUpResource) POST(c *webctx.Context, rw http.ResponseWriter, req *ht
 		},
 	)
 	if err != nil {
-		return webctx.InternalServerError(rw, "Could not create user: %s", err)
+		return ctx.InternalServerError(rw, "Could not create user: %s", err)
 	}
 
 	// return created user data
-	return webctx.Created(rw, user)
+	return ctx.Created(rw, user)
 }
 
 type SignInResource struct {
 	*base.Resource
 }
 
-func (r *SignInResource) POST(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *SignInResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	// decode request data
 	var form SignInForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return webctx.BadRequest(rw, "Could not query user: %s", err)
+		return ctx.BadRequest(rw, "Could not query user: %s", err)
 	}
 
 	// validate email address
 	if ok := regexp.MustCompile(emailRegex).MatchString(form.Email); !ok {
-		return webctx.BadRequest(rw, "Invalid email address")
+		return ctx.BadRequest(rw, "Invalid email address")
 	}
 
 	// validate password length
 	if len(form.Password) == 0 {
-		return webctx.BadRequest(rw, "Password cannot be empty")
+		return ctx.BadRequest(rw, "Password cannot be empty")
 	}
 
 	// create new user service
@@ -119,12 +119,12 @@ func (r *SignInResource) POST(c *webctx.Context, rw http.ResponseWriter, req *ht
 	var user *User
 	user, err = service.GetByEmail(form.Email)
 	if err != nil {
-		return webctx.BadRequest(rw, "Invalid email and/or password")
+		return ctx.BadRequest(rw, "Invalid email and/or password")
 	}
 
 	// check user password
 	if !user.Password.Valid(form.Password) {
-		return webctx.BadRequest(rw, "Invalid email and/or password")
+		return ctx.BadRequest(rw, "Invalid email and/or password")
 	}
 
 	// generate new token
@@ -135,12 +135,12 @@ type TokenRenewResource struct {
 	*base.Resource
 }
 
-func (r *TokenRenewResource) POST(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *TokenRenewResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 
 	// get user id from the current token
 	userId, found := c.Token.Claims["uid"]
 	if !found {
-		return webctx.BadRequest(rw, "Could not extract user from context")
+		return ctx.BadRequest(rw, "Could not extract user from context")
 	}
 
 	// create new user service
@@ -150,7 +150,7 @@ func (r *TokenRenewResource) POST(c *webctx.Context, rw http.ResponseWriter, req
 	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return webctx.InternalServerError(rw, "Could not query user.")
+		return ctx.InternalServerError(rw, "Could not query user.")
 	}
 
 	// generate new token
@@ -162,11 +162,11 @@ type MeResource struct {
 	*base.Resource
 }
 
-func (r *MeResource) GET(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *MeResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	// get user id from current token
 	userId, found := c.Token.Claims["uid"]
 	if !found {
-		return webctx.BadRequest(rw, "Could not extract user from context")
+		return ctx.BadRequest(rw, "Could not extract user from context")
 	}
 
 	// create new user service
@@ -176,20 +176,20 @@ func (r *MeResource) GET(c *webctx.Context, rw http.ResponseWriter, req *http.Re
 	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return webctx.InternalServerError(rw, "Could not query user.")
+		return ctx.InternalServerError(rw, "Could not query user.")
 	}
 
 	// return user data
-	return webctx.OK(rw, user)
+	return ctx.OK(rw, user)
 }
 
-func (r *MeResource) PUT(c *webctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *MeResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 
 	// decode request data
 	var form MeForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return webctx.BadRequest(rw, "Could decode user profile data: %s", err)
+		return ctx.BadRequest(rw, "Could decode user profile data: %s", err)
 	}
 
 	// create new user service
@@ -199,13 +199,13 @@ func (r *MeResource) PUT(c *webctx.Context, rw http.ResponseWriter, req *http.Re
 	user, err := service.GetById(form.Id.Int64)
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return webctx.InternalServerError(rw, "Could not query user.")
+		return ctx.InternalServerError(rw, "Could not query user.")
 	}
 
 	// get the json data from user
 	jsonData, err := user.DecodeJsonData()
 	if err != nil {
-		return webctx.BadRequest(rw, "Could not decode json data")
+		return ctx.BadRequest(rw, "Could not decode json data")
 	}
 
 	// update the user
@@ -216,5 +216,5 @@ func (r *MeResource) PUT(c *webctx.Context, rw http.ResponseWriter, req *http.Re
 	service.Update(user)
 
 	// return user data
-	return webctx.OK(rw, user)
+	return ctx.OK(rw, user)
 }

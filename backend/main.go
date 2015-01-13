@@ -7,8 +7,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/gotk/ctx"
 	"github.com/gotk/pg"
-	"github.com/gotk/webctx"
 	"github.com/joho/godotenv"
 	"github.com/nicksnyder/go-i18n/i18n"
 
@@ -76,7 +76,7 @@ func main() {
 
 	vars := map[string]interface{}{"db": db}
 
-	err = webctx.Init(router, privKey, pubKey, vars)
+	err = ctx.Init(router, privKey, pubKey, vars)
 	if err != nil {
 		log.Fatalf("Unable to configure API: %s", err)
 	}
