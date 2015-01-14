@@ -2,6 +2,7 @@ package media
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -13,6 +14,8 @@ import (
 	"github.com/gotk/pg"
 
 	"github.com/rafael84/go-spa/backend/base"
+	"github.com/rafael84/go-spa/backend/location"
+	"github.com/rafael84/go-spa/backend/mediatype"
 )
 
 func init() {
@@ -98,8 +101,47 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 		return ctx.BadRequest(rw, "Could not parse request data")
 	}
 
-	// get media from database
 	var entity pg.Entity
+	// get location from database
+	entity, err = r.DB(c).FindOne(&location.Location{}, "id=$1", form.LocationId)
+	if err != nil {
+		log.Errorf("Could not locate the requested location: %s", err)
+		return ctx.BadRequest(rw, "Could not locate the requested location")
+	}
+	location := entity.(*location.Location)
+
+	// get media type from database
+	entity, err = r.DB(c).FindOne(&mediatype.MediaType{}, "id=$1", form.MediaTypeId)
+	if err != nil {
+		log.Errorf("Could not locate the requested media type: %s", err)
+		return ctx.BadRequest(rw, "Could not locate the requested media type")
+	}
+	mediaType := entity.(*mediatype.MediaType)
+
+	// create directories if necessary
+	dir := fmt.Sprintf("/var/%s/%s", location.StaticPath, mediaType.Name)
+	err = os.MkdirAll(dir, 0755)
+	if err != nil {
+		log.Errorf("Unable to create directory: %s", err)
+		ctx.InternalServerError(rw, "Could not process uploaded file")
+	}
+
+	// generate filename randomly
+	filename, err := base.Random(16)
+	if err != nil {
+		log.Errorf("Unable to generate filename: %s", err)
+		ctx.InternalServerError(rw, "Could not process uploaded file")
+	}
+	path := fmt.Sprintf("%s/%s", dir, filename)
+
+	// move file to its destination
+	err = os.Rename(form.Path, path)
+	if err != nil {
+		log.Errorf("Could not move file %s", err)
+		return ctx.BadRequest(rw, "Could not process uploaded file")
+	}
+
+	// get media from database
 	entity, err = r.DB(c).FindOne(&Media{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media id %s: %v", id, err)
@@ -111,7 +153,7 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	media.Name = form.Name
 	media.LocationId = form.LocationId
 	media.MediaTypeId = form.MediaTypeId
-	media.Path = form.Path
+	media.Path = path
 	err = r.DB(c).Update(media)
 	if err != nil {
 		log.Errorf("Could not edit media %s: %v", form.Name, err)
@@ -154,7 +196,7 @@ func (r *MediaUploadResource) POST(c *ctx.Context, rw http.ResponseWriter, req *
 			break
 		}
 
-		tempFile, err = ioutil.TempFile("/tmp", "spa")
+		tempFile, err = ioutil.TempFile(os.TempDir(), "spa")
 		if err != nil {
 			return ctx.InternalServerError(rw, "Could not create temporary file")
 		}

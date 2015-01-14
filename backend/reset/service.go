@@ -1,14 +1,12 @@
 package reset
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"fmt"
-	"io"
 	"time"
 
 	"github.com/gotk/pg"
 	"github.com/guregu/null"
+	"github.com/rafael84/go-spa/backend/base"
 )
 
 type resetTokenService struct {
@@ -22,8 +20,7 @@ func NewResetTokenService(session *pg.Session) *resetTokenService {
 func (r *resetTokenService) Create(userId int64) (*ResetToken, error) {
 
 	// generate key
-	buf := make([]byte, 32, 32)
-	_, err := io.ReadFull(rand.Reader, buf)
+	key, err := base.Random(32)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +29,7 @@ func (r *resetTokenService) Create(userId int64) (*ResetToken, error) {
 	resetToken := &ResetToken{
 		Id:         null.NewInt(0, false),
 		State:      ResetTokenActive,
-		Key:        hex.EncodeToString(buf),
+		Key:        key,
 		Expiration: time.Now().Add(time.Minute * 10),
 		UserId:     userId,
 	}
