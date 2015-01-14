@@ -143,5 +143,41 @@
                 "label": "Salvar"
             }
         }
+    },
+    "location": {
+        "title": "Local",
+        "form": {
+            "name": {
+                "label": "Nome",
+                "placeholder": "Nome do local",
+                "error": "Por favor entre com o nome do local"
+            },
+            "staticURL": {
+                "label": "URL estática",
+                "placeholder": "URL estática",
+                "error": "Por favor entre com a url estática"
+            },
+            "staticPath": {
+                "label": "Caminho estático",
+                "placeholder": "Caminho estático",
+                "error": "Por favor entre com o caminho estático"
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
+    },
+    "mediaType": {
+        "title": "Tipo de Mídia",
+        "form": {
+            "name": {
+                "label": "Nome",
+                "placeholder": "Nome do tipo de mídia",
+                "error": "Por favor entre com o nome do tipo de mídia "
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
     }
 }
