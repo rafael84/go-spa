@@ -2,7 +2,10 @@ package media
 
 import (
 	"encoding/json"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
@@ -15,6 +18,7 @@ import (
 func init() {
 	ctx.Resource("/media", &MediaResource{}, false)
 	ctx.Resource("/media/{id:[0-9]+}", &MediaItemResource{}, false)
+	ctx.Resource("/media/upload", &MediaUploadResource{}, true)
 }
 
 type MediaResource struct {
@@ -128,4 +132,34 @@ func (r *MediaItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, req *
 		return ctx.InternalServerError(rw, "Could not delete media")
 	}
 	return ctx.NoContent(rw)
+}
+
+type MediaUploadResource struct {
+	*base.Resource
+}
+
+func (r *MediaUploadResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
+	reader, err := req.MultipartReader()
+	if err != nil {
+		return ctx.BadRequest(rw, "Could not upload file")
+	}
+	var tempFile *os.File
+	for {
+		part, err := reader.NextPart()
+		if err == io.EOF {
+			break
+		}
+
+		tempFile, err = ioutil.TempFile("/tmp", "spa")
+		if err != nil {
+			return ctx.InternalServerError(rw, "Could not create temporary file")
+		}
+		defer tempFile.Close()
+
+		_, err = io.Copy(tempFile, part)
+		if err != nil {
+			break
+		}
+	}
+	return ctx.Created(rw, tempFile.Name())
 }
