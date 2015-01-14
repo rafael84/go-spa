@@ -49,10 +49,12 @@ func (r *MediaResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	}
 
 	// create new media
+	path := "/tmp"
 	media := &Media{
 		Name:        form.Name,
 		MediaTypeId: form.MediaTypeId,
 		LocationId:  form.LocationId,
+		Path:        path,
 	}
 	err = r.DB(c).Create(media)
 	if err != nil {
@@ -88,6 +90,7 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 		Name        string `json:"name"`
 		MediaTypeId int    `json:"mediaTypeId"`
 		LocationId  int    `json:"locationId"`
+		Path        string `json:"path"`
 	}{}
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
@@ -108,6 +111,7 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	media.Name = form.Name
 	media.LocationId = form.LocationId
 	media.MediaTypeId = form.MediaTypeId
+	media.Path = form.Path
 	err = r.DB(c).Update(media)
 	if err != nil {
 		log.Errorf("Could not edit media %s: %v", form.Name, err)

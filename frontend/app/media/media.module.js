@@ -13,7 +13,7 @@
         .factory('Media', ['$http', '$q', 'Location', 'MediaType', Media])
         .controller('MediaListCtrl', ['ngDialog', 'medias', 'Media', 'Flash', MediaListCtrl])
         .controller('MediaNewCtrl', ['$state', 'Flash', 'Media', 'Location', 'MediaType', MediaNewCtrl])
-        .controller('MediaEditCtrl', ['$state', 'Flash', 'Media', 'Location', 'MediaType', 'media', MediaEditCtrl]);
+        .controller('MediaEditCtrl', ['$state', 'FileUploader', 'Flash', 'Media', 'Location', 'MediaType', 'media', MediaEditCtrl]);
 
     function Config($stateProvider) {
         $stateProvider
@@ -190,19 +190,27 @@
             });
     }
 
-    function MediaEditCtrl($state, Flash, Media, Location, MediaType, media) {
+    function MediaEditCtrl($state, FileUploader, Flash, Media, Location, MediaType, media) {
         var vm = this;
         vm.error = null;
+        vm.uploader = new FileUploader({
+            url: "/api/v1/media/upload"
+        });
         vm.media = media;
         vm.save = function(valid) {
-            Media.edit(vm.media)
-                .then(function success(response) {
-                    Flash.show('Media ' + vm.media.name + ' updated!');
-                    $state.go('media.list');
-                })
-                .catch(function error(response) {
-                    vm.error = response;
-                });
+            vm.uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                vm.media.path = response;
+                Media.edit(vm.media)
+                    .then(function success(response) {
+                        Flash.show('Media ' + vm.media.name + ' updated!');
+                        $state.go('media.list');
+                    })
+                    .catch(function error(response) {
+                        vm.error = response;
+                    });
+            }
+            var item = vm.uploader.queue[0];
+            item.upload();
         }
         Media.getLocations()
             .then(function success(response) {

@@ -4,6 +4,7 @@ angular.module("app", [
     'ngSanitize',
     'angular-jwt',
     'ui.select',
+    'angularFileUpload',
 
     'app.main',
     'app.home',

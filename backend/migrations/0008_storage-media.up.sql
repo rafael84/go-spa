@@ -7,6 +7,7 @@ create table storage.media
     name          varchar(140) not null,
     media_type_id bigint not null,
     location_id   bigint not null,
+    path          varchar(240) not null,
     json_data     jsonb
 )
 with ( oids = false );
