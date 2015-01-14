@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module("app", [
+    'ngSanitize',
     'angular-jwt',
+    'ui.select',
 
     'app.main',
     'app.home',
@@ -10,15 +12,18 @@ angular.module("app", [
     'app.signin',
     'app.group',
     'app.location',
-    'app.mediaType'
+    'app.mediaType',
+    'app.media'
 ])
 
-.config(function Config($httpProvider, $compileProvider, jwtInterceptorProvider) {
+.config(function Config($httpProvider, $compileProvider, jwtInterceptorProvider, uiSelectConfig) {
     jwtInterceptorProvider.tokenGetter = function(store) {
         return store.get('token')
     }
     $httpProvider.interceptors.push('jwtInterceptor');
     // $compileProvider.debugInfoEnabled(false);
+
+    uiSelectConfig.theme = 'bootstrap';
 })
 
 .run(function Run($rootScope, $state, $stateParams) {

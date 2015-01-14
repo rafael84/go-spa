@@ -14,6 +14,7 @@ import (
 
 	_ "github.com/rafael84/go-spa/backend/group"
 	_ "github.com/rafael84/go-spa/backend/location"
+	_ "github.com/rafael84/go-spa/backend/media"
 	_ "github.com/rafael84/go-spa/backend/mediatype"
 	"github.com/rafael84/go-spa/backend/middleware"
 	_ "github.com/rafael84/go-spa/backend/reset"

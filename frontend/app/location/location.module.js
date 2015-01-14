@@ -110,12 +110,22 @@
                 });
             return deferred.promise;
         }
+        function findLocal(id, locations) {
+            for (var i = 0; i < locations.length; i++) {
+                var location = locations[i];
+                if (location.id == id) {
+                    return location;
+                }
+            }
+            return null;
+        }
         return {
             getAll: getAll,
             getById: getById,
             remove: remove,
             add: add,
-            edit: edit
+            edit: edit,
+            findLocal: findLocal
         }
     }
 

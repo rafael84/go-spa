@@ -1,0 +1,27 @@
+<h3>
+    New Media
+    <small class="pull-right"><a ui-sref="media.list">Back</a></small>
+</h3>
+
+<form name="mediaForm" class="form" ng-submit="vm.save(mediaForm.$valid)" novalidate>
+
+    <div class="alert alert-danger lead" ng-show="vm.error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ vm.error }}
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': mediaForm.name.$invalid && !mediaForm.name.$pristine}">
+        <label for="name" translate="media.form.name.label">Name</label>
+        <input class="form-control" type="text" name="name" id="name" ng-model="vm.media.name" required placeholder="{{ 'media.form.name.placeholder' | translate}}"
+        />
+        <p ng-show="mediaForm.name.$invalid && !mediaForm.name.$pristine" class="help-block">
+            {{ 'media.form.name.error' | translate }}
+        </p>
+    </div>
+
+    <p class="clearfix">
+        <button class="btn btn-primary pull-right" type="submit" ng-disabled="mediaForm.$invalid">
+            {{'media.form.submit.label' | translate}} →
+        </button>
+    </p>
+</form>

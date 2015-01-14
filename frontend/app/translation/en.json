@@ -23,7 +23,8 @@
             "me": "Me",
             "groups": "Groups",
             "locations": "Locations",
-            "mediaTypes": "Media Types"
+            "mediaTypes": "Media Types",
+            "medias": "Medias"
         }
     },
     "signin": {
@@ -174,6 +175,29 @@
                 "label": "Name",
                 "placeholder": "Media Type Name",
                 "error": "Please enter the media type name."
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    },
+    "media": {
+        "title": "Media",
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Media  Name",
+                "error": "Please enter the media name."
+            },
+            "location": {
+                "label": "Location",
+                "placeholder": "Choose a location",
+                "error": "Please select the location"
+            },
+            "mediaType": {
+                "label": "Media Type",
+                "placeholder": "Choose a media type",
+                "error": "Please select the media type"
             },
             "submit": {
                 "label": "Save"

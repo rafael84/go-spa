@@ -1,59 +1,61 @@
 (function() {
     'use strict';
-    angular.module('app.mediaType', [
+    angular.module('app.media', [
             'ui.router',
             'ngDialog',
             'angular-storage',
             'angular-jwt',
-            'app.main'
+            'app.main',
+            'app.mediaType',
+            'app.location'
         ])
         .config(Config)
-        .factory('MediaType', ['$http', '$q', MediaType])
-        .controller('MediaTypeListCtrl', ['ngDialog', 'mediaTypes', 'MediaType', 'Flash', MediaTypeListCtrl])
-        .controller('MediaTypeNewCtrl', ['$state', 'Flash', 'MediaType', MediaTypeNewCtrl])
-        .controller('MediaTypeEditCtrl', ['$state', 'Flash', 'MediaType', 'mediaType', MediaTypeEditCtrl]);
+        .factory('Media', ['$http', '$q', 'Location', 'MediaType', Media])
+        .controller('MediaListCtrl', ['ngDialog', 'medias', 'Media', 'Flash', MediaListCtrl])
+        .controller('MediaNewCtrl', ['$state', 'Flash', 'Media', MediaNewCtrl])
+        .controller('MediaEditCtrl', ['$state', 'Flash', 'Media', 'Location', 'MediaType', 'media', MediaEditCtrl]);
 
     function Config($stateProvider) {
         $stateProvider
-            .state('mediaType', {
+            .state('media', {
                 abstract: true,
-                url: '/mediatype',
+                url: '/media',
                 template: '<ui-view/>',
                 resolve: {
-                    MediaType: 'MediaType'
+                    Media: 'Media'
                 }
             })
-            .state('mediaType.list', {
+            .state('media.list', {
                 url: '/list',
-                templateUrl: 'app/mediatype/mediatype.list.tmpl.html',
-                controller: 'MediaTypeListCtrl as vm',
+                templateUrl: 'app/media/media.list.tmpl.html',
+                controller: 'MediaListCtrl as vm',
                 resolve: {
-                    mediaTypes: function(MediaType) {
-                        return MediaType.getAll();
+                    medias: function(Media) {
+                        return Media.getAll();
                     }
                 }
             })
-            .state('mediaType.new', {
+            .state('media.new', {
                 url: '/new',
-                templateUrl: 'app/mediatype/mediatype.new.tmpl.html',
-                controller: 'MediaTypeNewCtrl as vm'
+                templateUrl: 'app/media/media.new.tmpl.html',
+                controller: 'MediaNewCtrl as vm'
             })
-            .state('mediaType.edit', {
-                url: '/edit/:mediaTypeId',
-                templateUrl: 'app/mediatype/mediatype.edit.tmpl.html',
-                controller: 'MediaTypeEditCtrl as vm',
+            .state('media.edit', {
+                url: '/edit/:mediaId',
+                templateUrl: 'app/media/media.edit.tmpl.html',
+                controller: 'MediaEditCtrl as vm',
                 resolve: {
-                    mediaType: function($stateParams, MediaType) {
-                        return MediaType.getById($stateParams.mediaTypeId);
+                    media: function($stateParams, Media) {
+                        return Media.getById($stateParams.mediaId);
                     }
                 }
             });
     }
 
-    function MediaType($http, $q) {
+    function Media($http, $q, Location, MediaType) {
         function getAll() {
             var deferred = $q.defer();
-            $http.get("/api/v1/mediatype")
+            $http.get("/api/v1/media")
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -65,7 +67,7 @@
 
         function getById(id) {
             var deferred = $q.defer();
-            $http.get("/api/v1/mediatype/" + id)
+            $http.get("/api/v1/media/" + id)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -75,9 +77,9 @@
             return deferred.promise;
         }
 
-        function remove(mediaType) {
+        function remove(media) {
             var deferred = $q.defer();
-            $http.delete("/api/v1/mediatype/" + mediaType.id)
+            $http.delete("/api/v1/media/" + media.id)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -87,9 +89,13 @@
             return deferred.promise;
         }
 
-        function add(mediaType) {
+        function add(media) {
             var deferred = $q.defer();
-            $http.post("/api/v1/mediatype", mediaType)
+
+            media.locationId = media.location.id;
+            media.mediaTypeId = media.mediaType.id;
+
+            $http.post("/api/v1/media", media)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -99,9 +105,13 @@
             return deferred.promise;
         }
 
-        function edit(mediaType) {
+        function edit(media) {
             var deferred = $q.defer();
-            $http.put("/api/v1/mediatype/" + mediaType.id, mediaType)
+
+            media.locationId = media.location.id;
+            media.mediaTypeId = media.mediaType.id;
+
+            $http.put("/api/v1/media/" + media.id, media)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -111,14 +121,12 @@
             return deferred.promise;
         }
 
-        function findLocal(id, mediaTypes) {
-            for (var i = 0; i < mediaTypes.length; i++) {
-                var mediaType = mediaTypes[i];
-                if (mediaType.id == id) {
-                    return mediaType;
-                }
-            }
-            return null;
+        function getLocations() {
+            return Location.getAll();
+        }
+
+        function getMediaTypes() {
+            return MediaType.getAll();
         }
         return {
             getAll: getAll,
@@ -126,29 +134,30 @@
             remove: remove,
             add: add,
             edit: edit,
-            findLocal: findLocal
+            getLocations: getLocations,
+            getMediaTypes: getMediaTypes
         }
     }
 
-    function MediaTypeListCtrl(ngDialog, mediaTypes, MediaType, Flash) {
+    function MediaListCtrl(ngDialog, medias, Media, Flash) {
         var vm = this;
-        vm.mediaTypes = mediaTypes;
-        vm.deleteDlg = function(mediaType) {
-            vm.mediaType = mediaType;
+        vm.medias = medias;
+        vm.deleteDlg = function(media) {
+            vm.media = media;
             ngDialog.open({
                 template: 'deleteDlgTmpl',
                 data: vm
             });
         }
         vm.delete = function() {
-            MediaType.remove(vm.mediaType)
+            Media.remove(vm.media)
                 .then(function success(response) {
-                    MediaType.getAll()
+                    Media.getAll()
                         .then(function success(response) {
-                            vm.mediaTypes = response;
+                            vm.medias = response;
                         });
                     Flash.show("Deleted");
-                    vm.mediaType = null;
+                    vm.media = null;
                 })
                 .catch(function error(response) {
                     Flash.show("Error!");
@@ -156,15 +165,15 @@
         }
     }
 
-    function MediaTypeNewCtrl($state, Flash, MediaType) {
+    function MediaNewCtrl($state, Flash, Media) {
         var vm = this;
         vm.error = null;
-        vm.mediaType = {};
+        vm.media = {};
         vm.save = function(valid) {
-            MediaType.add(vm.mediaType)
+            Media.add(vm.media)
                 .then(function success(response) {
-                    Flash.show('MediaType ' + vm.mediaType.name + ' created!');
-                    $state.go('mediaType.list');
+                    Flash.show('Media ' + vm.media.name + ' created!');
+                    $state.go('media.list');
                 })
                 .catch(function error(response) {
                     vm.error = response;
@@ -172,19 +181,30 @@
         }
     }
 
-    function MediaTypeEditCtrl($state, Flash, MediaType, mediaType) {
+    function MediaEditCtrl($state, Flash, Media, Location, MediaType, media) {
         var vm = this;
         vm.error = null;
-        vm.mediaType = mediaType;
+        vm.media = media;
         vm.save = function(valid) {
-            MediaType.edit(vm.mediaType)
+            Media.edit(vm.media)
                 .then(function success(response) {
-                    Flash.show('MediaType ' + vm.mediaType.name + ' updated!');
-                    $state.go('mediaType.list');
+                    Flash.show('Media ' + vm.media.name + ' updated!');
+                    $state.go('media.list');
                 })
                 .catch(function error(response) {
                     vm.error = response;
                 });
         }
+        Media.getLocations()
+            .then(function success(response) {
+                vm.locations = response;
+                vm.media.location = Location.findLocal(vm.media.locationId, vm.locations);
+            });
+
+        Media.getMediaTypes()
+            .then(function success(response) {
+                vm.mediaTypes = response;
+                vm.media.mediaType = MediaType.findLocal(vm.media.mediaTypeId, vm.mediaTypes);
+            });
     }
 })();

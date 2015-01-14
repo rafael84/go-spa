@@ -9,8 +9,9 @@
         <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css" type="text/css" />
         <link rel="stylesheet" href="vendor/animate.css/animate.min.css" type="text/css" />
-        <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog.min.css" />
-        <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog-theme-default.min.css" />
+        <link rel="stylesheet" href="vendor/ngDialog/css/ngDialog.min.css" />
+        <link rel="stylesheet" href="vendor/ngDialog/css/ngDialog-theme-default.min.css" />
+        <link rel="stylesheet" href="vendor/angular-ui-select/dist/select.min.css" />
         <!-- app -->
         <link rel="stylesheet" href="app/assets/app.css" type="text/css" />
     </head>
@@ -69,6 +70,11 @@
                             <i class="fa fa-image"></i> {{ 'home.menu.mediaTypes' | translate }}
                         </a>
                     </li>
+                    <li ng-class="{ active: $state.includes('media') }">
+                        <a ui-sref="media.list">
+                            <i class="fa fa-cubes"></i> {{ 'home.menu.medias' | translate }}
+                        </a>
+                    </li>
                 </div>
                 <!-- /menu -->
             </section>
@@ -102,6 +108,8 @@
         <script src="vendor/ui-router/release/angular-ui-router.min.js"></script>
         <script src="vendor/angular-translate/angular-translate.min.js"></script>
         <script src="vendor/ngDialog/js/ngDialog.min.js"></script>
+        <script src="vendor/angular-ui-select/dist/select.min.js"></script>
+        <script src="vendor/angular-sanitize/angular-sanitize.min.js"></script>
 
         <!-- APP -->
         <script src="app/app.js"></script>
@@ -114,6 +122,7 @@
         <script src="app/group/group.module.js"></script>
         <script src="app/location/location.module.js"></script>
         <script src="app/mediatype/mediatype.module.js"></script>
+        <script src="app/media/media.module.js"></script>
     </body>
 
 </html>
