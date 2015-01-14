@@ -34,7 +34,9 @@ func (r *MediaResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 
 	// decode request data
 	var form = &struct {
-		Name string `json:"name"`
+		Name        string `json:"name"`
+		MediaTypeId int    `json:"mediaTypeId"`
+		LocationId  int    `json:"locationId"`
 	}{}
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
@@ -44,7 +46,9 @@ func (r *MediaResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 
 	// create new media
 	media := &Media{
-		Name: form.Name,
+		Name:        form.Name,
+		MediaTypeId: form.MediaTypeId,
+		LocationId:  form.LocationId,
 	}
 	err = r.DB(c).Create(media)
 	if err != nil {

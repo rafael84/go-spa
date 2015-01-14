@@ -12,7 +12,7 @@
         .config(Config)
         .factory('Media', ['$http', '$q', 'Location', 'MediaType', Media])
         .controller('MediaListCtrl', ['ngDialog', 'medias', 'Media', 'Flash', MediaListCtrl])
-        .controller('MediaNewCtrl', ['$state', 'Flash', 'Media', MediaNewCtrl])
+        .controller('MediaNewCtrl', ['$state', 'Flash', 'Media', 'Location', 'MediaType', MediaNewCtrl])
         .controller('MediaEditCtrl', ['$state', 'Flash', 'Media', 'Location', 'MediaType', 'media', MediaEditCtrl]);
 
     function Config($stateProvider) {
@@ -165,7 +165,7 @@
         }
     }
 
-    function MediaNewCtrl($state, Flash, Media) {
+    function MediaNewCtrl($state, Flash, Media, Location, MediaType) {
         var vm = this;
         vm.error = null;
         vm.media = {};
@@ -179,6 +179,15 @@
                     vm.error = response;
                 });
         }
+        Media.getLocations()
+            .then(function success(response) {
+                vm.locations = response;
+            });
+
+        Media.getMediaTypes()
+            .then(function success(response) {
+                vm.mediaTypes = response;
+            });
     }
 
     function MediaEditCtrl($state, Flash, Media, Location, MediaType, media) {
