@@ -4,7 +4,7 @@
     },
     "main": {
         "header": {
-            "title": "Go SPA - Sample App",
+            "title": "Go SPA - Sample",
             "signup": "Sign Up",
             "signin": "Sign In",
             "signout": "Sign Out",
@@ -22,7 +22,8 @@
         "menu": {
             "me": "Me",
             "groups": "Groups",
-            "locations": "Locations"
+            "locations": "Locations",
+            "mediaTypes": "Media Types"
         }
     },
     "signin": {

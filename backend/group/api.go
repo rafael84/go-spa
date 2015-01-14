@@ -84,7 +84,7 @@ func (r *GroupItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 		return ctx.BadRequest(rw, "Could not parse request data")
 	}
 
-	// get user from database
+	// get group from database
 	var grp pg.Entity
 	grp, err = r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
@@ -115,7 +115,7 @@ func (r *GroupItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, req *
 	err = r.DB(c).Delete(grp)
 	if err != nil {
 		log.Errorf("Could not delete group %s: %v", id, err)
-		return ctx.InternalServerError(rw, "Could not delete user")
+		return ctx.InternalServerError(rw, "Could not delete group")
 	}
 	return ctx.NoContent(rw)
 }

@@ -10,25 +10,38 @@
         .config(Config)
         .factory('Location', ['$http', '$q', Location])
         .controller('LocationListCtrl', ['ngDialog', 'locations', 'Location', 'Flash', LocationListCtrl])
-        .controller('LocationDetailCtrl', ['location', LocationDetailCtrl]);
+        .controller('LocationNewCtrl', ['$state', 'Flash', 'Location', LocationNewCtrl])
+        .controller('LocationEditCtrl', ['$state', 'Flash', 'Location', 'location', LocationEditCtrl]);
 
     function Config($stateProvider) {
         $stateProvider
             .state('location', {
-                url: '/locations',
+                abstract: true,
+                url: '/location',
+                template: '<ui-view/>',
+                resolve: {
+                    Location: 'Location'
+                }
+            })
+            .state('location.list', {
+                url: '/list',
                 templateUrl: 'app/location/location.list.tmpl.html',
                 controller: 'LocationListCtrl as vm',
                 resolve: {
-                    Location: 'Location',
                     locations: function(Location) {
                         return Location.getAll();
                     }
                 }
             })
-            .state('location.detail', {
-                url: '/:locationId',
-                templateUrl: 'app/location/location.detail.tmpl.html',
-                controller: 'LocationDetailCtrl as vm',
+            .state('location.new', {
+                url: '/new',
+                templateUrl: 'app/location/location.new.tmpl.html',
+                controller: 'LocationNewCtrl as vm'
+            })
+            .state('location.edit', {
+                url: '/edit/:locationId',
+                templateUrl: 'app/location/location.edit.tmpl.html',
+                controller: 'LocationEditCtrl as vm',
                 resolve: {
                     location: function($stateParams, Location) {
                         return Location.getById($stateParams.locationId);
@@ -40,7 +53,7 @@
     function Location($http, $q) {
         function getAll() {
             var deferred = $q.defer();
-            $http.get("/api/v1/storage/location")
+            $http.get("/api/v1/location")
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -52,7 +65,7 @@
 
         function getById(id) {
             var deferred = $q.defer();
-            $http.get("/api/v1/storage/location/" + id)
+            $http.get("/api/v1/location/" + id)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -64,7 +77,31 @@
 
         function remove(location) {
             var deferred = $q.defer();
-            $http.delete("/api/v1/storage/location/" + location.id)
+            $http.delete("/api/v1/location/" + location.id)
+                .then(function success(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function error(response) {
+                    deferred.reject(response.data.error);
+                });
+            return deferred.promise;
+        }
+
+        function add(location) {
+            var deferred = $q.defer();
+            $http.post("/api/v1/location", location)
+                .then(function success(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function error(response) {
+                    deferred.reject(response.data.error);
+                });
+            return deferred.promise;
+        }
+
+        function edit(location) {
+            var deferred = $q.defer();
+            $http.put("/api/v1/location/" + location.id, location)
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 })
@@ -76,7 +113,9 @@
         return {
             getAll: getAll,
             getById: getById,
-            remove: remove
+            remove: remove,
+            add: add,
+            edit: edit
         }
     }
 
@@ -106,8 +145,35 @@
         }
     }
 
-    function LocationDetailCtrl(location) {
+    function LocationNewCtrl($state, Flash, Location) {
         var vm = this;
+        vm.error = null;
+        vm.location = {};
+        vm.save = function(valid) {
+            Location.add(vm.location)
+                .then(function success(response) {
+                    Flash.show('Location ' + vm.location.name + ' created!');
+                    $state.go('location.list');
+                })
+                .catch(function error(response) {
+                    vm.error = response;
+                });
+        }
+    }
+
+    function LocationEditCtrl($state, Flash, Location, location) {
+        var vm = this;
+        vm.error = null;
         vm.location = location;
+        vm.save = function(valid) {
+            Location.edit(vm.location)
+                .then(function success(response) {
+                    Flash.show('Location ' + vm.location.name + ' updated!');
+                    $state.go('location.list');
+                })
+                .catch(function error(response) {
+                    vm.error = response;
+                });
+        }
     }
 })();

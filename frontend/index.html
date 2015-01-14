@@ -1,107 +1,119 @@
-<!DOCTYPE html>
-<html ng-app="app" ng-controller="MainCtrl as main">
+<!doctype html>
+<html ng-app="app" ng-controller="MainCtrl as main" ng-cloak>
 
-<head>
-  <meta charset="utf-8">
-  <title translate="root.title">APP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- VENDOR -->
-  <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
-  <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css" type="text/css" />
-  <link rel="stylesheet" href="vendor/animate.css/animate.min.css" type="text/css" />
-  <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog.min.css" />
-  <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog-theme-default.min.css" />
-  <!-- APP -->
-  <link rel="stylesheet" href="app/assets/app.css" type="text/css" />
-</head>
+    <head>
+        <meta charset="utf-8">
+        <title translate="root.title">APP</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- vendor -->
+        <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css" type="text/css" />
+        <link rel="stylesheet" href="vendor/animate.css/animate.min.css" type="text/css" />
+        <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog.min.css" />
+        <link rel="stylesheet" href="./vendor/ngDialog/css/ngDialog-theme-default.min.css" />
+        <!-- app -->
+        <link rel="stylesheet" href="app/assets/app.css" type="text/css" />
+    </head>
 
-<body ng-cloak>
+    <body>
 
-  <div class="flash-message text-center" ng-class="{'animated bounceInDown': main.hasFlashMessage()}"
-  ng-show="main.hasFlashMessage()">
-    {{ main.getFlashMessage() }}
-  </div>
+        <div class="flash-message text-center" ng-class="{'animated bounceInDown': main.hasFlashMessage()}"
+            ng-show="main.hasFlashMessage()">
+            {{ main.getFlashMessage() }}
+        </div>
 
-  <div id="wrapper">
+        <div id="wrapper">
 
-    <section id="header" class="container-fluid">
-      <h1> 
-        <a ui-sref="home" translate="main.header.title">Go SPA</a> 
-          <small class="pull-right">
-            <span ng-hide="main.isUserSignedIn()">
-              <a class="btn btn-link" ui-sref="signup" translate="main.header.signup">Sign Up</a>
-              &#124;
-              <a class="btn btn-link" ui-sref="signin" translate="main.header.signin">Sign In</a>
-            </span>
-            <span ng-show="main.isUserSignedIn()">
-              {{ 'main.header.hello' | translate }} 
-              <a ui-sref="me">{{ main.getUser().jsonData.firstName }}</a>
-              &#124;
-              <a class="btn btn-link" ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
-            </span>
-          </small>
-      </h1>
-      <div class="nav nav-pills">
-        <li ng-class="{ active: $state.is('home') }">
-          <a ui-sref="home">
-            <i class="fa fa-home"></i> Home
-          </a>
-        </li>
-        <li ng-class="{ active: $state.is('me') }">
-          <a ui-sref="me">
-            <i class="fa fa-user"></i> {{ 'home.menu.me' | translate}}
-          </a>
-        </li>
-        <li ng-class="{ active: $state.includes('group') }">
-          <a ui-sref="group.list">
-            <i class="fa fa-users"></i> {{ 'home.menu.groups' | translate }}
-          </a>
-        </li>
-        <li ng-class="{ active: $state.includes('location') }">
-          <a ui-sref="location">
-            <i class="fa fa-folder"></i> {{ 'home.menu.locations' | translate }}
-          </a>
-        </li>
-      </div>
-    </section>
+            <!-- #header -->
+            <section id="header" class="container-fluid">
+                <h1> 
+                    <a ui-sref="home" translate="main.header.title">Go SPA</a> 
+                    <small class="pull-right">
+                        <span ng-hide="main.isUserSignedIn()">
+                            <a class="btn btn-link" ui-sref="signup" translate="main.header.signup">Sign Up</a>
+                            &#124;
+                            <a class="btn btn-link" ui-sref="signin" translate="main.header.signin">Sign In</a>
+                        </span>
+                        <span ng-show="main.isUserSignedIn()">
+                            {{ 'main.header.hello' | translate }} 
+                            <a ui-sref="me">{{ main.getUser().jsonData.firstName }}</a>
+                            &#124;
+                            <a class="btn btn-link" ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
+                        </span>
+                    </small>
+                </h1>
+                <!-- menu -->
+                <div class="nav nav-tabs">
+                    <li ng-class="{ active: $state.is('home') }">
+                        <a ui-sref="home">
+                            <i class="fa fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li ng-class="{ active: $state.is('me') }">
+                        <a ui-sref="me">
+                            <i class="fa fa-user"></i> {{ 'home.menu.me' | translate}}
+                        </a>
+                    </li>
+                    <li ng-class="{ active: $state.includes('group') }">
+                        <a ui-sref="group.list">
+                            <i class="fa fa-users"></i> {{ 'home.menu.groups' | translate }}
+                        </a>
+                    </li>
+                    <li ng-class="{ active: $state.includes('location') }">
+                        <a ui-sref="location.list">
+                            <i class="fa fa-folder"></i> {{ 'home.menu.locations' | translate }}
+                        </a>
+                    </li>
+                    <li ng-class="{ active: $state.includes('mediaType') }">
+                        <a ui-sref="mediaType">
+                            <i class="fa fa-folder"></i> {{ 'home.menu.mediaTypes' | translate }}
+                        </a>
+                    </li>
+                </div>
+                <!-- /menu -->
+            </section>
+            <!-- /#header -->
 
-    <section id="content" class="container-fluid" ui-view></section>
+            <section id="content" class="container-fluid" ui-view></section>
 
-    <section id="footer" class="container-fluid">
-      <span class="pull-right">
-        <button class="btn btn-link" ng-click="main.switchLang('en')">
-          <img src="app/assets/img/en.png" alt="english"/> 
-          {{ 'main.footer.translate.en' | translate }}
-        </button>
-        &#124;
-        <button class="btn btn-link" ng-click="main.switchLang('pt')">
-          <img src="app/assets/img/pt.png" alt="portuguese"/>
-          {{ 'main.footer.translate.pt' | translate }}
-        </button>
-      </span>
-    </section>
-  </div>
+            <!-- #footer -->
+            <section id="footer" class="container-fluid">
+                <span class="pull-right">
+                    <button class="btn btn-link" ng-click="main.switchLang('en')">
+                        <img src="app/assets/img/en.png" alt="english"/> 
+                        {{ 'main.footer.translate.en' | translate }}
+                    </button>
+                    &#124;
+                    <button class="btn btn-link" ng-click="main.switchLang('pt')">
+                        <img src="app/assets/img/pt.png" alt="portuguese"/>
+                        {{ 'main.footer.translate.pt' | translate }}
+                    </button>
+                </span>
+            </section>
+        </div>
+        <!-- /#footer -->
 
-  <!-- VENDOR -->
-  <script src="vendor/jquery/dist/jquery.min.js"></script>
-  <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="vendor/angularjs/angular.min.js"></script>
-  <script src="vendor/a0-angular-storage/dist/angular-storage.min.js"></script>
-  <script src="vendor/angular-jwt/dist/angular-jwt.min.js"></script>
-  <script src="vendor/ui-router/release/angular-ui-router.min.js"></script>
-  <script src="vendor/angular-translate/angular-translate.min.js"></script>
-  <script src="vendor/ngDialog/js/ngDialog.min.js"></script>
+        <!-- vendor -->
+        <script src="vendor/jquery/dist/jquery.min.js"></script>
+        <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="vendor/angularjs/angular.min.js"></script>
+        <script src="vendor/a0-angular-storage/dist/angular-storage.min.js"></script>
+        <script src="vendor/angular-jwt/dist/angular-jwt.min.js"></script>
+        <script src="vendor/ui-router/release/angular-ui-router.min.js"></script>
+        <script src="vendor/angular-translate/angular-translate.min.js"></script>
+        <script src="vendor/ngDialog/js/ngDialog.min.js"></script>
 
-  <!-- APP -->
-  <script src="app/app.js"></script>
-  <script src="app/main/main.module.js"></script>
-  <script src="app/translation/translation.module.js"></script>
-  <script src="app/account/account.module.js"></script>
-  <script src="app/home/home.module.js"></script>
-  <script src="app/signup/signup.module.js"></script>
-  <script src="app/signin/signin.module.js"></script>
-  <script src="app/group/group.module.js"></script>
-  <script src="app/location/location.module.js"></script>
-</body>
+        <!-- APP -->
+        <script src="app/app.js"></script>
+        <script src="app/main/main.module.js"></script>
+        <script src="app/translation/translation.module.js"></script>
+        <script src="app/account/account.module.js"></script>
+        <script src="app/home/home.module.js"></script>
+        <script src="app/signup/signup.module.js"></script>
+        <script src="app/signin/signin.module.js"></script>
+        <script src="app/group/group.module.js"></script>
+        <script src="app/location/location.module.js"></script>
+        <script src="app/mediatype/mediatype.module.js"></script>
+    </body>
 
 </html>

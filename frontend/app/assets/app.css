@@ -9,11 +9,8 @@ body {
     position: relative;
 }
 #header {
-    padding: 10px;
-    border-bottom: 1px solid #cacaca;
 }
 #content {
-    padding: 10px;
     /* padding of the footer element */
     padding-bottom: 45px;
 }

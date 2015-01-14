@@ -1,34 +1,39 @@
-<h3>Locations</h3>
+<h3>
+    Location List
+    <span class="pull-right">
+        <button type="button" class="btn btn-primary" ui-sref="location.new">New Location</button>
+    </span>
+</h3>
 
 <table class="table table-striped">
-  <thead>
-    <th>Id</th>
-    <th>Name</th>
-    <th>Static URL</th>
-    <th>Static Path</th>
-    <th>Actions</th>
-  </thead>
-  <tbody>
-    <tr ng-repeat="location in vm.locations">
-      <td>
-        <a class="btn btn-link" ui-sref="location.detail({locationId: location.id})">
-          {{ location.id }}
-        </a>
-      </td>
-      <td>{{ location.name }}</td>
-      <td>{{ location.staticUrl }}</td>
-      <td>{{ location.staticPath }}</td>
-      <td><a class="btn btn-link" ng-click="vm.deleteDlg(location)">Delete</td>
-    </tr>
-  </tbody>
-</table>
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Static URL</th>
+        <th>Static Path</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="location in vm.locations">
+            <td>
+                <a class="btn btn-link" ui-sref="location.edit({locationId: location.id})">
+                    {{ location.id }}
+                </a>
+            </td>
+            <td>{{ location.name }}</td>
+            <td>{{ location.staticURL }}</td>
+            <td>{{ location.staticPath }}</td>
+            <td><a class="btn btn-link" ng-click="vm.deleteDlg(location)">Delete</td>
+            </tr>
+        </tbody>
+    </table>
 
-<div ui-view></div>
+    <div ui-view></div>
 
 
-<script type="text/ng-template" id="deleteDlgTmpl">
-    <h1>Are you sure?</h1>
-    <p class="lead">You're about to delete the <b>{{ ngDialogData.location.name }}</b> location.</p>
-    <button type="button" class="btn btn-default" ng-click="closeThisDialog()">No, I made a terrible mistake!</button>
-    <button type="button" class="btn btn-danger" ng-click="ngDialogData.delete(); closeThisDialog()">Yes, I'm sure!!!</button>
-</script>
+    <script type="text/ng-template" id="deleteDlgTmpl">
+        <h1>Are you sure?</h1>
+        <p class="lead">You're about to delete the <b>{{ ngDialogData.location.name }}</b> location.</p>
+        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">No, I made a terrible mistake!</button>
+        <button type="button" class="btn btn-danger" ng-click="ngDialogData.delete(); closeThisDialog()">Yes, I'm sure!!!</button>
+    </script>

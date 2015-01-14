@@ -9,7 +9,8 @@ angular.module("app", [
     'app.signup',
     'app.signin',
     'app.group',
-    'app.location'
+    'app.location',
+    'app.mediaType'
 ])
 
 .config(function Config($httpProvider, $compileProvider, jwtInterceptorProvider) {

@@ -4,7 +4,7 @@
     },
     "main": {
         "header": {
-            "title": "Go SPA - Aplicação de Exemplo",
+            "title": "Go SPA - Exemplo",
             "signup": "Cadastrar",
             "signin": "Acessar minha conta",
             "signout": "Sair",
@@ -22,7 +22,8 @@
         "menu": {
             "me": "Meu Perfil",
             "groups": "Grupos",
-            "locations": "Locais"
+            "locations": "Locais",
+            "mediaTypes": "Tipos de Mídia"
         }
     },
     "signin": {

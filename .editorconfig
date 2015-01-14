@@ -17,4 +17,4 @@ indent_size = 4
 [**.html]
 max_char = 99
 indent_style = space
-indent_size = 2
+indent_size = 4
