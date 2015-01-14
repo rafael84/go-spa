@@ -13,7 +13,7 @@
     function Config($stateProvider) {
         $stateProvider
             .state('home', {
-                url: '',
+                url: '/',
                 templateUrl: 'app/home/home.tmpl.html',
                 controller: 'HomeCtrl as vm',
             });

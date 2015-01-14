@@ -1,8 +1,29 @@
 <h2 translate="home.title">Home</h2>
 
-<div class="alert alert-danger lead" ng-show="vm.error">
-    <i class="fa fa-exclamation-circle"></i>
-    {{ vm.error }}
-</div>
+<h3>Welcome</h3>
 
-<div ui-view></div>
+<p>Go SPA is a sample single page application (SPA) written in Go (golang) on the backend side, and Javascript
+    with AngularJS on the frontend side.</p>
+
+<p>The main goal is to provide the basic project structure for this kind of web application, even for the
+    larger ones.</p>
+
+<h4>What's in it</h4>
+<p>Here is a quick list of what is covered by this sample application:</p>
+
+<ul>
+    <li>Token based authentication</li>
+    <li>Internationalization (i18n) and Localization (l10n)</li>
+    <li>Database communication</li>
+    <li>Database schema migration</li>
+    <li>Email sending</li>
+    <li>User registration and password reset logic</li>
+</ul>
+
+<h4>Backend</h4>
+<ul>
+    <li>Integration with PostgreSQL database using <a href="github.com/gotk/pg" target="_blank">gotk/pg</a>
+    </li>
+    <li>Easy http api using <a href="github.com/gotk/ctx" target="_blank">gotk/ctx</a>
+    </li>
+</ul>
