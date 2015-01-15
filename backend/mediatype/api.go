@@ -25,7 +25,7 @@ func (r *MediaTypeResource) GET(c *ctx.Context, rw http.ResponseWriter, req *htt
 	mediaTypes, err := r.DB(c).FindAll(&MediaType{}, "")
 	if err != nil {
 		log.Errorf("Query error: %v", err)
-		return ctx.BadRequest(rw, "Query error")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_query_media_type"))
 	}
 	return ctx.OK(rw, mediaTypes)
 }
@@ -39,7 +39,7 @@ func (r *MediaTypeResource) POST(c *ctx.Context, rw http.ResponseWriter, req *ht
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_parse_request"))
 	}
 
 	// create new mediatype
@@ -49,7 +49,7 @@ func (r *MediaTypeResource) POST(c *ctx.Context, rw http.ResponseWriter, req *ht
 	err = r.DB(c).Create(mediaType)
 	if err != nil {
 		log.Errorf("Could not create media type %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not create media type")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_create_media_type"))
 	}
 
 	return ctx.Created(rw, mediaType)
@@ -66,7 +66,7 @@ func (r *MediaTypeItemResource) GET(c *ctx.Context, rw http.ResponseWriter, req 
 	mediaType, err := r.DB(c).FindOne(&MediaType{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media type id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query media type")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_query_media_type"))
 	}
 	return ctx.OK(rw, mediaType)
 }
@@ -82,7 +82,7 @@ func (r *MediaTypeItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req 
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_parse_request"))
 	}
 
 	// get media type from database
@@ -90,7 +90,7 @@ func (r *MediaTypeItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req 
 	entity, err = r.DB(c).FindOne(&MediaType{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media type id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query media type")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_query_media_type"))
 	}
 	mediaType := entity.(*MediaType)
 
@@ -99,7 +99,7 @@ func (r *MediaTypeItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req 
 	err = r.DB(c).Update(mediaType)
 	if err != nil {
 		log.Errorf("Could not edit media type %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not edit media type")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_edit_media_type"))
 	}
 
 	return ctx.OK(rw, mediaType)
@@ -112,12 +112,12 @@ func (r *MediaTypeItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, r
 	mediaType, err := r.DB(c).FindOne(&MediaType{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media type id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query media type")
+		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_query_media_type"))
 	}
 	err = r.DB(c).Delete(mediaType)
 	if err != nil {
 		log.Errorf("Could not delete media type %s: %v", id, err)
-		return ctx.InternalServerError(rw, "Could not delete media type")
+		return ctx.InternalServerError(rw, c.T("mediatype.api.could_not_delete_media_type"))
 	}
 	return ctx.NoContent(rw)
 }

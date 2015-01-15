@@ -31,14 +31,14 @@ func (r *ValidateKeyResource) POST(c *ctx.Context, rw http.ResponseWriter, req *
 	var form ValidateKeyForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return ctx.BadRequest(rw, "Unable to validate key")
+		return ctx.BadRequest(rw, c.T("reset.validate.unable_to_validate_key"))
 	}
 
 	service := NewResetTokenService(r.DB(c))
 
 	resetToken, err := service.GetByKey(form.Key)
 	if err != nil || !resetToken.Valid() {
-		return ctx.BadRequest(rw, "Invalid Key")
+		return ctx.BadRequest(rw, c.T("reset.validate.invalid_key")
 	}
 
 	return ctx.OK(rw, ValidKey{resetToken.UserId, form.Key})

@@ -25,7 +25,7 @@ func (r *LocationResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http
 	locations, err := r.DB(c).FindAll(&Location{}, "")
 	if err != nil {
 		log.Errorf("Could not query locations: %v", err)
-		return ctx.BadRequest(rw, "Could not query locations")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_query_locations"))
 	}
 	return ctx.OK(rw, locations)
 }
@@ -41,7 +41,7 @@ func (r *LocationResource) POST(c *ctx.Context, rw http.ResponseWriter, req *htt
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_parse_request_data"))
 	}
 
 	// create new location
@@ -53,7 +53,7 @@ func (r *LocationResource) POST(c *ctx.Context, rw http.ResponseWriter, req *htt
 	err = r.DB(c).Create(location)
 	if err != nil {
 		log.Errorf("Could not create location %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not create location")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_create_location"))
 	}
 
 	return ctx.Created(rw, location)
@@ -70,7 +70,7 @@ func (r *LocationItemResource) GET(c *ctx.Context, rw http.ResponseWriter, req *
 	location, err := r.DB(c).FindOne(&Location{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query location id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query location")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_query_location"))
 	}
 	return ctx.OK(rw, location)
 }
@@ -88,7 +88,7 @@ func (r *LocationItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_parse_request_data"))
 	}
 
 	// get location from database
@@ -96,7 +96,7 @@ func (r *LocationItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *
 	entity, err = r.DB(c).FindOne(&Location{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query location id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query location")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_query_location"))
 	}
 	location := entity.(*Location)
 
@@ -107,7 +107,7 @@ func (r *LocationItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *
 	err = r.DB(c).Update(location)
 	if err != nil {
 		log.Errorf("Could not edit location %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not edit location")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_edit_location"))
 	}
 
 	return ctx.OK(rw, location)
@@ -120,12 +120,12 @@ func (r *LocationItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, re
 	location, err := r.DB(c).FindOne(&Location{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query location id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query location")
+		return ctx.BadRequest(rw, c.T("location.api.could_not_query_location"))
 	}
 	err = r.DB(c).Delete(location)
 	if err != nil {
 		log.Errorf("Could not delete location %s: %v", id, err)
-		return ctx.InternalServerError(rw, "Could not delete location")
+		return ctx.InternalServerError(rw, c.T("location.api.could_not_delete_location"))
 	}
 	return ctx.NoContent(rw)
 }

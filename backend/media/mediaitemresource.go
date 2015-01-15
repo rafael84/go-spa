@@ -27,7 +27,7 @@ func (r *MediaItemResource) GET(c *ctx.Context, rw http.ResponseWriter, req *htt
 	media, err := db.FindOne(&Media{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query media")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_query_media"))
 	}
 	return ctx.OK(rw, media)
 }
@@ -42,21 +42,21 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_parse_request_data"))
 	}
 
 	// get location from database
 	location, err := getLocation(db, form.LocationId)
 	if err != nil {
 		log.Errorf("Could not locate the requested location: %s", err)
-		return ctx.BadRequest(rw, "Could not locate the requested location")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_locate_requested_location"))
 	}
 
 	// get media type from database
 	mediaType, err := getMediaType(db, form.MediaTypeId)
 	if err != nil {
 		log.Errorf("Could not locate the requested media type: %s", err)
-		return ctx.BadRequest(rw, "Could not locate the requested media type")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_locate_requested_media_type"))
 	}
 
 	// move the uploaded file to the right place
@@ -64,14 +64,14 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	dstPath, err = moveUploadedFile(location, mediaType, form.Path)
 	if err != nil {
 		log.Errorf("Could not process the uploaded file: %s", err)
-		return ctx.InternalServerError(rw, "Could not process the uploaded file")
+		return ctx.InternalServerError(rw, c.T("media.mediaitemresource.could_not_process_uploaded_file"))
 	}
 
 	// get media from database
 	entity, err := db.FindOne(&Media{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query media")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_query_media"))
 	}
 	media := entity.(*Media)
 
@@ -83,7 +83,7 @@ func (r *MediaItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	err = db.Update(media)
 	if err != nil {
 		log.Errorf("Could not edit media %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not edit media")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_edit_media"))
 	}
 
 	return ctx.OK(rw, media)
@@ -97,12 +97,12 @@ func (r *MediaItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, req *
 	media, err := db.FindOne(&Media{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query media id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query media")
+		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_query_media"))
 	}
 	err = db.Delete(media)
 	if err != nil {
 		log.Errorf("Could not delete media %s: %v", id, err)
-		return ctx.InternalServerError(rw, "Could not delete media")
+		return ctx.InternalServerError(rw, c.T("media.mediaitemresource.could_not_delete_media"))
 	}
 	return ctx.NoContent(rw)
 }

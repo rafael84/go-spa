@@ -25,7 +25,7 @@ func (r *GroupResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Re
 	groups, err := r.DB(c).FindAll(&Group{}, "")
 	if err != nil {
 		log.Errorf("Could not query groups: %v", err)
-		return ctx.BadRequest(rw, "Could not query groups")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_query_groups"))
 	}
 	return ctx.OK(rw, groups)
 }
@@ -39,7 +39,7 @@ func (r *GroupResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_parse_request_data"))
 	}
 
 	// create new group
@@ -47,7 +47,7 @@ func (r *GroupResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	err = r.DB(c).Create(grp)
 	if err != nil {
 		log.Errorf("Could not create group %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not create group")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_create_group"))
 	}
 
 	return ctx.Created(rw, grp)
@@ -64,7 +64,7 @@ func (r *GroupItemResource) GET(c *ctx.Context, rw http.ResponseWriter, req *htt
 	grp, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query group")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_query_group"))
 	}
 	return ctx.OK(rw, grp)
 }
@@ -81,7 +81,7 @@ func (r *GroupItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_parse_request_data"))
 	}
 
 	// get group from database
@@ -89,7 +89,7 @@ func (r *GroupItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	grp, err = r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query group")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_query_group"))
 	}
 
 	// update the group
@@ -97,7 +97,7 @@ func (r *GroupItemResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *htt
 	err = r.DB(c).Update(grp)
 	if err != nil {
 		log.Errorf("Could not edit group %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not edit group")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_edit_group"))
 	}
 
 	return ctx.OK(rw, grp)
@@ -110,12 +110,12 @@ func (r *GroupItemResource) DELETE(c *ctx.Context, rw http.ResponseWriter, req *
 	grp, err := r.DB(c).FindOne(&Group{}, "id = $1", id)
 	if err != nil {
 		log.Errorf("Could not query group id %s: %v", id, err)
-		return ctx.BadRequest(rw, "Could not query group")
+		return ctx.BadRequest(rw, c.T("group.api.could_not_query_group"))
 	}
 	err = r.DB(c).Delete(grp)
 	if err != nil {
 		log.Errorf("Could not delete group %s: %v", id, err)
-		return ctx.InternalServerError(rw, "Could not delete group")
+		return ctx.InternalServerError(rw, c.T("group.api.could_not_delete_group"))
 	}
 	return ctx.NoContent(rw)
 }

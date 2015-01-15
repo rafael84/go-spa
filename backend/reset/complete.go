@@ -30,38 +30,38 @@ func (r *CompleteResource) POST(c *ctx.Context, rw http.ResponseWriter, req *htt
 	var form ChangePasswordForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return ctx.BadRequest(rw, "Unable to change the password")
+		return ctx.BadRequest(rw, c.T("reset.complete.unable_to_change"))
 	}
 
 	// validate the passwords
 	if form.Password != form.PasswordAgain {
-		return ctx.BadRequest(rw, "Passwords mismatch")
+		return ctx.BadRequest(rw, c.T("reset.complete.mismatch"))
 	}
 
 	// validate the key again
 	resetTokenService := NewResetTokenService(r.DB(c))
 	resetToken, err := resetTokenService.GetByKey(form.ValidKey.Key)
 	if err != nil || !resetToken.Valid() {
-		return ctx.BadRequest(rw, "Invalid Key")
+		return ctx.BadRequest(rw, c.T("reset.token.invalid_key"))
 	}
 
 	// get user from db
 	userService := user.NewUserService(r.DB(c))
 	u, err := userService.GetById(resetToken.UserId)
 	if err != nil {
-		return ctx.InternalServerError(rw, "User not found")
+		return ctx.InternalServerError(rw, c.T("reset.complete.user_not_found"))
 	}
 
 	// encode user password
 	err = u.Password.Encode(form.Password)
 	if err != nil {
-		return ctx.InternalServerError(rw, "Could not change user password")
+		return ctx.InternalServerError(rw, c.T("reset.complete.could_not_change_password"))
 	}
 
 	// change user data in database
 	err = userService.Update(u)
 	if err != nil {
-		return ctx.InternalServerError(rw, "Could not change user password")
+		return ctx.InternalServerError(rw, c.T("reset.complete.could_not_change_password"))
 	}
 
 	// invalidate token

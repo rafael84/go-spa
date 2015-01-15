@@ -22,7 +22,7 @@ func (r *MediaResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Re
 	medias, err := r.DB(c).FindAll(&Media{}, "")
 	if err != nil {
 		log.Errorf("Query error: %v", err)
-		return ctx.BadRequest(rw, "Query error")
+		return ctx.BadRequest(rw, c.T("media.mediaresource.query_error"))
 	}
 	return ctx.OK(rw, medias)
 }
@@ -34,21 +34,21 @@ func (r *MediaResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	err := json.NewDecoder(req.Body).Decode(form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
-		return ctx.BadRequest(rw, "Could not parse request data")
+		return ctx.BadRequest(rw, c.T("media.mediaresource.could_not_parse_request_data"))
 	}
 
 	// get location from database
 	location, err := getLocation(db, form.LocationId)
 	if err != nil {
 		log.Errorf("Could not locate the requested location: %s", err)
-		return ctx.BadRequest(rw, "Could not locate the requested location")
+		return ctx.BadRequest(rw, c.T("media.mediaresource.could_not_locate_the_requested_location"))
 	}
 
 	// get media type from database
 	mediaType, err := getMediaType(db, form.MediaTypeId)
 	if err != nil {
 		log.Errorf("Could not locate the requested media type: %s", err)
-		return ctx.BadRequest(rw, "Could not locate the requested media type")
+		return ctx.BadRequest(rw, c.T("media.mediaresource.could_not_locate_the_requested_media_type"))
 	}
 
 	// move the uploaded file to the right place
@@ -56,7 +56,7 @@ func (r *MediaResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	dstPath, err = moveUploadedFile(location, mediaType, form.Path)
 	if err != nil {
 		log.Errorf("Could not process the uploaded file: %s", err)
-		return ctx.InternalServerError(rw, "Could not process the uploaded file")
+		return ctx.InternalServerError(rw, c.T("media.mediaresource.could_not_process_uploaded_file"))
 	}
 
 	// create new media
@@ -69,7 +69,7 @@ func (r *MediaResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	err = db.Create(media)
 	if err != nil {
 		log.Errorf("Could not create media %s: %v", form.Name, err)
-		return ctx.BadRequest(rw, "Could not create media")
+		return ctx.BadRequest(rw, c.T("media.mediaresource.could_not_create_media"))
 	}
 	return ctx.Created(rw, media)
 }

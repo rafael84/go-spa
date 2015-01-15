@@ -4,7 +4,7 @@
     "translation": "Could not parse request data"
   },
   {
-    "id": "user.signup.could_not_query_user ",
+    "id": "user.signup.could_not_query_user",
     "translation": "Could not query user"
   },
   {
@@ -14,6 +14,10 @@
   {
     "id": "user.signup.passwords_mismatch",
     "translation": "Passwords does not match"
+  },
+  {
+    "id": "user.signup.could_not_create_user",
+    "translation": "Could not create user"
   },
   {
     "id": "user.signin.invalid_email_address",
@@ -27,8 +31,206 @@
     "id": "user.signin.invalid_email_or_password",
     "translation": "Invalid email and/or password"
   },
+
   {
-    "id": "user.signin.email_taken",
-    "translation": "Este endereço de email já foi utilizado"
+    "id": "user.token.could_not_extract",
+    "translation": "Could not extract user from context"
+  },
+  {
+    "id": "user.token.could_not_query",
+    "translation": "Could not query user"
+  },
+  {
+    "id": "user.token.problem_signing_token",
+    "translation": "Problem signing token"
+  },
+
+  {
+    "id": "user.me.could_not_extract",
+    "translation": "Could not extract user from context"
+  },
+  {
+    "id": "user.me.could_not_query",
+    "translation": "Could not query user"
+  },
+  {
+    "id": "user.me.could_not_decode_profile_data",
+    "translation": "Could decode user profile data"
+  },
+  {
+    "id": "user.me.could_not_decode_json_data",
+    "translation": "Could not decode JSON data"
+  },
+  {
+    "id": "reset.validate.unable_to_validate_key",
+    "translation": "Unable to validate key"
+  },
+  {
+    "id": "reset.validate.invalid_key",
+    "translation": "Invalid key"
+  },
+  {
+    "id": "reset.complete.unable_to_change",
+    "translation": "Unable to change the password"
+  },
+  {
+    "id": "reset.complete.mismatch",
+    "translation": "Passwords mismatch"
+  },
+  {
+    "id": "reset.complete.user_not_found",
+    "translation": "User not found"
+  },
+  {
+    "id": "reset.complete.could_not_change_password",
+    "translation": "Could not change user password"
+  },
+  {
+    "id": "reset.begin.could_not_query",
+    "translation": "Could not query user"
+  },
+  {
+    "id": "reset.begin.invalid_email_address",
+    "translation": "Invalid email address"
+  },
+  {
+    "id": "reset.begin.user_not_found",
+    "translation": "User not found"
+  },
+  {
+    "id": "reset.begin.email_sent",
+    "translation": "Email sent"
+  },
+  {
+    "id": "mediatype.api.could_not_parse_request",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "mediatype.api.could_not_create_media_type",
+    "translation": "Could not create media type"
+  },
+  {
+    "id": "mediatype.api.could_not_query_media_type",
+    "translation": "Could not query media type"
+  },
+  {
+    "id": "mediatype.api.could_not_edit_media_type",
+    "translation": "Could not edit media type"
+  },
+  {
+    "id": "mediatype.api.could_not_delete_media_type",
+    "translation": "Could not delete media type"
+  },
+  {
+    "id": "media.uploadresource.could_not_upload_file",
+    "translation": "Could not upload file"
+  },
+  {
+    "id": "media.uploadresource.could_not_create_temp_file",
+    "translation": "Could not create temporary file"
+  },
+  {
+    "id": "media.mediaresource.query_error",
+    "translation": "Query error"
+  },
+  {
+    "id": "media.mediaresource.could_not_parse_request_data",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "media.mediaresource.could_not_locate_the_requested_location",
+    "translation": "Could not locate the requested location"
+  },
+  {
+    "id": "media.mediaresource.could_not_locate_the_requested_media_type",
+    "translation": "Could not locate the requested media type"
+  },
+  {
+    "id": "media.mediaresource.could_not_process_uploaded_file",
+    "translation": "Could not process the uploaded file"
+  },
+  {
+    "id": "media.mediaresource.could_not_create_media",
+    "translation": "Could not create media"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_query_media",
+    "translation": "Could not query media"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_parse_request_data",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_locate_requested_location",
+    "translation": "Could not locate the requested location"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_locate_requested_media_type",
+    "translation": "Could not locate the requested media type"
+  },
+    {
+    "id": "media.mediaitemresource.could_not_process_uploaded_file",
+    "translation":"Could not process the uploaded file"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_edit_media",
+    "translation": "Could not edit media"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_delete_media",
+    "translation": "Could not delete media"
+  },
+  {
+    "id": "location.api.could_not_query_locations",
+    "translation": "Could not query locations"
+  },
+  {
+    "id": "location.api.could_not_parse_request_data",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "location.api.could_not_create_location",
+    "translation": "Could not create location"
+  },
+  {
+    "id": "location.api.could_not_query_location",
+    "translation": "Could not query location"
+  },
+  {
+    "id": "location.api.could_not_parse_request_data",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "location.api.could_not_edit_location",
+    "translation": "Could not edit location"
+  },
+  {
+    "id": "location.api.could_not_delete_location",
+    "translation": "Could not delete location"
+  },
+  {
+    "id": "group.api.could_not_query_groups",
+    "translation": "Could not query groups"
+  },
+  {
+    "id": "group.api.could_not_parse_request_data",
+    "translation": "Could not parse request data"
+  },
+  {
+    "id": "group.api.could_not_create_group",
+    "translation": "Could not create group"
+  },
+  {
+    "id": "group.api.could_not_query_group",
+    "translation": "Could not query group"
+  },
+  {
+    "id": "group.api.could_not_edit_group",
+    "translation": "Could not edit group"
+  },
+  {
+    "id": "group.api.could_not_delete_group",
+    "translation": "Could not delete group"
   }
 ]

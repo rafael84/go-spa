@@ -27,7 +27,7 @@ type MediaUploadResource struct {
 func (r *MediaUploadResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	reader, err := req.MultipartReader()
 	if err != nil {
-		return ctx.BadRequest(rw, "Could not upload file")
+		return ctx.BadRequest(rw, c.T("media.uploadresource.could_not_upload_file"))
 	}
 	var tempFile *os.File
 	for {
@@ -38,7 +38,7 @@ func (r *MediaUploadResource) POST(c *ctx.Context, rw http.ResponseWriter, req *
 
 		tempFile, err = ioutil.TempFile(os.TempDir(), "spa")
 		if err != nil {
-			return ctx.InternalServerError(rw, "Could not create temporary file")
+			return ctx.InternalServerError(rw, c.T("media.uploadresource.could_not_create_temp_file"))
 		}
 		defer tempFile.Close()
 

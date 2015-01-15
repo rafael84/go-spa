@@ -29,7 +29,7 @@ func (r *MeResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Reque
 	// get user id from current token
 	userId, found := c.Token.Claims["uid"]
 	if !found {
-		return ctx.BadRequest(rw, "Could not extract user from context")
+		return ctx.BadRequest(rw, c.T("user.me.could_not_extract"))
 	}
 
 	// create new user service
@@ -39,7 +39,7 @@ func (r *MeResource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Reque
 	user, err := service.GetById(int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return ctx.InternalServerError(rw, "Could not query user.")
+		return ctx.InternalServerError(rw, c.T("user.me.could_not_query"))
 	}
 
 	// return user data
@@ -52,7 +52,7 @@ func (r *MeResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Reque
 	var form MeForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return ctx.BadRequest(rw, "Could decode user profile data: %s", err)
+		return ctx.BadRequest(rw, c.T("user.me.could_not_decode_profile_data"))
 	}
 
 	// create new user service
@@ -62,13 +62,13 @@ func (r *MeResource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Reque
 	user, err := service.GetById(form.Id.Int64)
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
-		return ctx.InternalServerError(rw, "Could not query user.")
+		return ctx.InternalServerError(rw, c.T("user.me.could_not_query"))
 	}
 
 	// get the json data from user
 	jsonData, err := user.DecodeJsonData()
 	if err != nil {
-		return ctx.BadRequest(rw, "Could not decode json data")
+		return ctx.BadRequest(rw, c.T("user.me.could_not_decode_json_data"))
 	}
 
 	// update the user

@@ -34,12 +34,12 @@ func (r *ResetResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	var form ResetForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return ctx.BadRequest(rw, "Could not query user: %s", err)
+		return ctx.BadRequest(rw, c.T("reset.begin.could_not_query"))
 	}
 
 	// validate email address
 	if ok := regexp.MustCompile(base.EmailRegex).MatchString(form.Email); !ok {
-		return ctx.BadRequest(rw, "Invalid email address")
+		return ctx.BadRequest(rw, c.T("reset.begin.invalid_email_address"))
 	}
 
 	// create new user service
@@ -49,12 +49,12 @@ func (r *ResetResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.R
 	var u *user.User
 	u, err = userService.GetByEmail(form.Email)
 	if err != nil {
-		return ctx.BadRequest(rw, "User not found")
+		return ctx.BadRequest(rw, c.T("reset.begin.user_not_found"))
 	}
 
 	go sendResetPasswordEmail(c, u)
 
-	return ctx.OK(rw, "Email sent")
+	return ctx.OK(rw, c.T("reset.begin.email_sent"))
 }
 
 func sendResetPasswordEmail(c *ctx.Context, u *user.User) {

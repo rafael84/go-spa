@@ -44,7 +44,7 @@ func (r *SignUpResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 		return ctx.BadRequest(rw, c.T("user.signup.email_taken"))
 	} else if err != pg.ERecordNotFound {
 		log.Errorf("Could not query user: %s", err)
-		return ctx.InternalServerError(rw, "user.signup.could_not_query_user")
+		return ctx.InternalServerError(rw, c.T("user.signup.could_not_query_user"))
 	}
 
 	// password validation
@@ -62,7 +62,7 @@ func (r *SignUpResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 		},
 	)
 	if err != nil {
-		return ctx.InternalServerError(rw, "Could not create user: %s", err)
+		return ctx.InternalServerError(rw, c.T("user.signup.could_not_create_user"))
 	}
 
 	// return created user data
