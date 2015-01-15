@@ -11,9 +11,24 @@
     "id": "user.signup.email_taken",
     "translation": "Este endereço de email já foi utilizado"
   },
-,
   {
     "id": "user.signup.passwords_mismatch",
     "translation": "As senhas não coincidem"
+  },
+  {
+    "id": "user.signin.invalid_email_address",
+    "translation": "Endereço de email inválido"
+  },
+  {
+    "id": "user.signup.email_taken",
+    "translation": "Este endereço de email já foi utilizado"
+  },
+  {
+    "id": "user.signup.email_taken",
+    "translation": "Este endereço de email já foi utilizado"
+  },
+  {
+    "id": "user.signup.email_taken",
+    "translation": "Este endereço de email já foi utilizado"
   }
 ]

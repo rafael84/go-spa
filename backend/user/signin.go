@@ -28,17 +28,17 @@ func (r *SignInResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 	var form SignInForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return ctx.BadRequest(rw, "Could not query user: %s", err)
+		return ctx.BadRequest(rw, "Could not query user: %s", err) // how to translate this?
 	}
 
 	// validate email address
 	if ok := regexp.MustCompile(base.EmailRegex).MatchString(form.Email); !ok {
-		return ctx.BadRequest(rw, "Invalid email address")
+		return ctx.BadRequest(rw, c.T("user.signin.invalid_email_address"))
 	}
 
 	// validate password length
 	if len(form.Password) == 0 {
-		return ctx.BadRequest(rw, "Password cannot be empty")
+		return ctx.BadRequest(rw, c.T("user.signin.password_cannot_be_empty"))
 	}
 
 	// create new user service
@@ -48,12 +48,12 @@ func (r *SignInResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 	var user *User
 	user, err = service.GetByEmail(form.Email)
 	if err != nil {
-		return ctx.BadRequest(rw, "Invalid email and/or password")
+		return ctx.BadRequest(rw, c.T("user.signin.invalid_email_or_password"))
 	}
 
 	// check user password
 	if !user.Password.Valid(form.Password) {
-		return ctx.BadRequest(rw, "Invalid email and/or password")
+		return ctx.BadRequest(rw, c.T("user.signin.invalid_email_or_password"))
 	}
 
 	// generate new token

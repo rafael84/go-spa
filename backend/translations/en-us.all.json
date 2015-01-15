@@ -14,5 +14,21 @@
   {
     "id": "user.signup.passwords_mismatch",
     "translation": "Passwords does not match"
+  },
+  {
+    "id": "user.signin.invalid_email_address",
+    "translation": "Invalid email address"
+  },
+  {
+    "id": "user.signin.password_cannot_be_empty",
+    "translation": "Password cannot be empty"
+  },
+  {
+    "id": "user.signin.invalid_email_or_password",
+    "translation": "Invalid email and/or password"
+  },
+  {
+    "id": "user.signin.email_taken",
+    "translation": "Este endereço de email já foi utilizado"
   }
 ]
