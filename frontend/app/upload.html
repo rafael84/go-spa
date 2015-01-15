@@ -1,0 +1,14 @@
+<input type="file" class="input-md" nv-file-select="" uploader="vm.uploader" ng-show="vm.uploader.queue.length == 0">
+
+<script type="text/javascript">
+    (function(window, document)
+    {
+        $(":file").filestyle(
+        {
+            iconName : 'fa fa-folder-open',
+            buttonText: "",
+            buttonName: "btn-default",
+            size: "md"
+        });
+    })(window, document);
+</script>
