@@ -3,8 +3,8 @@ package reset
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 
 	log "github.com/Sirupsen/logrus"
@@ -12,6 +12,7 @@ import (
 	"github.com/gotk/pg"
 
 	"github.com/rafael84/go-spa/backend/base"
+	"github.com/rafael84/go-spa/backend/cfg"
 	"github.com/rafael84/go-spa/backend/mail"
 	"github.com/rafael84/go-spa/backend/user"
 )
@@ -68,16 +69,16 @@ func sendResetPasswordEmail(c *ctx.Context, u *user.User) {
 	}
 
 	body.WriteString("Access this link: ")
-	body.WriteString("http://localhost:3000/#/reset-password/step2/")
+	body.WriteString(fmt.Sprintf("%s/#/reset-password/step2/", cfg.Server.BasePath()))
 	body.WriteString(resetToken.Key)
 
 	err = mail.NewGmailAccount(
-		os.Getenv("EMAIL_USERNAME"),
-		os.Getenv("EMAIL_PASSWORD"),
+		cfg.Email.Username,
+		cfg.Email.Password,
 	).Send(&mail.Message{
-		From:    "Go-SPA",
+		From:    cfg.Email.From,
 		To:      []string{u.Email},
-		Subject: "Reset Password",
+		Subject: cfg.Email.Subject,
 		Body:    body.Bytes(),
 	})
 
