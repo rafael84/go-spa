@@ -1,18 +1,18 @@
 [
   {
-    "id": "account.user.could_not_parse_request_data",
+    "id": "user.signup.could_not_parse_request_data",
     "translation": "Could not parse request data"
   },
   {
-    "id": "account.user.could_not_query_user ",
+    "id": "user.signup.could_not_query_user ",
     "translation": "Could not query user"
   },
   {
-    "id": "account.user.email_taken",
+    "id": "user.signup.email_taken",
     "translation": "This email address is already taken"
   },
   {
-    "id": "account.user.passwords_mismatch",
+    "id": "user.signup.passwords_mismatch",
     "translation": "Passwords does not match"
   }
 ]
