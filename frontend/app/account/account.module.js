@@ -154,6 +154,15 @@ angular.module('app.account', [
             }
             return deferred.promise;
         };
+        account.getAuthorizationHeader = function() {
+            if (account.isTokenExpired()) {
+                return null;
+            }
+            var token = store.get('token');
+            return {
+                'Authorization': 'Bearer ' + token
+            };
+        };
         return {
             signIn: account.signIn,
             isUserSignedIn: account.isUserSignedIn,
@@ -164,7 +173,8 @@ angular.module('app.account', [
             getUser: account.getUser,
             resetPassword: account.resetPassword,
             resetPasswordValidateKey: account.resetPasswordValidateKey,
-            changePassword: account.changePassword
+            changePassword: account.changePassword,
+            getAuthorizationHeader: account.getAuthorizationHeader
         };
     })
     .controller('MeCtrl', ['user', 'Me', 'Flash',

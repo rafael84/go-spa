@@ -182,7 +182,10 @@
         }
     },
     "media": {
-        "title": "Media",
+        "title": {
+            "edit": "Edit Media",
+            "new": "New Media"
+        },
         "form": {
             "name": {
                 "label": "Name",

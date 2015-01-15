@@ -179,5 +179,31 @@
                 "label": "Salvar"
             }
         }
+    },
+    "media": {
+        "title": {
+            "edit": "Edit Media",
+            "new": "New Media"
+        },
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Media  Name",
+                "error": "Please enter the media name."
+            },
+            "location": {
+                "label": "Location",
+                "placeholder": "Choose a location",
+                "error": "Please select the location"
+            },
+            "mediaType": {
+                "label": "Media Type",
+                "placeholder": "Choose a media type",
+                "error": "Please select the media type"
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
     }
 }
