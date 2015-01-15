@@ -38,7 +38,7 @@ func (r *ValidateKeyResource) POST(c *ctx.Context, rw http.ResponseWriter, req *
 
 	resetToken, err := service.GetByKey(form.Key)
 	if err != nil || !resetToken.Valid() {
-		return ctx.BadRequest(rw, c.T("reset.validate.invalid_key")
+		return ctx.BadRequest(rw, c.T("reset.validate.invalid_key"))
 	}
 
 	return ctx.OK(rw, ValidKey{resetToken.UserId, form.Key})

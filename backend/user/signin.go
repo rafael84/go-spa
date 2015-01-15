@@ -57,5 +57,5 @@ func (r *SignInResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 	}
 
 	// generate new token
-	return tokenResponse(rw, newToken(user))
+	return tokenResponse(c, rw, newToken(user))
 }

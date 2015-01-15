@@ -42,7 +42,7 @@ func (r *TokenRenewResource) POST(c *ctx.Context, rw http.ResponseWriter, req *h
 	}
 
 	// generate new token
-	return tokenResponse(rw, newToken(user))
+	return tokenResponse(c, rw, newToken(user))
 
 }
 
@@ -56,7 +56,7 @@ func newToken(user *User) *jwt.Token {
 	return token
 }
 
-func tokenResponse(rw http.ResponseWriter, token *jwt.Token) error {
+func tokenResponse(c *ctx.Context, rw http.ResponseWriter, token *jwt.Token) error {
 	tokenString, err := ctx.SignToken(token)
 	if err != nil {
 		return ctx.InternalServerError(rw, c.T("user.token.problem_signing_token"))
