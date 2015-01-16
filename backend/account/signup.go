@@ -1,4 +1,4 @@
-package signup
+package account
 
 import (
 	"encoding/json"
@@ -12,34 +12,30 @@ import (
 )
 
 func init() {
-	ctx.Resource("/account/user/signup", &SignUpResource{}, true)
+	ctx.Resource("/account/user/signup", &SignUp{}, true)
 }
 
-type SignUpForm struct {
-	FirstName     string `json:"firstName"`
-	LastName      string `json:"lastName"`
-	Email         string `json:"email"`
-	Password      string `json:"password"`
-	PasswordAgain string `json:"passwordAgain"`
-}
+type SignUp struct{}
 
-type SignUpResource struct{}
-
-func (r *SignUpResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *SignUp) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	db := c.Vars["db"].(*pg.Session)
 
 	// decode request data
-	var form SignUpForm
+	var form struct {
+		FirstName     string `json:"firstName"`
+		LastName      string `json:"lastName"`
+		Email         string `json:"email"`
+		Password      string `json:"password"`
+		PasswordAgain string `json:"passwordAgain"`
+	}
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
 		log.Errorf("Could not parse request data: %s", err)
 		return ctx.BadRequest(rw, c.T("user.signup.could_not_parse_request_data"))
 	}
 
-	// create new user service
-	service := user.NewUserService(db)
 	// check whether the email address is already taken
-	_, err = service.GetByEmail(form.Email)
+	_, err = user.GetByEmail(db, form.Email)
 	if err == nil {
 		return ctx.BadRequest(rw, c.T("user.signup.email_taken"))
 	} else if err != pg.ERecordNotFound {
@@ -53,7 +49,8 @@ func (r *SignUpResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 	}
 
 	// create new user
-	user, err := service.Create(
+	u, err := user.Create(
+		db,
 		form.Email,
 		form.Password,
 		&user.UserJsonData{
@@ -66,5 +63,5 @@ func (r *SignUpResource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.
 	}
 
 	// return created user data
-	return ctx.Created(rw, user)
+	return ctx.Created(rw, u)
 }

@@ -41,16 +41,16 @@ func (lc *Collection) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Req
 	}
 
 	// create new location
-	location := &Model{
+	loc := &Model{
 		Name:       form.Name,
 		StaticURL:  form.StaticURL,
 		StaticPath: form.StaticPath,
 	}
-	err = db.Create(location)
+	err = db.Create(loc)
 	if err != nil {
 		log.Errorf("Could not create location %s: %v", form.Name, err)
 		return ctx.BadRequest(rw, c.T("location.api.could_not_create_location"))
 	}
 
-	return ctx.Created(rw, location)
+	return ctx.Created(rw, loc)
 }

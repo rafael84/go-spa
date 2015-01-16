@@ -35,12 +35,9 @@ func (r *Begin) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) 
 		return ctx.BadRequest(rw, c.T("reset.begin.invalid_email_address"))
 	}
 
-	// create new user service
-	userService := user.NewUserService(db)
-
 	// get user from database
 	var u *user.Model
-	u, err = userService.GetByEmail(form.Email)
+	u, err = user.GetByEmail(db, form.Email)
 	if err != nil {
 		return ctx.BadRequest(rw, c.T("reset.begin.user_not_found"))
 	}

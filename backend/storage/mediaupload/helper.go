@@ -7,7 +7,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
-	"github.com/rafael84/go-spa/backend/base"
+	"github.com/rafael84/go-spa/backend/random"
 	"github.com/rafael84/go-spa/backend/storage/location"
 	"github.com/rafael84/go-spa/backend/storage/mediatype"
 )
@@ -23,7 +23,7 @@ func MoveFile(location *location.Model, mediaType *mediatype.Model, srcPath stri
 	}
 
 	// generate filename randomly
-	filename, err := base.Random(16)
+	filename, err := random.New(16)
 	if err != nil {
 		log.Errorf("Unable to generate filename: %s", err)
 		return "", errors.New("Could not process uploaded file")

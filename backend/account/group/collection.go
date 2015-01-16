@@ -23,6 +23,7 @@ func (r *Collection) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Reque
 		log.Errorf("Could not query groups: %v", err)
 		return ctx.BadRequest(rw, c.T("group.api.could_not_query_groups"))
 	}
+
 	return ctx.OK(rw, groups)
 }
 

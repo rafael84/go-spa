@@ -6,6 +6,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/gotk/ctx"
 	"github.com/gotk/pg"
+
 	"github.com/rafael84/go-spa/backend/account/user"
 )
 
@@ -14,12 +15,12 @@ const (
 )
 
 func init() {
-	ctx.Resource("/account/token/renew", &Resource{}, false)
+	ctx.Resource("/account/token/renew", &Renew{}, false)
 }
 
-type Resource struct{}
+type Renew struct{}
 
-func (r *Resource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *Renew) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	db := c.Vars["db"].(*pg.Session)
 
 	// get user id from the current token
@@ -28,11 +29,8 @@ func (r *Resource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Reques
 		return ctx.BadRequest(rw, c.T("user.token.could_not_extract"))
 	}
 
-	// create new user service
-	service := user.NewUserService(db)
-
 	// check if user is still valid
-	user, err := service.GetById(int64(userId.(float64)))
+	user, err := user.GetById(db, int64(userId.(float64)))
 	if err != nil {
 		log.Errorf("Could not query user: %v", err)
 		return ctx.InternalServerError(rw, c.T("user.token.could_not_query"))

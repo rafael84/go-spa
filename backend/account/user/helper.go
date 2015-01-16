@@ -6,21 +6,14 @@ import (
 
 	"github.com/gotk/pg"
 	"github.com/guregu/null"
-	"github.com/rafael84/go-spa/backend/base"
+
+	"github.com/rafael84/go-spa/backend/password"
 )
 
-type userService struct {
-	session *pg.Session
-}
-
-func NewUserService(session *pg.Session) *userService {
-	return &userService{session}
-}
-
-func (us *userService) Create(email, password string, userJsonData *UserJsonData) (*Model, error) {
+func Create(db *pg.Session, email, pw string, userJsonData *UserJsonData) (*Model, error) {
 	// encode password
-	var saltedPassword base.SaltedPassword
-	err := saltedPassword.Encode(password)
+	var saltedPassword password.Salted
+	err := saltedPassword.Encode(pw)
 	if err != nil {
 		return nil, errors.New("Could not encode password")
 	}
@@ -40,7 +33,7 @@ func (us *userService) Create(email, password string, userJsonData *UserJsonData
 	}
 
 	// create new user in database
-	err = us.session.Create(user)
+	err = db.Create(user)
 	if err != nil {
 		return nil, fmt.Errorf("Could not persist user: %s", err)
 	}
@@ -48,24 +41,24 @@ func (us *userService) Create(email, password string, userJsonData *UserJsonData
 	return user, nil
 }
 
-func (us *userService) Update(user *Model) error {
-	err := us.session.Update(user)
+func Update(db *pg.Session, user *Model) error {
+	err := db.Update(user)
 	if err != nil {
 		return fmt.Errorf("Could not persist user: %s", err)
 	}
 	return nil
 }
 
-func (us *userService) GetById(id int64) (*Model, error) {
-	user, err := us.session.FindOne(&Model{}, "id = $1", id)
+func GetById(db *pg.Session, id int64) (*Model, error) {
+	user, err := db.FindOne(&Model{}, "id = $1", id)
 	if err != nil {
 		return nil, err
 	}
 	return user.(*Model), nil
 }
 
-func (us *userService) GetByEmail(email string) (*Model, error) {
-	user, err := us.session.FindOne(&Model{}, "email = $1", email)
+func GetByEmail(db *pg.Session, email string) (*Model, error) {
+	user, err := db.FindOne(&Model{}, "email = $1", email)
 	if err != nil {
 		return nil, err
 	}

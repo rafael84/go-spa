@@ -20,14 +20,12 @@ type Complete struct{}
 func (r *Complete) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	db := c.Vars["db"].(*pg.Session)
 
-	type ChangePasswordForm struct {
+	// decode request data
+	var form struct {
 		Password      string   `json:"password"`
 		PasswordAgain string   `json:"passwordAgain"`
 		ValidKey      ValidKey `json:"validKey"`
 	}
-
-	// decode request data
-	var form ChangePasswordForm
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
 		return ctx.BadRequest(rw, c.T("reset.complete.unable_to_change"))
@@ -39,15 +37,13 @@ func (r *Complete) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Reques
 	}
 
 	// validate the key again
-	resetTokenService := NewService(db)
-	resetToken, err := resetTokenService.GetByKey(form.ValidKey.Key)
+	resetToken, err := getToken(db, form.ValidKey.Key)
 	if err != nil || !resetToken.Valid() {
 		return ctx.BadRequest(rw, c.T("reset.token.invalid_key"))
 	}
 
 	// get user from db
-	userService := user.NewUserService(db)
-	u, err := userService.GetById(resetToken.UserId)
+	u, err := user.GetById(db, resetToken.UserId)
 	if err != nil {
 		return ctx.InternalServerError(rw, c.T("reset.complete.user_not_found"))
 	}
@@ -59,14 +55,13 @@ func (r *Complete) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Reques
 	}
 
 	// change user data in database
-	err = userService.Update(u)
+	err = user.Update(db, u)
 	if err != nil {
 		return ctx.InternalServerError(rw, c.T("reset.complete.could_not_change_password"))
 	}
 
 	// invalidate token
-	resetToken.State = ResetTokenInactive
-	err = resetTokenService.Update(resetToken)
+	err = updateToken(db, resetToken)
 	if err != nil {
 		log.Errorf("Unable to invalidate token: %s", err)
 	}

@@ -10,10 +10,9 @@ import (
 	"github.com/gotk/ctx"
 	"github.com/gotk/pg"
 
+	_ "github.com/rafael84/go-spa/backend/account"
 	_ "github.com/rafael84/go-spa/backend/account/group"
 	_ "github.com/rafael84/go-spa/backend/account/resetpassword"
-	_ "github.com/rafael84/go-spa/backend/account/signin"
-	_ "github.com/rafael84/go-spa/backend/account/signup"
 	_ "github.com/rafael84/go-spa/backend/account/token"
 	_ "github.com/rafael84/go-spa/backend/account/user"
 	"github.com/rafael84/go-spa/backend/cfg"

@@ -1,4 +1,4 @@
-package signin
+package account
 
 import (
 	"encoding/json"
@@ -14,12 +14,12 @@ import (
 )
 
 func init() {
-	ctx.Resource("/account/user/signin", &Resource{}, true)
+	ctx.Resource("/account/user/signin", &SignIn{}, true)
 }
 
-type Resource struct{}
+type SignIn struct{}
 
-func (r *Resource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
+func (r *SignIn) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	db := c.Vars["db"].(*pg.Session)
 
 	// decode request data
@@ -29,7 +29,7 @@ func (r *Resource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Reques
 	}
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
-		return ctx.BadRequest(rw, "Could not query user") // TODO: translate this
+		return ctx.BadRequest(rw, c.T("user.signin.could_not_query"))
 	}
 
 	// validate email address
@@ -42,21 +42,18 @@ func (r *Resource) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Reques
 		return ctx.BadRequest(rw, c.T("user.signin.password_cannot_be_empty"))
 	}
 
-	// create new user service
-	service := user.NewUserService(db)
-
 	// check user in database
-	var user *user.Model
-	user, err = service.GetByEmail(form.Email)
+	var u *user.Model
+	u, err = user.GetByEmail(db, form.Email)
 	if err != nil {
 		return ctx.BadRequest(rw, c.T("user.signin.invalid_email_or_password"))
 	}
 
 	// check user password
-	if !user.Password.Valid(form.Password) {
+	if !u.Password.Valid(form.Password) {
 		return ctx.BadRequest(rw, c.T("user.signin.invalid_email_or_password"))
 	}
 
 	// generate new token
-	return token.Response(c, rw, token.New(user))
+	return token.Response(c, rw, token.New(u))
 }

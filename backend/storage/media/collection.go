@@ -41,7 +41,7 @@ func (r *Collection) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Requ
 	}
 
 	// get location from database
-	loc, err := location.ById(db, form.LocationId)
+	loc, err := location.GetById(db, form.LocationId)
 	if err != nil {
 		log.Errorf("Could not locate the requested location: %s", err)
 		return ctx.BadRequest(rw, c.T("media.mediaresource.could_not_locate_the_requested_location"))

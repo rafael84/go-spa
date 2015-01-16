@@ -1,4 +1,4 @@
-package base
+package random
 
 import (
 	"crypto/rand"
@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-func Random(size int) (string, error) {
+func New(size int) (string, error) {
 	buf := make([]byte, size, size)
 	_, err := io.ReadFull(rand.Reader, buf)
 	if err != nil {

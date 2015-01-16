@@ -32,9 +32,7 @@ func (r *ValidateKey) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Req
 		return ctx.BadRequest(rw, c.T("reset.validate.unable_to_validate_key"))
 	}
 
-	service := NewService(db)
-
-	resetToken, err := service.GetByKey(form.Key)
+	resetToken, err := getToken(db, form.Key)
 	if err != nil || !resetToken.Valid() {
 		return ctx.BadRequest(rw, c.T("reset.validate.invalid_key"))
 	}
