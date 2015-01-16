@@ -1,34 +1,236 @@
 [
   {
     "id": "user.signup.could_not_parse_request_data",
-    "translation": "Não foi possível recuperar os dados da requisição"
+    "translation": "Não foi possível tratar as informações recebidas"
   },
   {
-    "id": "user.signup.could_not_query_user ",
-    "translation": "Não foi possível consultar dados os usuário"
+    "id": "user.signup.could_not_query_user",
+    "translation": "Não encontramos esse usuário em nossa base"
   },
   {
     "id": "user.signup.email_taken",
-    "translation": "Este endereço de email já foi utilizado"
+    "translation": "Este endereço de email não está disponível"
   },
   {
     "id": "user.signup.passwords_mismatch",
-    "translation": "As senhas não coincidem"
+    "translation": "Senhas não conferem"
+  },
+  {
+    "id": "user.signup.could_not_create_user",
+    "translation": "Não foi possível criar o usuário"
   },
   {
     "id": "user.signin.invalid_email_address",
     "translation": "Endereço de email inválido"
   },
   {
-    "id": "user.signup.email_taken",
-    "translation": "Este endereço de email já foi utilizado"
+    "id": "user.signin.password_cannot_be_empty",
+    "translation": "O campo de senha não pode ficar vazio"
   },
   {
-    "id": "user.signup.email_taken",
-    "translation": "Este endereço de email já foi utilizado"
+    "id": "user.signin.invalid_email_or_password",
+    "translation": "Senha ou email inválido"
+  },
+
+  {
+    "id": "user.token.could_not_extract",
+    "translation": "Não foi possível extrair usuário do contexto"
   },
   {
-    "id": "user.signup.email_taken",
-    "translation": "Este endereço de email já foi utilizado"
+    "id": "user.token.could_not_query",
+    "translation": "Não encontramos esse usuário em nossa base"
+  },
+  {
+    "id": "user.token.problem_signing_token",
+    "translation": "Problema com a assinatura do Token"
+  },
+
+  {
+    "id": "user.me.could_not_extract",
+    "translation": "Não foi possível extrair o usuário do contexto"
+  },
+  {
+    "id": "user.me.could_not_query",
+    "translation": "Não encontramos esse usuário em nossa base"
+  },
+  {
+    "id": "user.me.could_not_decode_profile_data",
+    "translation": "Não foi possível decodificar as informações do usuário"
+  },
+  {
+    "id": "user.me.could_not_decode_json_data",
+    "translation": "Não foi possível decodificar o JSON"
+  },
+  {
+    "id": "reset.validate.unable_to_validate_key",
+    "translation": "Não foi possível validar a chave"
+  },
+  {
+    "id": "reset.validate.invalid_key",
+    "translation": "Chave inválida"
+  },
+  {
+    "id": "reset.complete.unable_to_change",
+    "translation": "Não foi possível modificar a senha"
+  },
+  {
+    "id": "reset.complete.mismatch",
+    "translation": "As senhas não conferem"
+  },
+  {
+    "id": "reset.complete.user_not_found",
+    "translation": "Usuário não encontrado"
+  },
+  {
+    "id": "reset.complete.could_not_change_password",
+    "translation": "Não foi possível modificar a senha do usuário"
+  },
+  {
+    "id": "reset.begin.could_not_query",
+    "translation": "Não encontramos esse usuário em nossa base"
+  },
+  {
+    "id": "reset.begin.invalid_email_address",
+    "translation": "Endereço de email inválido"
+  },
+  {
+    "id": "reset.begin.user_not_found",
+    "translation": "Usuário não encontrado"
+  },
+  {
+    "id": "reset.begin.email_sent",
+    "translation": "Email enviado"
+  },
+  {
+    "id": "mediatype.api.could_not_parse_request",
+    "translation": "Não foi possível tratar as informações recebidas"
+  },
+  {
+    "id": "mediatype.api.could_not_create_media_type",
+    "translation": "Não foi possível criar esse tipo de mídia"
+  },
+  {
+    "id": "mediatype.api.could_not_query_media_type",
+    "translation": "Não foi possível encontrar esse tipo de mídia"
+  },
+  {
+    "id": "mediatype.api.could_not_edit_media_type",
+    "translation": "Não foi possível modificar esse tipo de mídia"
+  },
+  {
+    "id": "mediatype.api.could_not_delete_media_type",
+    "translation": "Não foi possível apagar essa mídia"
+  },
+  {
+    "id": "media.uploadresource.could_not_upload_file",
+    "translation": "Não foi possível completar o upload do arquivo"
+  },
+  {
+    "id": "media.uploadresource.could_not_create_temp_file",
+    "translation": "Não foi possível criar o diretório temporário"
+  },
+  {
+    "id": "media.mediaresource.query_error",
+    "translation": "Erro de pesquisa"
+  },
+  {
+    "id": "media.mediaresource.could_not_parse_request_data",
+    "translation": "Não foi possível tratar as informações recebidas"
+  },
+  {
+    "id": "media.mediaresource.could_not_locate_the_requested_location",
+    "translation": "Não foi possível encontrar a localização solicitada"
+  },
+  {
+    "id": "media.mediaresource.could_not_locate_the_requested_media_type",
+    "translation": "Não foi possível encontrar o tipo de mídia solicitado"
+  },
+  {
+    "id": "media.mediaresource.could_not_process_uploaded_file",
+    "translation": "Não foi possível processar o arquivo enviado via upload"
+  },
+  {
+    "id": "media.mediaresource.could_not_create_media",
+    "translation": "Não foi possível criar a mídia"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_query_media",
+    "translation": "Não foi possível encontrar a mídia"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_parse_request_data",
+    "translation": "Não foi possível tratar as informações recebidas"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_locate_requested_location",
+    "translation": "Não foi possível encontrar a localização solicitada"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_locate_requested_media_type",
+    "translation": "Não foi possível encontrar o tipo de mídia solicitado"
+  },
+    {
+    "id": "media.mediaitemresource.could_not_process_uploaded_file",
+    "translation":"Não foi possível processar o arquivo enviado via upload"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_edit_media",
+    "translation": "Não foi possível modificar a mídia"
+  },
+  {
+    "id": "media.mediaitemresource.could_not_delete_media",
+    "translation": "Não foi possível apagar a mídia"
+  },
+  {
+    "id": "location.api.could_not_query_locations",
+    "translation": "Não foi possível encontrar as localizações solicitadas"
+  },
+  {
+    "id": "location.api.could_not_parse_request_data",
+    "translation": "Não foi possível tratar as informações recebidas"
+  },
+  {
+    "id": "location.api.could_not_create_location",
+    "translation": "Não foi possível criar a localização"
+  },
+  {
+    "id": "location.api.could_not_query_location",
+    "translation": "Não foi possível encontrar a localização solicitada"
+  },
+  {
+    "id": "location.api.could_not_parse_request_data",
+    "translation": "Não foi possível tratar as informações recebidas"
+  },
+  {
+    "id": "location.api.could_not_edit_location",
+    "translation": "Não foi possível modificar a a localização"
+  },
+  {
+    "id": "location.api.could_not_delete_location",
+    "translation": "Não foi possível apagar a a localização"
+  },
+  {
+    "id": "group.api.could_not_query_groups",
+    "translation": "Não foi possível encontrar os grupos"
+  },
+  {
+    "id": "group.api.could_not_parse_request_data",
+    "translation": "Não foi possível tratar as informações recebidas"
+  },
+  {
+    "id": "group.api.could_not_create_group",
+    "translation": "Could not create group"
+  },
+  {
+    "id": "group.api.could_not_query_group",
+    "translation": "Não foi possível encontrar o grupo"
+  },
+  {
+    "id": "group.api.could_not_edit_group",
+    "translation": "Não foi possível modificar o grupo"
+  },
+  {
+    "id": "group.api.could_not_delete_group",
+    "translation": "Não foi possível apagar o grupo"
   }
 ]
