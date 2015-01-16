@@ -5,7 +5,7 @@
   },
   {
     "id": "user.signup.could_not_query_user",
-    "translation": "Não encontramos esse usuário em nossa base"
+    "translation": "Não foi possível encontrar o usuário"
   },
   {
     "id": "user.signup.email_taken",
@@ -31,6 +31,11 @@
     "id": "user.signin.invalid_email_or_password",
     "translation": "Senha ou email inválido"
   },
+    {
+    "id": "user.signin.could_not_query",
+    "translation": "Não foi possível encontrar o usuário"
+  },
+
 
   {
     "id": "user.token.could_not_extract",

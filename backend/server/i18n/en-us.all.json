@@ -31,6 +31,10 @@
     "id": "user.signin.invalid_email_or_password",
     "translation": "Invalid email and/or password"
   },
+  {
+    "id": "user.signin.could_not_query",
+    "translation": "Could not query user"
+  },
 
   {
     "id": "user.token.could_not_extract",
