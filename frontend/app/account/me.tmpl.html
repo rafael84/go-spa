@@ -2,41 +2,53 @@
 
 <form name="userForm" class="form" ng-submit="vm.update(userForm.$valid)" novalidate>
 
-  <div class="alert alert-danger lead" ng-show="vm.error">
-    <i class="fa fa-exclamation-circle"></i>
-    {{ vm.error }}
-  </div>
+    <div class="alert alert-danger lead" ng-show="vm.error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ vm.error }}
+    </div>
 
-  <div class="form-group" ng-class="{'has-error': userForm.firstName.$invalid && !userForm.firstName.$pristine}">
-    <label for="email" translate="me.form.firstName.label">First Name</label>
-    <input class="form-control" type="text" name="firstName" id="firstName" ng-model="vm.user.jsonData.firstName"
-    required placeholder="{{ 'me.form.firstName.placeholder' | translate}}" />
-    <p ng-show="userForm.firstName.$invalid && !userForm.firstName.$pristine" class="help-block">
-      {{ 'me.form.firstName.error' | translate }}
+    <div class="form-group" ng-class="{'has-error': userForm.firstName.$invalid && !userForm.firstName.$pristine}">
+        <label for="email" translate="me.form.firstName.label">First Name</label>
+        <input class="form-control" type="text" name="firstName" id="firstName" ng-model="vm.user.jsonData.firstName"
+        required placeholder="{{ 'me.form.firstName.placeholder' | translate}}" />
+        <p ng-show="userForm.firstName.$invalid && !userForm.firstName.$pristine" class="help-block">
+            {{ 'me.form.firstName.error' | translate }}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.lastName.$invalid && !userForm.lastName.$pristine}">
+        <label for="email" translate="me.form.lastName.label">Last Name</label>
+        <input class="form-control" type="text" name="lastName" id="lastName" ng-model="vm.user.jsonData.lastName"
+        required placeholder="{{ 'me.form.lastName.placeholder' | translate}}" />
+        <p ng-show="userForm.lastName.$invalid && !userForm.lastName.$pristine" class="help-block">
+            {{ 'me.form.lastName.error' | translate }}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.email.$invalid && !userForm.email.$pristine}">
+        <label for="email" translate="me.form.email.label">Email</label>
+        <input class="form-control" type="email" name="email" id="email" ng-model="vm.user.email" required placeholder="{{ 'me.form.email.placeholder' | translate }}"
+        />
+        <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">
+            {{ 'me.form.email.error' | translate}}
+        </p>
+    </div>
+
+    <div class="form-group">
+        <label for="role" translate="me.form.role.label">Role</label>
+        <ui-select ng-model="vm.user.role" class="form-input">
+            <ui-select-match placeholder="{{ 'me.form.role.placeholder' | translate }}">
+                {{ $select.selected.name }}
+            </ui-select-match>
+            <ui-select-choices repeat="role in vm.roles | filter: { name: $select.search }">
+                <span ng-bind-html="role.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <p class="clearfix">
+        <button class="btn btn-primary pull-right" type="submit" ng-disabled="userForm.$invalid">
+            {{'me.form.submit.label' | translate}} →
+        </button>
     </p>
-  </div>
-
-  <div class="form-group" ng-class="{'has-error': userForm.lastName.$invalid && !userForm.lastName.$pristine}">
-    <label for="email" translate="me.form.lastName.label">Last Name</label>
-    <input class="form-control" type="text" name="lastName" id="lastName" ng-model="vm.user.jsonData.lastName"
-    required placeholder="{{ 'me.form.lastName.placeholder' | translate}}" />
-    <p ng-show="userForm.lastName.$invalid && !userForm.lastName.$pristine" class="help-block">
-      {{ 'me.form.lastName.error' | translate }}
-    </p>
-  </div>
-
-  <div class="form-group" ng-class="{'has-error': userForm.email.$invalid && !userForm.email.$pristine}">
-    <label for="email" translate="me.form.email.label">Email</label>
-    <input class="form-control" type="email" name="email" id="email" ng-model="vm.user.email" required placeholder="{{ 'me.form.email.placeholder' | translate }}"
-    />
-    <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">
-      {{ 'me.form.email.error' | translate}}
-    </p>
-  </div>
-
-  <p class="clearfix">
-    <button class="btn btn-primary pull-right" type="submit" ng-disabled="userForm.$invalid">
-      {{'me.form.submit.label' | translate}} →
-    </button>
-  </p>
 </form>
