@@ -21,6 +21,7 @@ type Model struct {
 	UpdatedAt time.Time       `db:"updated_at,autofilled"   json:"updatedAt"`
 	Email     string          `db:"email"                   json:"email"`
 	Password  password.Salted `db:"password"                json:"-"`
+	Role      int             `db:"role"                    json:"role"`
 	JsonData  pg.JSONB        `db:"json_data"               json:"jsonData,omitempty"`
 }
 
