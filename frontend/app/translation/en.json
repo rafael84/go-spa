@@ -72,6 +72,11 @@
                 "placeholder": "Enter your password again, please",
                 "error": "You must enter your password twice."
             },
+            "role": {
+                "label": "Role",
+                "placeholder": "Choose the user role",
+                "error": "Please select user role"
+            },
             "submit": {
                 "label": "Continue"
             }
@@ -126,6 +131,11 @@
                 "label": "Email",
                 "placeholder": "Email address",
                 "error": "Please enter a valid email address."
+            },
+            "role": {
+                "label": "Role",
+                "placeholder": "Choose the user role",
+                "error": "Please select user role"
             },
             "submit": {
                 "label": "Save"
@@ -201,11 +211,6 @@
                 "label": "Media Type",
                 "placeholder": "Choose a media type",
                 "error": "Please select the media type"
-            },
-            "role": {
-                "label": "Role",
-                "placeholder": "Choose the user role",
-                "error": "Please select user role"
             },
             "submit": {
                 "label": "Save"

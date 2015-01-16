@@ -10,29 +10,35 @@ angular.module('app.signup', [
 .config(function Config($stateProvider) {
     $stateProvider.state('signup', {
         url: '/signup',
-        controller: 'SignUpCtrl as signup',
+        controller: 'SignUpCtrl as vm',
         templateUrl: 'app/signup/signup.tmpl.html'
     });
 })
 
 .controller('SignUpCtrl', function SignUpCtrl($state, Account, Flash) {
-    var signup = this;
+    var vm = this;
 
-    signup.user = {};
-    signup.error = null;
+    vm.user = {};
+    vm.error = null;
 
-    signup.register = function register(valid) {
+    Account.getRoles()
+        .then(function success(roles) {
+            vm.roles = roles;
+        });
+
+    vm.register = function register(valid) {
         if (!valid) {
             return;
         }
 
-        Account.signUp(signup.user)
+        vm.user.role = vm.user.role.id;
+        Account.signUp(vm.user)
             .then(function success(response) {
                 Flash.show('Thanks for registering!');
                 $state.go('home');
             })
             .catch(function error(response) {
-                signup.error = response.data.error;
+                vm.error = response.data.error;
             });
     }
 })

@@ -1,6 +1,7 @@
 'use strict';
 angular.module('app.account', [
         'ui.router',
+        'ui.select',
         'angular-jwt',
         'angular-storage',
         'app.main'
@@ -46,6 +47,9 @@ angular.module('app.account', [
                     Me: 'Me',
                     user: function(Me) {
                         return Me.get();
+                    },
+                    roles: function(Account) {
+                        return Account.getRoles();
                     }
                 }
             })
@@ -163,6 +167,17 @@ angular.module('app.account', [
                 'Authorization': 'Bearer ' + token
             };
         };
+        account.getRoles = function() {
+            var deferred = $q.defer();
+            $http.get('/api/v1/account/user/role')
+                .then(function success(response) {
+                    deferred.resolve(response.data);
+                })
+                .catch(function error(response) {
+                    deferred.reject(response);
+                });
+            return deferred.promise;
+        };
         return {
             signIn: account.signIn,
             isUserSignedIn: account.isUserSignedIn,
@@ -174,14 +189,17 @@ angular.module('app.account', [
             resetPassword: account.resetPassword,
             resetPasswordValidateKey: account.resetPasswordValidateKey,
             changePassword: account.changePassword,
-            getAuthorizationHeader: account.getAuthorizationHeader
+            getAuthorizationHeader: account.getAuthorizationHeader,
+            getRoles: account.getRoles
         };
     })
-    .controller('MeCtrl', ['user', 'Me', 'Flash',
-        function MeCtrl(user, Me, Flash) {
+    .controller('MeCtrl', ['user', 'Me', 'roles', 'Flash',
+        function MeCtrl(user, Me, roles, Flash) {
             var vm = this;
             vm.user = user;
+            vm.roles = roles;
             vm.update = function(valid) {
+                vm.user.role = vm.user.role.id;
                 Me.update(vm.user)
                     .then(function success(response) {
                         Flash.show('Your profile has been updated.');

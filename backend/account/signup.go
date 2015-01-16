@@ -27,6 +27,7 @@ func (r *SignUp) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request)
 		Email         string `json:"email"`
 		Password      string `json:"password"`
 		PasswordAgain string `json:"passwordAgain"`
+		Role          int    `json:"role"`
 	}
 	err := json.NewDecoder(req.Body).Decode(&form)
 	if err != nil {
@@ -53,6 +54,7 @@ func (r *SignUp) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request)
 		db,
 		form.Email,
 		form.Password,
+		form.Role,
 		&user.UserJsonData{
 			FirstName: form.FirstName,
 			LastName:  form.LastName,
