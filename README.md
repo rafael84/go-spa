@@ -8,9 +8,9 @@ Go (golang) Single Page Application Bootstrap, built with Go (golang) and Angula
 ## TODO
 
 - [x] i18n
-- [ ] add a page to handle LOCATIONS
-- [ ] improve the ME page
-- [ ] improve the GROUPS page
+- [x] add a page to handle LOCATIONS
+- [x] improve the ME page
+- [x] improve the GROUPS page
 - [ ] improve the docs
 
 

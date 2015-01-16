@@ -52,7 +52,3 @@ func NewEmailAccount(identity, username, password, host string, port int) *accou
 		),
 	}
 }
-
-func NewGmailAccount(username, password string) *account {
-	return NewEmailAccount("", username, password, "smtp.gmail.com", 587)
-}
