@@ -202,6 +202,11 @@
                 "placeholder": "Choose a media type",
                 "error": "Please select the media type"
             },
+            "role": {
+                "label": "Role",
+                "placeholder": "Choose the user role",
+                "error": "Please select user role"
+            },
             "submit": {
                 "label": "Save"
             }

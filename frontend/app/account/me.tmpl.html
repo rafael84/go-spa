@@ -33,6 +33,20 @@
       {{ 'me.form.email.error' | translate}}
     </p>
   </div>
+  
+    <div class="form-group">
+        <label for="role" translate="media.form.role.label">Role</label>
+        <ui-select ng-model="vm.media.role" class="form-input">
+            <ui-select-match placeholder="{{ 'media.form.role.placeholder' | translate }}">
+                <span class="lead"><strong>{{ $select.selected.role }}</strong></span>
+            </ui-select-match>
+            <ui-select-choices repeat="role in vm.roles 
+                | propsFilter: { role: $select.search }">
+                <h4 class="page-header" ng-bind-html="location.name | highlight: $select.search"></h4>
+                <div>Role: <span ng-bind-html="role | highlight: $select.search"></span></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
 
   <p class="clearfix">
     <button class="btn btn-primary pull-right" type="submit" ng-disabled="userForm.$invalid">
