@@ -54,7 +54,7 @@ func (r *Resource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request
 	}
 
 	// get media type from database
-	mediaType, err := mediatype.GetById(db, form.MediaTypeId)
+	mediatype, err := mediatype.GetById(db, form.MediatypeId)
 	if err != nil {
 		log.Errorf("Could not locate the requested media type: %s", err)
 		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_locate_requested_media_type"))
@@ -62,7 +62,7 @@ func (r *Resource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request
 
 	// move the uploaded file to the right place
 	var dstPath string
-	dstPath, err = mediaupload.MoveFile(loc, mediaType, form.Path)
+	dstPath, err = mediaupload.MoveFile(loc, mediatype, form.Path)
 	if err != nil {
 		log.Errorf("Could not process the uploaded file: %s", err)
 		return ctx.InternalServerError(rw, c.T("media.mediaitemresource.could_not_process_uploaded_file"))
@@ -79,7 +79,7 @@ func (r *Resource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request
 	// update the media
 	media.Name = form.Name
 	media.LocationId = form.LocationId
-	media.MediaTypeId = form.MediaTypeId
+	media.MediatypeId = form.MediatypeId
 	media.Path = dstPath
 	err = db.Update(media)
 	if err != nil {

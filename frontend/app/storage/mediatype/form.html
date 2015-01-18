@@ -1,0 +1,27 @@
+<h3>
+    {{ 'mediatype.form.title' | translate }}
+    <small class="pull-right"><a ui-sref="mediatype.list">Back</a></small>
+</h3>
+
+<form name="mediatypeForm" class="form" ng-submit="vm.save(mediatypeForm.$valid)" novalidate>
+
+    <div class="alert alert-danger lead" ng-show="vm.error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ vm.error }}
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': mediatypeForm.name.$invalid && !mediatypeForm.name.$pristine}">
+        <label for="name" translate="mediatype.form.name.label">Name</label>
+        <input class="form-control" type="text" name="name" id="name" ng-model="vm.mediatype.name" required
+        placeholder="{{ 'mediatype.form.name.placeholder' | translate}}" />
+        <p ng-show="mediatypeForm.name.$invalid && !mediatypeForm.name.$pristine" class="help-block">
+            {{ 'mediatype.form.name.error' | translate }}
+        </p>
+    </div>
+
+    <p class="clearfix">
+        <button class="btn btn-primary pull-right" type="submit" ng-disabled="mediatypeForm.$invalid">
+            {{'mediatype.form.submit.label' | translate}} →
+        </button>
+    </p>
+</form>

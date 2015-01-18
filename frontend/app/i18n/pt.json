@@ -1,0 +1,210 @@
+{
+    "root": {
+        "title": "GO SPA"
+    },
+    "main": {
+        "header": {
+            "title": "Go SPA - Exemplo",
+            "signup": "Cadastrar",
+            "signin": "Acessar minha conta",
+            "signout": "Sair",
+            "hello": "Olá"
+        },
+        "footer": {
+            "translate": {
+                "en": "Inglês",
+                "pt": "Português"
+            }
+        }
+    },
+    "home": {
+        "title": "Home",
+        "menu": {
+            "profile": "Perfil",
+            "groups": "Grupos",
+            "locations": "Locais",
+            "mediatypes": "Tipos de Mídia",
+            "medias": "Mídias"
+        }
+    },
+    "signin": {
+        "title": "Acessar minha conta",
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email"
+            },
+            "password": {
+                "label": "Senha",
+                "placeholder": "Pelo menos 6 caracteres"
+            },
+            "resetPassword": "Esqueci minha senha",
+            "submit": {
+                "label": "Continuar"
+            }
+        }
+    },
+    "signup": {
+        "title": "Cadastrar",
+        "form": {
+            "firstName": {
+                "label": "Nome",
+                "placeholder": "Entre apenas com o seu primeiro nome, por favor",
+                "error": "Por favor, entre com o seu primeiro nome."
+            },
+            "lastName": {
+                "label": "Sobrenome",
+                "placeholder": "Enter com seu sobrenome",
+                "error": "Por favor, entre com o seu sobrenome."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email",
+                "error": "Por favor, entre com um email válido"
+            },
+            "password": {
+                "label": "Senha",
+                "placeholder": "Pelo menos 6 caracteres",
+                "error": "Por favor entre com uma senha com pelo menos 6 caracteres"
+            },
+            "passwordAgain": {
+                "label": "Senha, novamente",
+                "placeholder": "Entre com a sua senha mais uma vez, por favor",
+                "error": "Você deve entrar com a senha duas vezes"
+            },
+            "submit": {
+                "label": "Continuar"
+            }
+        }
+    },
+    "resetPassword": {
+        "step1": {
+            "title": "Esqueci minha senha",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Endereço de email"
+                },
+                "submit": {
+                    "label": "Continuar"
+                }
+            }
+        },
+        "step2": {
+            "title": "Esqueci minha senha - Passo 2",
+            "form": {
+                "password": {
+                    "label": "Senha",
+                    "placeholder": "Pelo menos 6 caracteres",
+                    "error": "Por favor entre com uma senha com pelo menos 6 caracteres"
+                },
+                "passwordAgain": {
+                    "label": "Senha, novamente",
+                    "placeholder": "Entre com a sua senha mais uma vez, por favor",
+                    "error": "Você deve entrar com a senha duas vezes"
+                },
+                "submit": {
+                    "label": "Alterar Senha"
+                }
+            }
+        }
+    },
+    "me": {
+        "title": "Meu Perfil",
+        "form": {
+            "firstName": {
+                "label": "Nome",
+                "placeholder": "Entre apenas com o seu primeiro nome, por favor",
+                "error": "Por favor, entre com o seu primeiro nome."
+            },
+            "lastName": {
+                "label": "Sobrenome",
+                "placeholder": "Enter com seu sobrenome",
+                "error": "Por favor, entre com o seu sobrenome."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Endereço de email",
+                "error": "Por favor, entre com um email válido"
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
+    },
+    "group": {
+        "title": "Novo Grupo",
+        "form": {
+            "name": {
+                "label": "Nome",
+                "placeholder": "Nome do Grupo",
+                "error": "Por favor, digite o nome do grupo"
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
+    },
+    "location": {
+        "title": "Local",
+        "form": {
+            "name": {
+                "label": "Nome",
+                "placeholder": "Nome do local",
+                "error": "Por favor entre com o nome do local"
+            },
+            "staticURL": {
+                "label": "URL estática",
+                "placeholder": "URL estática",
+                "error": "Por favor entre com a url estática"
+            },
+            "staticPath": {
+                "label": "Caminho estático",
+                "placeholder": "Caminho estático",
+                "error": "Por favor entre com o caminho estático"
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
+    },
+    "mediaType": {
+        "title": "Tipo de Mídia",
+        "form": {
+            "name": {
+                "label": "Nome",
+                "placeholder": "Nome do tipo de mídia",
+                "error": "Por favor entre com o nome do tipo de mídia "
+            },
+            "submit": {
+                "label": "Salvar"
+            }
+        }
+    },
+    "media": {
+        "title": {
+            "edit": "Edit Media",
+            "new": "New Media"
+        },
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Media  Name",
+                "error": "Please enter the media name."
+            },
+            "location": {
+                "label": "Location",
+                "placeholder": "Choose a location",
+                "error": "Please select the location"
+            },
+            "mediaType": {
+                "label": "Media Type",
+                "placeholder": "Choose a media type",
+                "error": "Please select the media type"
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    }
+}

@@ -1,0 +1,220 @@
+{
+    "root": {
+        "title": "GO SPA"
+    },
+    "main": {
+        "header": {
+            "title": "Go SPA - Sample",
+            "signup": "Sign Up",
+            "signin": "Sign In",
+            "signout": "Sign Out",
+            "hello": "Hello"
+        },
+        "footer": {
+            "translate": {
+                "en": "English",
+                "pt": "Portuguese"
+            }
+        }
+    },
+    "home": {
+        "title": "Home",
+        "menu": {
+            "profile": "Profile",
+            "groups": "Groups",
+            "locations": "Locations",
+            "mediatypes": "Media Types",
+            "medias": "Medias"
+        }
+    },
+    "signin": {
+        "title": "Sign In",
+        "form": {
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "At least 6 characters"
+            },
+            "resetPassword": "Reset my password",
+            "submit": {
+                "label": "Continue"
+            }
+        }
+    },
+    "signup": {
+        "title": "Sign Up",
+        "form": {
+            "firstName": {
+                "label": "First Name",
+                "placeholder": "Please enter your first name only, please",
+                "error": "Please enter your first name."
+            },
+            "lastName": {
+                "label": "Last Name",
+                "placeholder": "Please enter your last name",
+                "error": "Please enter your last name."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address",
+                "error": "Please enter a valid email address."
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "At least 6 characters",
+                "error": "Please provide a password with at least 6 characters."
+            },
+            "passwordAgain": {
+                "label": "Password, again",
+                "placeholder": "Enter your password again, please",
+                "error": "You must enter your password twice."
+            },
+            "role": {
+                "label": "Role",
+                "placeholder": "Choose the user role",
+                "error": "Please select user role"
+            },
+            "submit": {
+                "label": "Continue"
+            }
+        }
+    },
+    "resetpassword": {
+        "step1": {
+            "title": "Reset Password",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "placeholder": "Email address"
+                },
+                "submit": {
+                    "label": "Continue"
+                }
+            }
+        },
+        "step2": {
+            "title": "Reset Password - Step 2",
+            "form": {
+                "password": {
+                    "label": "Password",
+                    "placeholder": "At least 6 characters",
+                    "error": "Please provide a password with at least 6 characters."
+                },
+                "passwordAgain": {
+                    "label": "Password, again",
+                    "placeholder": "Enter your password again, please",
+                    "error": "You must enter your password twice."
+                },
+                "submit": {
+                    "label": "Change Password"
+                }
+            }
+        }
+    },
+    "me": {
+        "title": "Me",
+        "form": {
+            "firstName": {
+                "label": "First Name",
+                "placeholder": "Please enter your first name only, please",
+                "error": "Please enter your first name."
+            },
+            "lastName": {
+                "label": "Last Name",
+                "placeholder": "Please enter your last name",
+                "error": "Please enter your last name."
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Email address",
+                "error": "Please enter a valid email address."
+            },
+            "role": {
+                "label": "Role",
+                "placeholder": "Choose the user role",
+                "error": "Please select user role"
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    },
+    "group": {
+        "title": "Group",
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Group Name",
+                "error": "Please enter the group name."
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    },
+    "location": {
+        "title": "Location",
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Location Name",
+                "error": "Please enter the location name."
+            },
+            "staticURL": {
+                "label": "Static URL",
+                "placeholder": "Static URL",
+                "error": "Please enter the static url"
+            },
+            "staticPath": {
+                "label": "Static Path",
+                "placeholder": "Static Path",
+                "error": "Please enter the static path"
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    },
+    "mediatype": {
+        "form": {
+            "title": "Media Type",
+            "name": {
+                "label": "Name",
+                "placeholder": "Media Type Name",
+                "error": "Please enter the media type name."
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    },
+    "media": {
+        "title": {
+            "edit": "Edit Media",
+            "new": "New Media"
+        },
+        "form": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Media  Name",
+                "error": "Please enter the media name."
+            },
+            "location": {
+                "label": "Location",
+                "placeholder": "Choose a location",
+                "error": "Please select the location"
+            },
+            "mediatype": {
+                "label": "Media Type",
+                "placeholder": "Choose a media type",
+                "error": "Please select the media type"
+            },
+            "submit": {
+                "label": "Save"
+            }
+        }
+    }
+}

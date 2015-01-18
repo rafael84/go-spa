@@ -13,7 +13,7 @@ type Model struct {
 	CreatedAt   time.Time `db:"created_at,autofilled"     json:"createdAt"`
 	UpdatedAt   time.Time `db:"updated_at,autofilled"     json:"updatedAt"`
 	Name        string    `db:"name"                      json:"name"`
-	MediaTypeId int       `db:"media_type_id"             json:"mediaTypeId"`
+	MediatypeId int       `db:"media_type_id"             json:"mediatypeId"`
 	LocationId  int       `db:"location_id"               json:"locationId"`
 	Path        string    `db:"path"                      json:"path"`
 	JsonData    pg.JSONB  `db:"json_data"                 json:"jsonData,omitempty"`

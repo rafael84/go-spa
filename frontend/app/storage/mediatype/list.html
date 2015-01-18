@@ -1,0 +1,34 @@
+<h3>
+    Media Type List
+    <span class="pull-right">
+        <button type="button" class="btn btn-primary" ui-sref="mediatype.new">New Media Type</button>
+    </span>
+</h3>
+
+<table class="table table-striped">
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="mediatype in vm.mediatypes">
+            <td>
+                <a class="btn btn-link" ui-sref="mediatype.edit({id: mediatype.id})">
+                    {{ mediatype.id }}
+                </a>
+            </td>
+            <td>{{ mediatype.name }}</td>
+            <td><a class="btn btn-link" ng-click="vm.deleteDlg(mediatype)">Delete</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div ui-view></div>
+
+    <script type="text/ng-template" id="deleteDlgTmpl">
+        <h1>Are you sure?</h1>
+        <p class="lead">You're about to delete the <b>{{ ngDialogData.mediatype.name }}</b> media type</p>
+        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">No, I made a terrible mistake!</button>
+        <button type="button" class="btn btn-danger" ng-click="ngDialogData.delete(); closeThisDialog()">Yes, I'm sure!!!</button>
+    </script>

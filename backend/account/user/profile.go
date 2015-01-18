@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	ctx.Resource("/account/user/me", &Profile{}, false)
+	ctx.Resource("/account/user/profile", &Profile{}, false)
 }
 
 type Profile struct{}

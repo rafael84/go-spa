@@ -48,7 +48,7 @@ func (r *Collection) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Requ
 	}
 
 	// get media type from database
-	mt, err := mediatype.GetById(db, form.MediaTypeId)
+	mt, err := mediatype.GetById(db, form.MediatypeId)
 	if err != nil {
 		log.Errorf("Could not locate the requested media type: %s", err)
 		return ctx.BadRequest(rw, c.T("media.mediaresource.could_not_locate_the_requested_media_type"))
@@ -65,7 +65,7 @@ func (r *Collection) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Requ
 	// create new media
 	media := &Model{
 		Name:        form.Name,
-		MediaTypeId: form.MediaTypeId,
+		MediatypeId: form.MediatypeId,
 		LocationId:  form.LocationId,
 		Path:        dstPath,
 	}

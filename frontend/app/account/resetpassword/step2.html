@@ -1,0 +1,44 @@
+<h2 translate="resetpassword.step2.title">Reset Password - Step 2</h2>
+
+<div class="alert alert-danger lead" ng-show="vm.error">
+    <i class="fa fa-exclamation-circle"></i>
+    {{ vm.error }}
+</div>
+
+<div ng-hide="vm.validKey">
+    <p class="lead">
+        Click <a ui-sref="resetpassword">here</a> to restart the process.
+    </p>
+</div>
+
+<form name="resetForm" ng-submit="vm.send(vm.user)" ng-show="vm.validKey" novalidate>
+
+    <div class="form-group" ng-class="{'has-error': resetForm.password.$invalid && !resetForm.password.$pristine}">
+        <label for="password" translate="resetpassword.step2.form.password.label">Password</label>
+        <input class="form-control" type="password" name="password" id="password" ng-model="vm.user.password"
+        ng-minlength="6" required placeholder="{{'resetpassword.step2.form.password.placeholder' | translate}}"
+        />
+        <p ng-show="resetForm.password.$error.minlength || (resetForm.password.$invalid && !resetForm.password.$pristine)"
+        class="help-block">
+            {{ 'resetpassword.step2.form.password.error' | translate }}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': resetForm.passwordAgain.$invalid && !resetForm.passwordAgain.$pristine}">
+        <label for="passwordAgain" translate="resetpassword.step2.form.passwordAgain.label">Password, again</label>
+        <input class="form-control" type="password" name="passwordAgain" id="passwordAgain" ng-model="vm.user.passwordAgain"
+        required placeholder="{{'resetpassword.step2.form.passwordAgain.placeholder' | translate}}"
+        />
+        <p ng-show="resetForm.passwordAgain.$invalid && !resetForm.passwordAgain.$pristine" class="help-block">
+            {{'resetpassword.step2.form.passwordAgain.error' | translate}}
+        </p>
+    </div>
+
+    <p class="clearfix">
+        <span class="pull-right">
+            <button class="btn btn-default" type="submit">
+                {{ 'resetpassword.step2.form.submit.label' | translate }} →
+            </button>
+        </span>
+    </p>
+</form>

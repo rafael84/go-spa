@@ -17,12 +17,12 @@ type Collection struct{}
 
 func (r *Collection) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
 	db := c.Vars["db"].(*pg.Session)
-	mediaTypes, err := db.FindAll(&Model{}, "")
+	mediatypes, err := db.FindAll(&Model{}, "")
 	if err != nil {
 		log.Errorf("Query error: %v", err)
 		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_query_media_type"))
 	}
-	return ctx.OK(rw, mediaTypes)
+	return ctx.OK(rw, mediatypes)
 }
 
 func (r *Collection) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Request) error {
@@ -39,14 +39,14 @@ func (r *Collection) POST(c *ctx.Context, rw http.ResponseWriter, req *http.Requ
 	}
 
 	// create new mediatype
-	mediaType := &Model{
+	mediatype := &Model{
 		Name: form.Name,
 	}
-	err = db.Create(mediaType)
+	err = db.Create(mediatype)
 	if err != nil {
 		log.Errorf("Could not create media type %s: %v", form.Name, err)
 		return ctx.BadRequest(rw, c.T("mediatype.api.could_not_create_media_type"))
 	}
 
-	return ctx.Created(rw, mediaType)
+	return ctx.Created(rw, mediatype)
 }

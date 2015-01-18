@@ -12,10 +12,10 @@ import (
 	"github.com/rafael84/go-spa/backend/storage/mediatype"
 )
 
-func MoveFile(location *location.Model, mediaType *mediatype.Model, srcPath string) (string, error) {
+func MoveFile(location *location.Model, mediatype *mediatype.Model, srcPath string) (string, error) {
 
 	// create directories if necessary
-	dir := fmt.Sprintf("/var/%s/%s", location.StaticPath, mediaType.Name)
+	dir := fmt.Sprintf("/var/%s/%s", location.StaticPath, mediatype.Name)
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		log.Errorf("Unable to create directory: %s", err)

@@ -1,0 +1,73 @@
+<h2 translate="signup.title">Sign Up</h2>
+
+<form name="userForm" class="form" ng-submit="vm.register(userForm.$valid)" novalidate>
+
+    <div class="alert alert-danger lead" ng-show="signup.error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ signup.error }}
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.firstName.$invalid && !userForm.firstName.$pristine}">
+        <label for="email" translate="signup.form.firstName.label">First Name</label>
+        <input class="form-control" type="text" name="firstName" id="firstName" ng-model="vm.user.firstName"
+        required placeholder="{{ 'signup.form.firstName.placeholder' | translate}}" />
+        <p ng-show="userForm.firstName.$invalid && !userForm.firstName.$pristine" class="help-block">
+            {{ 'signup.form.firstName.error' | translate }}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.lastName.$invalid && !userForm.lastName.$pristine}">
+        <label for="email" translate="signup.form.lastName.label">Last Name</label>
+        <input class="form-control" type="text" name="lastName" id="lastName" ng-model="vm.user.lastName" required
+        placeholder="{{ 'signup.form.lastName.placeholder' | translate}}" />
+        <p ng-show="userForm.lastName.$invalid && !userForm.lastName.$pristine" class="help-block">
+            {{ 'signup.form.lastName.error' | translate }}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.email.$invalid && !userForm.email.$pristine}">
+        <label for="email" translate="signup.form.email.label">Email</label>
+        <input class="form-control" type="email" name="email" id="email" ng-model="vm.user.email" required placeholder="{{ 'signup.form.email.placeholder' | translate }}"
+        />
+        <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">
+            {{ 'signup.form.email.error' | translate}}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.password.$invalid && !userForm.password.$pristine}">
+        <label for="password" translate="signup.form.password.label">Password</label>
+        <input class="form-control" type="password" name="password" id="password" ng-model="vm.user.password"
+        ng-minlength="6" required placeholder="{{'signup.form.password.placeholder' | translate}}" />
+        <p ng-show="userForm.password.$error.minlength || (userForm.password.$invalid && !userForm.password.$pristine)"
+            class="help-block">
+            {{ 'signup.form.password.error' | translate }}
+        </p>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': userForm.passwordAgain.$invalid && !userForm.passwordAgain.$pristine}">
+        <label for="passwordAgain" translate="signup.form.passwordAgain.label">Password, again</label>
+        <input class="form-control" type="password" name="passwordAgain" id="passwordAgain" ng-model="vm.user.passwordAgain"
+        required placeholder="{{'signup.form.passwordAgain.placeholder' | translate}}" />
+        <p ng-show="userForm.passwordAgain.$invalid && !userForm.passwordAgain.$pristine" class="help-block">
+            {{'signup.form.passwordAgain.error' | translate}}
+        </p>
+    </div>
+
+    <div class="form-group">
+        <label for="role" translate="signup.form.role.label">Role</label>
+        <ui-select ng-model="vm.user.role" class="form-input">
+            <ui-select-match placeholder="{{ 'signup.form.role.placeholder' | translate }}">
+                {{ $select.selected.name }}
+            </ui-select-match>
+            <ui-select-choices repeat="role in vm.roles | filter: { name: $select.search }">
+                <span ng-bind-html="role.name | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <p class="clearfix">
+        <button class="btn btn-default pull-right" type="submit" ng-disabled="userForm.$invalid">
+            {{'signup.form.submit.label' | translate}} →
+        </button>
+    </p>
+</form>
