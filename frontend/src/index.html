@@ -1,0 +1,132 @@
+<!doctype html>
+<html class="no-js" ng-app="app">
+
+<head>
+    <meta charset="utf-8">
+    <title>APP</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <!-- bower:css -->
+    <!-- run `gulp wiredep` to automaticaly populate bower styles dependencies -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css({.tmp/serve,src}) styles/app.css -->
+    <!-- inject:css -->
+    <!-- css files will be automaticaly insert here -->
+    <!-- endinject -->
+    <!-- endbuild -->
+</head>
+
+<body>
+    <!--[if lt IE 10]>
+    <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. 
+        Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your 
+        experience.
+    </p>
+    <![endif]-->
+
+    <div class="flash-message text-center" ng-class="{'animated bounceInDown': main.hasFlashMessage()}"
+    ng-show="main.hasFlashMessage()">
+        {{ main.getFlashMessage() }}
+    </div>
+
+    <div id="wrapper">
+
+        <!-- #header -->
+        <section id="header" class="container-fluid">
+            <h1> 
+                <a ui-sref="home" translate="main.header.title">Go SPA</a> 
+                <small class="pull-right">
+                    <span ng-hide="main.isUserSignedIn()">
+                        <a class="btn btn-link" ui-sref="signup" translate="main.header.signup">Sign Up</a>
+                        &#124;
+                        <a class="btn btn-link" ui-sref="signin" translate="main.header.signin">Sign In</a>
+                    </span>
+                    <span ng-show="main.isUserSignedIn()">
+                        {{ 'main.header.hello' | translate }} 
+                        <a ui-sref="me">{{ main.getUser().jsonData.firstName }}</a>
+                        &#124;
+                        <a class="btn btn-link" ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
+                    </span>
+                </small>
+            </h1>
+
+            <!-- menu -->
+            <div class="nav nav-tabs">
+                <li ng-class="{ active: $state.is('home') }">
+                    <a ui-sref="home">
+                        <i class="fa fa-home"></i> Home
+                    </a>
+                </li>
+                <li ng-class="{ active: $state.is('profile') }">
+                    <a ui-sref="profile">
+                        <i class="fa fa-user"></i> {{ 'home.menu.profile' | translate}}
+                    </a>
+                </li>
+                <li ng-class="{ active: $state.includes('group') }">
+                    <a ui-sref="group.list">
+                        <i class="fa fa-users"></i> {{ 'home.menu.groups' | translate }}
+                    </a>
+                </li>
+                <li ng-class="{ active: $state.includes('location') }">
+                    <a ui-sref="location.list">
+                        <i class="fa fa-folder"></i> {{ 'home.menu.locations' | translate }}
+                    </a>
+                </li>
+                <li ng-class="{ active: $state.includes('mediatype') }">
+                    <a ui-sref="mediatype.list">
+                        <i class="fa fa-image"></i> {{ 'home.menu.mediatypes' | translate }}
+                    </a>
+                </li>
+                <li ng-class="{ active: $state.includes('media') }">
+                    <a ui-sref="media.list">
+                        <i class="fa fa-cubes"></i> {{ 'home.menu.medias' | translate }}
+                    </a>
+                </li>
+            </div>
+            <!-- /menu -->
+
+        </section>
+        <!-- /#header -->
+
+        <section id="content" class="container-fluid" ui-view></section>
+
+        <section id="footer" class="container-fluid">
+            <span class="pull-right">
+                <button class="btn btn-link" ng-click="main.switchLang('en')">
+                    <img src="assets/images/en.png" alt="english"/> 
+                    {{ 'main.footer.translate.en' | translate }}
+                </button>
+                &#124;
+                <button class="btn btn-link" ng-click="main.switchLang('pt')">
+                    <img src="assets/images/pt.png" alt="portuguese"/>
+                    {{ 'main.footer.translate.pt' | translate }}
+                </button>
+            </span>
+        </section>
+    </div>
+
+    <!-- build:js(src) scripts/vendor.js -->
+    <!-- bower:js -->
+    <!-- run `gulp wiredep` to automaticaly populate bower script dependencies -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp/serve,.tmp/partials,src}) scripts/app.js -->
+    <!-- inject:js -->
+    <!-- js files will be automaticaly insert here -->
+    <!-- endinject -->
+
+    <!-- inject:partials -->
+    <!-- angular templates will be automatically converted in js and inserted here -->
+    <!-- endinject -->
+    <!-- endbuild -->
+</body>
+
+</html>
