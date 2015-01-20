@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.account.profile')
-    .factory(function(user, Profile, roles, Flash) {
+    .controller('ProfileCtrl', function(user, Profile, roles, Flash) {
         var vm = this;
         vm.user = user;
         vm.roles = roles;

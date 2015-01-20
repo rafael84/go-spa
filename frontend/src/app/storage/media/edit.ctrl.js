@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.storage.media')
-    .controller('EditCtrl',
+    .controller('MediaEditCtrl',
         function($state, FileUploader, Account, Flash, Media, Location, MediaType, media) {
             var vm = this;
             vm.title = 'media.title.edit';

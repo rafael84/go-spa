@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.storage.location')
-    .controller('ListCtrl', function(ngDialog, locations, Location, Flash) {
+    .controller('LocationListCtrl', function(ngDialog, locations, Location, Flash) {
         var vm = this;
         vm.locations = locations;
         vm.deleteDlg = function(location) {

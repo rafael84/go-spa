@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.account.group')
-    .controller('ListCtrl', function(ngDialog, groups, Group, Flash) {
+    .controller('GroupListCtrl', function(ngDialog, groups, Group, Flash) {
         var vm = this;
         vm.groups = groups;
         vm.deleteDlg = function(group) {

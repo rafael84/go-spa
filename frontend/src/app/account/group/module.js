@@ -19,7 +19,7 @@ angular.module('app.account.group', [
         .state('group.list', {
             url: '/list',
             templateUrl: 'app/account/group/list.html',
-            controller: 'ListCtrl as vm',
+            controller: 'GroupListCtrl as vm',
             resolve: {
                 groups: function(Group) {
                     return Group.getAll();
@@ -29,12 +29,12 @@ angular.module('app.account.group', [
         .state('group.new', {
             url: '/new',
             templateUrl: 'app/account/group/form.html',
-            controller: 'NewCtrl as vm'
+            controller: 'GroupNewCtrl as vm'
         })
         .state('group.edit', {
             url: '/edit/:groupId',
             templateUrl: 'app/account/group/form.html',
-            controller: 'EditCtrl as vm',
+            controller: 'GroupEditCtrl as vm',
             resolve: {
                 group: function($stateParams, Group) {
                     return Group.getById($stateParams.groupId);

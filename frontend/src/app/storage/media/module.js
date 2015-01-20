@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('app.storage.media', [
-    'ui.router',
     'ngDialog',
+    'ngSanitize',
+    'ui.router',
     'angular-storage',
+    'angularFileUpload',
     'angular-jwt',
     'app.account',
     'app.main',
@@ -22,7 +24,7 @@ angular.module('app.storage.media', [
         .state('media.list', {
             url: '/list',
             templateUrl: 'app/storage/media/list.html',
-            controller: 'ListCtrl as vm',
+            controller: 'MediaListCtrl as vm',
             resolve: {
                 medias: function(Media) {
                     return Media.getAll();
@@ -32,12 +34,12 @@ angular.module('app.storage.media', [
         .state('media.new', {
             url: '/new',
             templateUrl: 'app/storage/media/form.html',
-            controller: 'NewCtrl as vm'
+            controller: 'MediaNewCtrl as vm'
         })
         .state('media.edit', {
             url: '/edit/:id',
             templateUrl: 'app/storage/media/form.html',
-            controller: 'EditCtrl as vm',
+            controller: 'MediaEditCtrl as vm',
             resolve: {
                 media: function($stateParams, Media) {
                     return Media.getById($stateParams.id);

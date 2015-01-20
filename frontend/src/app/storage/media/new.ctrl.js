@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.storage.media')
-    .controller('NewCtrl',
+    .controller('MediaNewCtrl',
         function($state, FileUploader, Account, Flash, Media, Location, MediaType) {
             var vm = this;
             vm.title = 'media.title.new';

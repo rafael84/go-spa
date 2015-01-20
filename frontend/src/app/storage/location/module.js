@@ -19,7 +19,7 @@ angular.module('app.storage.location', [
         .state('location.list', {
             url: '/list',
             templateUrl: 'app/storage/location/list.html',
-            controller: 'ListCtrl as vm',
+            controller: 'LocationListCtrl as vm',
             resolve: {
                 locations: function(Location) {
                     return Location.getAll();
@@ -29,12 +29,12 @@ angular.module('app.storage.location', [
         .state('location.new', {
             url: '/new',
             templateUrl: 'app/storage/location/form.html',
-            controller: 'NewCtrl as vm'
+            controller: 'LocationNewCtrl as vm'
         })
         .state('location.edit', {
             url: '/edit/:locationId',
             templateUrl: 'app/storage/location/form.html',
-            controller: 'EditCtrl as vm',
+            controller: 'LocationEditCtrl as vm',
             resolve: {
                 location: function($stateParams, Location) {
                     return Location.getById($stateParams.locationId);

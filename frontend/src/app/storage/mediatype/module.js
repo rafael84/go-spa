@@ -19,7 +19,7 @@ angular.module('app.storage.mediatype', [
         .state('mediatype.list', {
             url: '/list',
             templateUrl: 'app/storage/mediatype/list.html',
-            controller: 'ListCtrl as vm',
+            controller: 'MediatypeListCtrl as vm',
             resolve: {
                 mediatypes: function(MediaType) {
                     return MediaType.getAll();
@@ -29,12 +29,12 @@ angular.module('app.storage.mediatype', [
         .state('mediatype.new', {
             url: '/new',
             templateUrl: 'app/storage/mediatype/form.html',
-            controller: 'NewCtrl as vm'
+            controller: 'MediatypeNewCtrl as vm'
         })
         .state('mediatype.edit', {
             url: '/edit/:id',
             templateUrl: 'app/storage/mediatype/form.html',
-            controller: 'EditCtrl as vm',
+            controller: 'MediatypeEditCtrl as vm',
             resolve: {
                 mediatype: function($stateParams, MediaType) {
                     return MediaType.getById($stateParams.id);

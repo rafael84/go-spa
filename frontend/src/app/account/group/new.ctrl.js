@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.account.group')
-    .controller('NewCtrl', function($state, Flash, Group) {
+    .controller('GroupNewCtrl', function($state, Flash, Group) {
         var vm = this;
         vm.error = null;
         vm.group = {};

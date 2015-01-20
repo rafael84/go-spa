@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.storage.location')
-    .controller('NewCtrl', function LocationNewCtrl($state, Flash, Location) {
+    .controller('LocationNewCtrl', function LocationNewCtrl($state, Flash, Location) {
         var vm = this;
         vm.error = null;
         vm.location = {};

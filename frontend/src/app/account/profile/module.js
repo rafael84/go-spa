@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('app.account.profile', [
+    'ngSanitize',
     'ui.router',
     'ui.select',
     'angular-jwt',

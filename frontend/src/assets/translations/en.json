@@ -114,7 +114,7 @@
             }
         }
     },
-    "me": {
+    "profile": {
         "title": "Me",
         "form": {
             "firstName": {

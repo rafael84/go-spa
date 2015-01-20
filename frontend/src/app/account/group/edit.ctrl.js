@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.account.group')
-    .controller('EditCtrl', function($state, Flash, Group, group) {
+    .controller('GroupEditCtrl', function($state, Flash, Group, group) {
         var vm = this;
         vm.error = null;
         vm.group = group;

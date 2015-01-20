@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.storage.mediatype')
-    .controller('NewCtrl', function($state, Flash, MediaType) {
+    .controller('MediatypeNewCtrl', function($state, Flash, MediaType) {
         var vm = this;
         vm.error = null;
         vm.mediatype = {};

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.storage.mediatype')
-    .controller('ListCtrl', function(ngDialog, mediatypes, MediaType, Flash) {
+    .controller('MediatypeListCtrl', function(ngDialog, mediatypes, MediaType, Flash) {
         var vm = this;
         vm.mediatypes = mediatypes;
         vm.deleteDlg = function(mediatype) {
