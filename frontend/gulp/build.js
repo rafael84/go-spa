@@ -76,6 +76,7 @@ gulp.task('images', function() {
 
 gulp.task('translations', function() {
     return gulp.src(paths.src + '/assets/translations/*.json')
+        .pipe($.jsonminify())
         .pipe(gulp.dest(paths.dist + '/assets/translations/'));
 });
 
