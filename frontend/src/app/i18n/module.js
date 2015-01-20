@@ -8,7 +8,7 @@ angular.module('app.i18n', ['pascalprecht.translate'])
     .factory('translationLoader', function($http, $q) {
         return function(options) {
             var deferred = $q.defer();
-            $http.get('app/i18n/' + options.key + '.json')
+            $http.get('assets/translations/' + options.key + '.json')
                 .then(function success(response) {
                     deferred.resolve(response.data);
                 });
