@@ -30,6 +30,7 @@ func (r *Resource) GET(c *ctx.Context, rw http.ResponseWriter, req *http.Request
 		log.Errorf("Could not query media id %s: %v", id, err)
 		return ctx.BadRequest(rw, c.T("media.mediaitemresource.could_not_query_media"))
 	}
+
 	return ctx.OK(rw, media)
 }
 
@@ -81,6 +82,7 @@ func (r *Resource) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request
 	media.LocationId = form.LocationId
 	media.MediatypeId = form.MediatypeId
 	media.Path = dstPath
+	media.EncodeData(loc, mediatype)
 	err = db.Update(media)
 	if err != nil {
 		log.Errorf("Could not edit media %s: %v", form.Name, err)
