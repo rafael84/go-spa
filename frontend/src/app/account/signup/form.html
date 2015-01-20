@@ -53,18 +53,6 @@
         </p>
     </div>
 
-    <div class="form-group">
-        <label for="role" translate="signup.form.role.label">Role</label>
-        <ui-select ng-model="vm.user.role" class="form-input">
-            <ui-select-match placeholder="{{ 'signup.form.role.placeholder' | translate }}">
-                {{ $select.selected.name }}
-            </ui-select-match>
-            <ui-select-choices repeat="role in vm.roles | filter: { name: $select.search }">
-                <span ng-bind-html="role.name | highlight: $select.search"></span>
-            </ui-select-choices>
-        </ui-select>
-    </div>
-
     <p class="clearfix">
         <button class="btn btn-default pull-right" type="submit" ng-disabled="userForm.$invalid">
             {{'signup.form.submit.label' | translate}} →

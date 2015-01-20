@@ -7,6 +7,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 
+	"github.com/rafael84/go-spa/backend/cfg"
 	"github.com/rafael84/go-spa/backend/random"
 	"github.com/rafael84/go-spa/backend/storage/location"
 	"github.com/rafael84/go-spa/backend/storage/mediatype"
@@ -15,7 +16,7 @@ import (
 func MoveFile(location *location.Model, mediatype *mediatype.Model, srcPath string) (string, error) {
 
 	// create directories if necessary
-	dir := fmt.Sprintf("/var/%s/%s", location.StaticPath, mediatype.Name)
+	dir := fmt.Sprintf("%s/%s/%s", cfg.Media.Root, location.StaticPath, mediatype.Name)
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		log.Errorf("Unable to create directory: %s", err)

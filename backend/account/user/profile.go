@@ -43,7 +43,6 @@ func (r *Profile) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request)
 	var form struct {
 		Id       null.Int     `json:"id"`
 		Email    string       `json:"email"`
-		Role     int          `json:"role"`
 		JsonData UserJsonData `json:"jsonData,omitempty"`
 	}
 	err := json.NewDecoder(req.Body).Decode(&form)
@@ -66,7 +65,6 @@ func (r *Profile) PUT(c *ctx.Context, rw http.ResponseWriter, req *http.Request)
 
 	// update the user
 	u.Email = form.Email
-	u.Role = form.Role
 	jsonData.FirstName = form.JsonData.FirstName
 	jsonData.LastName = form.JsonData.LastName
 	u.JsonData.Encode(jsonData)

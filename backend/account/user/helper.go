@@ -10,7 +10,7 @@ import (
 	"github.com/rafael84/go-spa/backend/password"
 )
 
-func Create(db *pg.Session, email, pw string, role int, userJsonData *UserJsonData) (*Model, error) {
+func Create(db *pg.Session, email, pw string, userJsonData *UserJsonData) (*Model, error) {
 	// encode password
 	var saltedPassword password.Salted
 	err := saltedPassword.Encode(pw)
@@ -24,7 +24,6 @@ func Create(db *pg.Session, email, pw string, role int, userJsonData *UserJsonDa
 		State:    UserStateActive,
 		Email:    email,
 		Password: saltedPassword,
-		Role:     role,
 	}
 
 	// fill user structure with additional data

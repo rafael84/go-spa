@@ -98,16 +98,5 @@ angular.module('app.account')
                 'Authorization': 'Bearer ' + token
             };
         };
-        account.getRoles = function() {
-            var deferred = $q.defer();
-            $http.get('/api/v1/account/user/role')
-                .then(function success(response) {
-                    deferred.resolve(response.data);
-                })
-                .catch(function error(response) {
-                    deferred.reject(response);
-                });
-            return deferred.promise;
-        };
         return account;
     });

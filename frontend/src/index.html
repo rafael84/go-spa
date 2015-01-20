@@ -49,7 +49,7 @@
                     </span>
                     <span ng-show="main.isUserSignedIn()">
                         {{ 'main.header.hello' | translate }} 
-                        <a ui-sref="me">{{ main.getUser().jsonData.firstName }}</a>
+                        <a ui-sref="profile">{{ main.getUser().jsonData.firstName }}</a>
                         &#124;
                         <a class="btn btn-link" ng-click="main.signOut()" translate="main.header.signout">Sign Out</a>
                     </span>

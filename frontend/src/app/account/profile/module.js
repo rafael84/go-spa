@@ -17,9 +17,6 @@ angular.module('app.account.profile', [
                 Profile: 'Profile',
                 user: function(Profile) {
                     return Profile.get();
-                },
-                roles: function(Account) {
-                    return Account.getRoles();
                 }
             }
         });

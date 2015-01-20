@@ -5,15 +5,10 @@ angular.module('app.account.signup')
         var vm = this;
         vm.user = {};
         vm.error = null;
-        Account.getRoles()
-            .then(function success(roles) {
-                vm.roles = roles;
-            });
         vm.register = function register(valid) {
             if (!valid) {
                 return;
             }
-            vm.user.role = vm.user.role.id;
             Account.signUp(vm.user)
                 .then(function success(response) {
                     Flash.show('Thanks for registering!');
